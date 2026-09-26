@@ -1,6 +1,6 @@
 import type { Etapa } from '../shared/constants'
 import type {
-  AppInfo, AuthStatus, DadosPainel, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
+  Agenda, Aplicacao, AplicacaoInput, AppInfo, AuthStatus, DadosPainel, FiltroTarefas, ResumoLembretes, Tarefa, TarefaInput, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
   Resultado, Tag
 } from '../shared/types'
 
@@ -39,6 +39,25 @@ export interface Api {
     excluir(id: string): P<void>
   }
   painel: { obter(periodo: PeriodoPainel): P<DadosPainel> }
+  tarefas: {
+    listar(opcoes: { filtro?: FiltroTarefas; lead_id?: string; limite?: number }): P<Tarefa[]>
+    criar(dados: TarefaInput): P<Tarefa>
+    atualizar(id: string, dados: TarefaInput): P<Tarefa>
+    concluir(id: string, concluida: boolean): P<Tarefa>
+    excluir(id: string): P<void>
+  }
+  aplicacoes: {
+    listar(leadId: string): P<Aplicacao[]>
+    criar(dados: AplicacaoInput): P<Aplicacao>
+    atualizar(id: string, dados: AplicacaoInput): P<Aplicacao>
+    excluir(id: string): P<void>
+  }
+  agenda: { obter(): P<Agenda> }
+  lembretes: {
+    resumo(): P<ResumoLembretes>
+    notificar(): P<boolean>
+  }
+  aoNavegar(fn: (rota: string) => void): () => void
   config: {
     obter(): P<Record<string, string>>
     salvar(chave: string, valor: string): P<void>

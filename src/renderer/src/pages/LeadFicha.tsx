@@ -17,6 +17,8 @@ import { TagPicker } from '../components/TagPicker'
 import { LeadPicker } from '../components/LeadPicker'
 import { useToast } from '../components/toast'
 import { HistoricoLead, type HistoricoLeadRef } from '../components/HistoricoLead'
+import { TarefasLead } from '../components/TarefasLead'
+import { AplicacoesLead } from '../components/AplicacoesLead'
 
 const VAZIO: LeadInput = {
   nome: '', telefone: null, whatsapp: null, email: null, cidade: null, estado: null, profissao: null,
@@ -42,7 +44,7 @@ const ABAS = [
   { id: 'financeiro', label: 'Perfil financeiro' },
   { id: 'preferencias', label: 'Preferências' },
   { id: 'historico', label: 'Histórico', novo: false },
-  { id: 'tarefas', label: 'Tarefas', fase: 4 },
+  { id: 'tarefas', label: 'Tarefas', novo: false },
   { id: 'posvenda', label: 'Pós-venda', fase: 6 }
 ] as const
 type Aba = (typeof ABAS)[number]['id']
@@ -352,6 +354,11 @@ export function LeadFicha() {
                 <Secao titulo="Sucessão" descricao="Holding, testamento, previdência para sucessão, herdeiros…">
                   <textarea className="input col-span-6" rows={5} {...txt('sucessao_notas')} />
                 </Secao>
+                <Secao titulo="Aplicações" descricao="Produtos aplicados e vencimentos. Vencimentos em até 30 dias aparecem na tela Início.">
+                  <div className="col-span-6">
+                    {id ? <AplicacoesLead leadId={id} /> : <p className="text-sm text-zinc-500">Salve o lead para cadastrar aplicações.</p>}
+                  </div>
+                </Secao>
               </>
             )}
 
@@ -368,7 +375,9 @@ export function LeadFicha() {
 
             {aba === 'historico' && id && <HistoricoLead ref={historicoRef} leadId={id} versao={lead?.updated_at} />}
 
-            {(aba === 'tarefas' || aba === 'posvenda') && (
+            {aba === 'tarefas' && id && lead && <TarefasLead leadId={id} leadNome={lead.nome} />}
+
+            {aba === 'posvenda' && (
               <div className="flex flex-col items-center py-20 text-center text-sm text-zinc-500">
                 <Construction size={22} className="mb-2 text-zinc-400" />
                 Disponível na Fase {(ABAS.find((a) => a.id === aba) as { fase?: number }).fase}.

@@ -123,6 +123,7 @@ export function gerarLeadsFicticios(qtd = 50): number {
   const tags = TAGS_SEED.map(([n, c]) => criarTag(n, c))
   const usuario = usuarioAtualId()
   const idsCriados: string[] = []
+  let aniversariosForcados = 0
   const agora = Date.now()
   const ordemEtapas: string[] = ETAPAS.map((e) => e.value as string).filter((e) => e !== 'perdido')
 
@@ -139,6 +140,8 @@ export function gerarLeadsFicticios(qtd = 50): number {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
   const insTarefa = db.prepare(`INSERT INTO tarefas (id, created_at, updated_at, lead_id, titulo, data_vencimento, concluida, concluida_em, tipo, responsavel_id)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+  const insAplic = db.prepare(`INSERT INTO aplicacoes (id, created_at, updated_at, lead_id, produto, valor, data_vencimento)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`)
   const insTag = db.prepare('INSERT OR IGNORE INTO lead_tags (id, created_at, updated_at, lead_id, tag_id) VALUES (?, ?, ?, ?, ?)')
 
   db.transaction(() => {
@@ -157,6 +160,11 @@ export function gerarLeadsFicticios(qtd = 50): number {
       const faixaIdx = Math.min(5, Math.max(0, Math.round(rnd() * 3 + (idade > 45 ? 1.2 : 0) + (chance(0.1) ? 1.5 : 0))))
       const [fp, fr, vmin, vmax] = FAIXAS[faixaIdx]
       const etapa = etapaAleatoria()
+      // Garante alguns aniversários hoje e nesta semana (em leads não perdidos) para testar a tela Início.
+      if (aniversariosForcados < 3 && etapa !== 'perdido') {
+        const alvo = new Date(agora + [0, 2, 5][aniversariosForcados++] * 86_400_000)
+        nasc.setMonth(alvo.getMonth(), alvo.getDate())
+      }
       const origem = pick(['instagram', 'instagram', 'youtube', 'linkedin', 'indicacao', 'indicacao', 'indicacao', 'eventos', 'site', 'google_forms', 'outro'])
       const casado = chance(0.6)
       // Leads nas primeiras etapas tendem a ser recentes; os demais se espalham pelo último ano.
@@ -199,7 +207,7 @@ export function gerarLeadsFicticios(qtd = 50): number {
         null,
         chance(0.9) ? fp : null, chance(0.8) ? fr : null,
         avaliado ? pick(['conservador', 'moderado', 'moderado', 'arrojado']) : 'nao_avaliado',
-        avaliado ? dataISO(new Date(createdMs + int(5, 60) * 86_400_000)) : null,
+        avaliado ? dataISO(new Date(Math.min(agora, createdMs + int(5, 60) * 86_400_000))) : null,
         JSON.stringify(algunsDe(OBJETIVOS.map((o) => o.value), 1, 3)),
         pick(['curto', 'medio', 'longo', 'longo']),
         faixaIdx >= 3 && chance(0.6) ? 'Tem holding familiar em estudo; avaliar previdência VGBL para sucessão.' : null,
@@ -233,6 +241,14 @@ export function gerarLeadsFicticios(qtd = 50): number {
       }
       if (etapa === 'cliente_ativo' && chance(0.5)) {
         insTarefa.run(randomUUID(), createdISO, createdISO, id, 'Revisão trimestral da carteira', dataISO(new Date(agora + int(-5, 60) * 86_400_000)), 0, null, 'revisao', usuario)
+      }
+      // Aplicações (com vencimentos) para quem já abriu conta.
+      if (etapa === 'conta_aberta' || etapa === 'cliente_ativo') {
+        for (let k = 0; k < int(1, 3); k++) {
+          const produto = pick(['CDB Banco Master 2027', 'LCI Banco Inter', 'LCA BTG', 'Tesouro IPCA+ 2035', 'CRA Raízen', 'Debênture Eneva', 'CDB Sofisa 110% CDI', 'COE Ibovespa'])
+          const venc = chance(0.6) ? new Date(agora + int(-5, 45) * 86_400_000) : new Date(agora + int(60, 900) * 86_400_000)
+          insAplic.run(randomUUID(), createdISO, createdISO, id, produto, Math.round((20_000 + rnd() * 480_000) / 1000) * 1000, dataISO(venc))
+        }
       }
       for (const tag of algunsDe(tags, 0, 2)) insTag.run(randomUUID(), createdISO, createdISO, id, tag.id)
       idsCriados.push(id)

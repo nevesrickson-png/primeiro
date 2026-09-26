@@ -10,6 +10,7 @@ import { data as formatarData, dataHoraLocalParaISO, isoParaDataHoraLocal, tempo
 import { Confirmar, EtapaBadge } from './ui'
 import { DataInput } from './inputs'
 import { useToast } from './toast'
+import { avisarTarefasAlteradas } from '../lib/eventos'
 
 const ICONE: Record<TipoInteracao, typeof Phone> = {
   ligacao: Phone, whatsapp: MessageCircle, email: Mail, reuniao: Users, evento: CalendarDays, outro: MoreHorizontal
@@ -23,11 +24,11 @@ const COR_ICONE: Record<TipoInteracao, string> = {
   outro: 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
 }
 
-interface Formulario { tipo: TipoInteracao; data: string | null; hora: string; resumo: string; proximo_passo: string }
+interface Formulario { tipo: TipoInteracao; data: string | null; hora: string; resumo: string; proximo_passo: string; lembrar_em: string | null }
 
 function formularioVazio(): Formulario {
   const { data, hora } = isoParaDataHoraLocal(new Date().toISOString())
-  return { tipo: 'whatsapp', data, hora, resumo: '', proximo_passo: '' }
+  return { tipo: 'whatsapp', data, hora, resumo: '', proximo_passo: '', lembrar_em: null }
 }
 
 export interface HistoricoLeadRef { focar: () => void }
@@ -81,7 +82,13 @@ export const HistoricoLead = forwardRef<HistoricoLeadRef, { leadId: string; vers
     try {
       if (editandoId) await chamar(api.interacoes.atualizar(editandoId, dados))
       else await chamar(api.interacoes.criar(dados))
-      avisar(editandoId ? 'Interação atualizada.' : 'Interação registrada.')
+      // Próximo passo com data vira uma tarefa de follow-up.
+      const lembrete = !editandoId && form.proximo_passo.trim() && form.lembrar_em
+      if (lembrete) {
+        await chamar(api.tarefas.criar({ lead_id: leadId, titulo: form.proximo_passo.trim(), data_vencimento: form.lembrar_em, tipo: 'follow_up' }))
+        avisarTarefasAlteradas()
+      }
+      avisar(editandoId ? 'Interação atualizada.' : lembrete ? 'Interação registrada e follow-up agendado.' : 'Interação registrada.')
       setForm(formularioVazio())
       setEditandoId(null)
       carregar()
@@ -95,7 +102,7 @@ export const HistoricoLead = forwardRef<HistoricoLeadRef, { leadId: string; vers
   function editar(i: Interacao) {
     const { data, hora } = isoParaDataHoraLocal(i.data)
     setEditandoId(i.id)
-    setForm({ tipo: i.tipo, data, hora, resumo: i.resumo ?? '', proximo_passo: i.proximo_passo ?? '' })
+    setForm({ tipo: i.tipo, data, hora, resumo: i.resumo ?? '', proximo_passo: i.proximo_passo ?? '', lembrar_em: null })
     resumoRef.current?.focus()
   }
 
@@ -144,6 +151,12 @@ export const HistoricoLead = forwardRef<HistoricoLeadRef, { leadId: string; vers
         <div className="mt-2 flex items-center gap-2">
           <CornerDownRight size={14} className="shrink-0 text-zinc-400" />
           <input className="input" placeholder="Próximo passo (opcional)" value={form.proximo_passo} onChange={(e) => setForm((f) => ({ ...f, proximo_passo: e.target.value }))} onKeyDown={(e) => e.key === 'Enter' && salvar()} />
+          {!editandoId && (
+            <div className="flex shrink-0 items-center gap-1.5" title="Cria uma tarefa de follow-up com o próximo passo">
+              <span className="whitespace-nowrap text-xs text-zinc-500">Lembrar em</span>
+              <div className="w-32"><DataInput value={form.lembrar_em} onChange={(v) => setForm((f) => ({ ...f, lembrar_em: v }))} /></div>
+            </div>
+          )}
           {editandoId && (
             <button className="btn-ghost" onClick={() => { setEditandoId(null); setForm(formularioVazio()) }}>Cancelar</button>
           )}

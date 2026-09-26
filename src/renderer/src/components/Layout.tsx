@@ -1,20 +1,45 @@
-import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
-import { Home, Users, KanbanSquare, BarChart3, Settings, Lock, Moon, Sun } from 'lucide-react'
-import { api } from '../lib/api'
+import { Home, Users, KanbanSquare, BarChart3, Settings, Lock, Moon, Sun, CheckSquare } from 'lucide-react'
+import { api, chamar } from '../lib/api'
+import { aoAlterarTarefas } from '../lib/eventos'
 import { aplicarTema, temaAtual, type Tema } from '../lib/tema'
 
 const ITENS = [
   { to: '/inicio', label: 'Início', icone: Home },
+  { to: '/tarefas', label: 'Tarefas', icone: CheckSquare },
   { to: '/leads', label: 'Leads', icone: Users },
   { to: '/funil', label: 'Funil', icone: KanbanSquare },
   { to: '/painel', label: 'Painel', icone: BarChart3 },
   { to: '/configuracoes', label: 'Configurações', icone: Settings }
 ]
 
+// A notificação do dia é mostrada uma vez por desbloqueio.
+let notificado = false
+
 export function Layout({ onBloquear }: { onBloquear: () => void }) {
   const [tema, setTema] = useState<Tema>(temaAtual())
+  const [pendentes, setPendentes] = useState(0)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const atualizar = () =>
+      chamar(api.lembretes.resumo()).then((r) => setPendentes(r.atrasadas + r.hoje)).catch(() => {})
+    atualizar()
+    if (!notificado) {
+      notificado = true
+      api.lembretes.notificar()
+    }
+    const intervalo = setInterval(atualizar, 10 * 60 * 1000)
+    const sair = aoAlterarTarefas(atualizar)
+    const semNav = api.aoNavegar((rota) => navigate(rota))
+    return () => {
+      clearInterval(intervalo)
+      sair()
+      semNav()
+    }
+  }, [navigate])
 
   function alternarTema() {
     const t = tema === 'escuro' ? 'claro' : 'escuro'
@@ -44,7 +69,10 @@ export function Layout({ onBloquear }: { onBloquear: () => void }) {
               }
             >
               <Icone size={16} strokeWidth={1.8} />
-              {label}
+              <span className="flex-1">{label}</span>
+              {to === '/inicio' && pendentes > 0 && (
+                <span className="rounded-full bg-red-500 px-1.5 text-[10px] font-semibold tabular-nums text-white" title="Tarefas atrasadas e de hoje">{pendentes}</span>
+              )}
             </NavLink>
           ))}
         </nav>
@@ -56,6 +84,7 @@ export function Layout({ onBloquear }: { onBloquear: () => void }) {
           <button
             onClick={async () => {
               await api.auth.bloquear()
+              notificado = false
               onBloquear()
             }}
             className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-zinc-600 hover:bg-zinc-200/60 dark:text-zinc-400 dark:hover:bg-zinc-800/60"

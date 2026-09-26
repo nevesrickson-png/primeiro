@@ -1,10 +1,13 @@
-import { app, ipcMain } from 'electron'
+import { app, ipcMain, Notification, BrowserWindow } from 'electron'
 import { caminhoBanco, pastaDados } from './paths'
 import * as conn from './db/connection'
 import * as leads from './db/leads'
 import * as tags from './db/tags'
 import * as interacoes from './db/interacoes'
 import { obterPainel } from './db/painel'
+import * as tarefas from './db/tarefas'
+import * as aplicacoes from './db/aplicacoes'
+import { obterAgenda, resumoLembretes } from './db/agenda'
 import * as config from './db/configuracoes'
 import { gerarLeadsFicticios } from './db/seed'
 import type { AppInfo, AuthStatus, Resultado } from '@shared/types'
@@ -68,6 +71,24 @@ export function registrarIpc(): void {
   handle('tags:atualizar', tags.atualizarTag)
   handle('tags:excluir', tags.excluirTag)
 
+  // Tarefas
+  handle('tarefas:listar', tarefas.listarTarefas)
+  handle('tarefas:criar', tarefas.criarTarefa)
+  handle('tarefas:atualizar', tarefas.atualizarTarefa)
+  handle('tarefas:concluir', tarefas.concluirTarefa)
+  handle('tarefas:excluir', tarefas.excluirTarefa)
+
+  // Aplicações (sensível: só local)
+  handle('aplicacoes:listar', aplicacoes.listarAplicacoes)
+  handle('aplicacoes:criar', aplicacoes.criarAplicacao)
+  handle('aplicacoes:atualizar', aplicacoes.atualizarAplicacao)
+  handle('aplicacoes:excluir', aplicacoes.excluirAplicacao)
+
+  // Início e lembretes
+  handle('agenda:obter', obterAgenda)
+  handle('lembretes:resumo', resumoLembretes)
+  handle('lembretes:notificar', () => notificarLembretes())
+
   // Painel
   handle('painel:obter', obterPainel)
 
@@ -80,4 +101,27 @@ export function registrarIpc(): void {
     if (app.isPackaged) throw new Error('Disponível apenas em modo de desenvolvimento.')
     return gerarLeadsFicticios(qtd ?? 50)
   })
+}
+
+/** Notificação nativa do sistema com o resumo do dia (chamada ao desbloquear o app). */
+function notificarLembretes(): boolean {
+  if (!Notification.isSupported()) return false
+  const r = resumoLembretes()
+  const partes: string[] = []
+  if (r.atrasadas) partes.push(`${r.atrasadas} tarefa(s) atrasada(s)`)
+  if (r.hoje) partes.push(`${r.hoje} tarefa(s) para hoje`)
+  if (r.aniversariosHoje) partes.push(`${r.aniversariosHoje} aniversariante(s) hoje`)
+  if (r.vencimentos7dias) partes.push(`${r.vencimentos7dias} vencimento(s) nos próximos 7 dias`)
+  if (!partes.length) return false
+  const n = new Notification({ title: 'CRM Assessor — sua agenda', body: partes.join(' · ') })
+  n.on('click', () => {
+    const [win] = BrowserWindow.getAllWindows()
+    if (win) {
+      if (win.isMinimized()) win.restore()
+      win.focus()
+      win.webContents.send('navegar', '/inicio')
+    }
+  })
+  n.show()
+  return true
 }

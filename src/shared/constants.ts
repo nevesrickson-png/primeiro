@@ -114,6 +114,13 @@ export const TIPOS_INTERACAO = [
 ] as const satisfies readonly Opcao[]
 export type TipoInteracao = (typeof TIPOS_INTERACAO)[number]['value']
 
+export const TIPOS_TAREFA = [
+  { value: 'follow_up', label: 'Follow-up' },
+  { value: 'revisao', label: 'Revisão' },
+  { value: 'outro', label: 'Outro' }
+] as const satisfies readonly Opcao[]
+export type TipoTarefa = (typeof TIPOS_TAREFA)[number]['value']
+
 export const UFS = [
   'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
   'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'

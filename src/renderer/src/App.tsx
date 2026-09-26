@@ -8,7 +8,8 @@ import { Bloqueio } from './pages/Bloqueio'
 import { Leads } from './pages/Leads'
 import { LeadFicha } from './pages/LeadFicha'
 import { Configuracoes } from './pages/Configuracoes'
-import { EmBreve } from './pages/EmBreve'
+import { Inicio } from './pages/Inicio'
+import { Tarefas } from './pages/Tarefas'
 import { Funil } from './pages/Funil'
 import { Painel } from './pages/Painel'
 
@@ -30,15 +31,16 @@ export default function App() {
         <HashRouter>
           <Routes>
             <Route element={<Layout onBloquear={atualizar} />}>
-              <Route path="/" element={<Navigate to="/leads" replace />} />
-              <Route path="/inicio" element={<EmBreve titulo="Início" fase={4} texto="Agenda do dia com tarefas, follow-ups, aniversários, vencimentos e leads parados." />} />
+              <Route path="/" element={<Navigate to="/inicio" replace />} />
+              <Route path="/inicio" element={<Inicio />} />
+              <Route path="/tarefas" element={<Tarefas />} />
               <Route path="/leads" element={<Leads />} />
               <Route path="/leads/novo" element={<LeadFicha />} />
               <Route path="/leads/:id" element={<LeadFicha />} />
               <Route path="/funil" element={<Funil />} />
               <Route path="/painel" element={<Painel />} />
               <Route path="/configuracoes" element={<Configuracoes />} />
-              <Route path="*" element={<Navigate to="/leads" replace />} />
+              <Route path="*" element={<Navigate to="/inicio" replace />} />
             </Route>
           </Routes>
         </HashRouter>

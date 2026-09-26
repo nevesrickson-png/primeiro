@@ -36,6 +36,30 @@ const api = {
     excluir: inv('tags:excluir')
   },
   painel: { obter: inv('painel:obter') },
+  tarefas: {
+    listar: inv('tarefas:listar'),
+    criar: inv('tarefas:criar'),
+    atualizar: inv('tarefas:atualizar'),
+    concluir: inv('tarefas:concluir'),
+    excluir: inv('tarefas:excluir')
+  },
+  aplicacoes: {
+    listar: inv('aplicacoes:listar'),
+    criar: inv('aplicacoes:criar'),
+    atualizar: inv('aplicacoes:atualizar'),
+    excluir: inv('aplicacoes:excluir')
+  },
+  agenda: { obter: inv('agenda:obter') },
+  lembretes: {
+    resumo: inv('lembretes:resumo'),
+    notificar: inv('lembretes:notificar')
+  },
+  /** Recebe pedidos de navegação do processo principal (ex.: clique na notificação). */
+  aoNavegar: (fn: (rota: string) => void) => {
+    const h = (_e: unknown, rota: string) => fn(rota)
+    ipcRenderer.on('navegar', h)
+    return () => ipcRenderer.removeListener('navegar', h)
+  },
   config: {
     obter: inv('config:obter'),
     salvar: inv('config:salvar')

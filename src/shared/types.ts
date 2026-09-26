@@ -1,5 +1,5 @@
 import type {
-  Etapa, TipoInteracao, FaixaPatrimonio, FaixaRenda, Horizonte, Objetivo, Origem, Produto, Suitability
+  Etapa, TipoInteracao, TipoTarefa, FaixaPatrimonio, FaixaRenda, Horizonte, Objetivo, Origem, Produto, Suitability
 } from './constants'
 
 /** Campos editáveis de um lead (o que a ficha envia para criar/atualizar). */
@@ -177,4 +177,77 @@ export interface DadosPainel {
   novosPorMes: { mes: string; qtd: number }[]
   parados: LeadParado[]
   tarefasAtrasadas: TarefaAtrasada[]
+}
+
+export interface TarefaInput {
+  lead_id: string | null
+  titulo: string
+  /** AAAA-MM-DD */
+  data_vencimento: string | null
+  tipo: TipoTarefa
+}
+
+export interface Tarefa extends TarefaInput {
+  id: string
+  concluida: boolean
+  concluida_em: string | null
+  created_at: string
+  updated_at: string
+  lead_nome: string | null
+}
+
+export type FiltroTarefas = 'pendentes' | 'atrasadas' | 'hoje' | 'proximas' | 'sem_data' | 'concluidas'
+
+export interface AplicacaoInput {
+  lead_id: string
+  produto: string
+  valor: number | null
+  /** AAAA-MM-DD */
+  data_vencimento: string | null
+}
+
+export interface Aplicacao extends AplicacaoInput {
+  id: string
+  created_at: string
+  updated_at: string
+}
+
+export interface Aniversariante {
+  id: string
+  nome: string
+  data_nascimento: string
+  /** Próximo aniversário (AAAA-MM-DD) e idade que vai completar. */
+  proximo: string
+  idade: number
+  dias: number
+  whatsapp: string | null
+}
+
+export interface Vencimento {
+  tipo: 'aplicacao' | 'revisao'
+  id: string
+  lead_id: string
+  lead_nome: string
+  descricao: string
+  valor: number | null
+  data: string
+  dias: number
+}
+
+export interface Agenda {
+  hoje: string
+  diasParado: number
+  tarefasAtrasadas: Tarefa[]
+  tarefasHoje: Tarefa[]
+  tarefasProximas: Tarefa[]
+  aniversariantes: Aniversariante[]
+  vencimentos: Vencimento[]
+  parados: { total: number; leads: LeadParado[] }
+}
+
+export interface ResumoLembretes {
+  atrasadas: number
+  hoje: number
+  aniversariosHoje: number
+  vencimentos7dias: number
 }
