@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    @apply bg-white text-zinc-900 antialiased dark:bg-[#0b0d12] dark:text-zinc-100;
+    font-feature-settings: 'cv11', 'ss01';
+    font-size: 14px;
+  }
+  ::selection { @apply bg-brand-500/25; }
+  * { scrollbar-width: thin; scrollbar-color: rgb(161 161 170 / 0.4) transparent; }
+  input[type='date']::-webkit-calendar-picker-indicator { opacity: 0.5; }
+}
+
+@layer components {
+  .input {
+    @apply h-9 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm outline-none transition
+      placeholder:text-zinc-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20
+      disabled:cursor-not-allowed disabled:opacity-60
+      dark:border-zinc-800 dark:bg-zinc-900 dark:placeholder:text-zinc-500;
+  }
+  textarea.input { @apply h-auto py-2 leading-relaxed; }
+  .label { @apply mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400; }
+  .card { @apply rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/60; }
+  .btn {
+    @apply inline-flex h-9 select-none items-center justify-center gap-2 whitespace-nowrap rounded-md px-3
+      text-sm font-medium transition disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary { @apply btn bg-brand-600 text-white shadow-sm hover:bg-brand-700; }
+  .btn-secondary {
+    @apply btn border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50
+      dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800;
+  }
+  .btn-ghost { @apply btn text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800; }
+  .btn-danger { @apply btn bg-red-600 text-white hover:bg-red-700; }
+  .btn-sm { @apply h-7 px-2 text-xs; }
+}

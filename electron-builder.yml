@@ -1,0 +1,18 @@
+appId: br.com.crmassessor.app
+productName: CRM Assessor
+directories:
+  buildResources: resources
+  output: release
+files:
+  - out/**
+  - package.json
+asarUnpack:
+  - node_modules/better-sqlite3-multiple-ciphers/**
+# better-sqlite3-multiple-ciphers usa N-API com prebuilds: não recompilar para o Electron
+npmRebuild: false
+win:
+  target:
+    - target: portable
+      arch: [x64]
+portable:
+  artifactName: CRM-Assessor-${version}-portable.exe

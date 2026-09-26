@@ -1,0 +1,110 @@
+import type {
+  Etapa, FaixaPatrimonio, FaixaRenda, Horizonte, Objetivo, Origem, Produto, Suitability
+} from './constants'
+
+/** Campos editáveis de um lead (o que a ficha envia para criar/atualizar). */
+export interface LeadInput {
+  nome: string
+  telefone: string | null
+  whatsapp: string | null
+  email: string | null
+  cidade: string | null
+  estado: string | null
+  profissao: string | null
+  empresa: string | null
+  cargo: string | null
+  data_nascimento: string | null
+  estado_civil: string | null
+  conjuge: string | null
+  filhos: string | null
+  instagram: string | null
+  linkedin: string | null
+  outras_redes: string | null
+  faixa_patrimonio: FaixaPatrimonio | null
+  faixa_renda: FaixaRenda | null
+  suitability: Suitability
+  data_suitability: string | null
+  objetivos: Objetivo[]
+  horizonte: Horizonte | null
+  sucessao_notas: string | null
+  produtos_interesse: Produto[]
+  hobbies_rapport: string | null
+  origem: Origem | null
+  origem_detalhe: string | null
+  indicado_por: string | null
+  etapa: Etapa
+  motivo_perda: string | null
+  valor_potencial: number | null
+  consentimento_lgpd: boolean
+  data_consentimento: string | null
+  base_legal: string | null
+  observacoes: string | null
+  tag_ids: string[]
+}
+
+export interface Lead extends Omit<LeadInput, 'tag_ids'> {
+  id: string
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
+  responsavel_id: string | null
+  created_by: string | null
+  tags: Tag[]
+  indicado_por_nome: string | null
+}
+
+/** Linha enxuta usada na lista virtualizada. */
+export interface LeadResumo {
+  id: string
+  nome: string
+  telefone: string | null
+  whatsapp: string | null
+  email: string | null
+  cidade: string | null
+  estado: string | null
+  empresa: string | null
+  etapa: Etapa
+  origem: Origem | null
+  faixa_patrimonio: FaixaPatrimonio | null
+  suitability: Suitability
+  valor_potencial: number | null
+  created_at: string
+  updated_at: string
+  tag_ids: string[]
+}
+
+export type OrdenacaoLeads =
+  | 'nome' | 'created_at' | 'updated_at' | 'valor_potencial' | 'etapa' | 'patrimonio'
+
+export interface FiltrosLeads {
+  busca?: string
+  etapas?: Etapa[]
+  origens?: Origem[]
+  faixas_patrimonio?: FaixaPatrimonio[]
+  suitability?: Suitability[]
+  tag_id?: string | null
+  produto?: Produto | null
+  ordenacao?: OrdenacaoLeads
+  direcao?: 'asc' | 'desc'
+}
+
+export interface Tag {
+  id: string
+  nome: string
+  cor: string
+}
+
+export interface AuthStatus {
+  bancoExiste: boolean
+  desbloqueado: boolean
+  caminhoBanco: string
+}
+
+export interface AppInfo {
+  versao: string
+  dev: boolean
+  pastaDados: string
+}
+
+/** Resultado padrão das chamadas IPC: erros viram mensagens em português. */
+export type Resultado<T> = { ok: true; data: T } | { ok: false; erro: string }
