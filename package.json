@@ -1,7 +1,7 @@
 {
   "name": "crm-assessor",
   "productName": "CRM Assessor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CRM desktop pessoal, offline e criptografado para assessor de investimentos",
   "main": "./out/main/index.js",
   "author": "CRM Assessor",
