@@ -10,7 +10,7 @@ Especificação completa e decisões técnicas: [CLAUDE.md](CLAUDE.md).
 - [x] **Fase 3** — Painel de métricas
 - [x] **Fase 4** — Tarefas, lembretes e tela Início
 - [x] **Fase 5** — Sincronização com Google Planilhas + Google Forms (instalação: [apps-script/LEIA-ME.md](apps-script/LEIA-ME.md))
-- [ ] Fase 6 — Pós-venda, backup, exportação e build do .exe portátil
+- [x] **Fase 6** — Pós-venda, backup, exportação e build do .exe portátil
 
 ## Como rodar (desenvolvimento)
 
@@ -32,7 +32,7 @@ Outros comandos:
 | `npm run typecheck` | Verifica os tipos TypeScript |
 | `npm run simulador` | Simula a planilha Google localmente (para testar a sincronização em dev) |
 | `npm run build` | Compila para `out/` |
-| `npm run dist` | Gera o `.exe` portátil em `release/` (será finalizado na Fase 6) |
+| `npm run dist` | Gera o `.exe` portátil em `release/` |
 
 ## Atalhos
 
@@ -43,3 +43,23 @@ Outros comandos:
 | `Ctrl+S` | Ficha | Salvar |
 | `Ctrl+Enter` | Histórico da ficha | Registrar interação |
 | `Esc` | Menus/diálogos | Fechar |
+
+## Gerar e usar o .exe portátil (Windows)
+
+```bash
+npm install
+npm run dist
+```
+
+O arquivo sai em `release/CRM-Assessor-<versão>-portatil.exe` (um único arquivo, sem instalação).
+
+1. Crie uma pasta só para o CRM (ex.: `D:\CRM` ou num pendrive) e coloque o `.exe` dentro.
+2. Abra o `.exe`. Na primeira vez, o Windows pode mostrar "O Windows protegeu o computador" (o app não é assinado digitalmente): clique em **Mais informações → Executar assim mesmo**.
+3. Tudo fica **na mesma pasta do .exe**:
+   - `crm.db` — o banco criptografado;
+   - `backups/` — backups automáticos (um a cada fechamento, os 10 mais recentes);
+   - `dados-do-app/` — preferências e cache do aplicativo.
+4. Para trocar de computador, copie a **pasta inteira**.
+
+> O `.exe` portátil se descompacta numa pasta temporária a cada abertura, por isso leva alguns segundos para abrir.
+> **Guarde a senha**: sem ela não há como abrir o banco nem os backups.

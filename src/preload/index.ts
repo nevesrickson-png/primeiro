@@ -50,6 +50,25 @@ const api = {
     excluir: inv('aplicacoes:excluir')
   },
   agenda: { obter: inv('agenda:obter') },
+  posvenda: {
+    revisoes: inv('posvenda:revisoes'),
+    criarRevisao: inv('posvenda:criarRevisao'),
+    atualizarRevisao: inv('posvenda:atualizarRevisao'),
+    excluirRevisao: inv('posvenda:excluirRevisao'),
+    nps: inv('posvenda:nps'),
+    criarNps: inv('posvenda:criarNps'),
+    excluirNps: inv('posvenda:excluirNps'),
+    resumoNps: inv('posvenda:resumoNps'),
+    indicacoes: inv('posvenda:indicacoes')
+  },
+  backup: {
+    listar: inv('backup:listar'),
+    fazer: inv('backup:fazer'),
+    restaurar: inv('backup:restaurar'),
+    restaurarArquivo: inv('backup:restaurarArquivo'),
+    abrirPasta: inv('backup:abrirPasta')
+  },
+  exportar: { leadsCsv: inv('exportar:leadsCsv') },
   sync: {
     obterConfig: inv('sync:obterConfig'),
     salvarConfig: inv('sync:salvarConfig'),

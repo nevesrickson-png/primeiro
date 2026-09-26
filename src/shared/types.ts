@@ -295,3 +295,43 @@ export interface ConflitoSync {
   vencedor: 'local' | 'planilha'
   created_at: string
 }
+
+export interface RevisaoInput {
+  lead_id: string
+  /** AAAA-MM-DD */
+  data: string
+  notas: string | null
+  proxima_revisao: string | null
+}
+export interface Revisao extends RevisaoInput {
+  id: string
+  created_at: string
+  updated_at: string
+}
+
+export interface NpsInput {
+  lead_id: string
+  data: string
+  nota: number
+  comentario: string | null
+}
+export interface Nps extends NpsInput {
+  id: string
+  created_at: string
+  updated_at: string
+}
+
+export interface Indicacao {
+  id: string
+  nome: string
+  etapa: Etapa
+  valor_potencial: number | null
+  created_at: string
+}
+
+export interface Backup {
+  arquivo: string
+  caminho: string
+  tamanho: number
+  data: string
+}

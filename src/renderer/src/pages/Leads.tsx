@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import clsx from 'clsx'
-import { ArrowDownUp, Plus, Search, Users, X, Sparkles, ArrowDown, ArrowUp } from 'lucide-react'
+import { ArrowDownUp, Plus, Search, Users, X, Sparkles, ArrowDown, ArrowUp, Download } from 'lucide-react'
 import {
   ETAPAS, FAIXAS_PATRIMONIO, ORIGENS, PRODUTOS, SUITABILITY, rotulo
 } from '@shared/constants'
@@ -12,6 +12,7 @@ import { moedaCompacta, telefone } from '../lib/format'
 import { usePersistente } from '../lib/usePersistente'
 import { EtapaBadge, FiltroMulti, Select, TagChip, Vazio } from '../components/ui'
 import { useToast } from '../components/toast'
+import { ExportarCsv } from '../components/BackupExportacao'
 
 const FILTROS_INICIAIS: FiltrosLeads = {
   busca: '', etapas: [], origens: [], faixas_patrimonio: [], suitability: [], tag_id: null, produto: null,
@@ -38,6 +39,7 @@ export function Leads() {
   const [tags, setTags] = useState<Tag[]>([])
   const [carregado, setCarregado] = useState(false)
   const [dev, setDev] = useState(false)
+  const [exportar, setExportar] = useState(false)
   const buscaRef = useRef<HTMLInputElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -132,9 +134,14 @@ export function Leads() {
             <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded border border-zinc-200 px-1.5 text-[10px] text-zinc-400 dark:border-zinc-700">Ctrl K</kbd>
           )}
         </div>
-        <button className="btn-primary h-8" onClick={() => navigate('/leads/novo')} title="Novo lead (Ctrl+N)">
-          <Plus size={15} /> Novo lead
-        </button>
+        <div className="flex gap-2">
+          <button className="btn-secondary h-8" onClick={() => setExportar(true)} disabled={!leads.length} title="Exportar a lista atual para CSV">
+            <Download size={14} /> Exportar
+          </button>
+          <button className="btn-primary h-8" onClick={() => navigate('/leads/novo')} title="Novo lead (Ctrl+N)">
+            <Plus size={15} /> Novo lead
+          </button>
+        </div>
       </header>
 
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-zinc-200 px-6 py-2.5 dark:border-zinc-800">
@@ -223,6 +230,7 @@ export function Leads() {
           </div>
         </div>
       )}
+      <ExportarCsv aberto={exportar} filtros={filtros} total={leads.length} onFechar={() => setExportar(false)} />
     </div>
   )
 }

@@ -1,18 +1,30 @@
 appId: br.com.crmassessor.app
 productName: CRM Assessor
+copyright: CRM Assessor
 directories:
   buildResources: resources
   output: release
 files:
   - out/**
   - package.json
+  # Código-fonte C do SQLite e ferramentas de compilação não são necessários (usamos o binário pronto)
+  - "!node_modules/better-sqlite3-multiple-ciphers/{deps,src,build,benchmark,docs}/**"
+  - "!node_modules/better-sqlite3-multiple-ciphers/binding.gyp"
+  - "!node_modules/node-addon-api/**"
 asarUnpack:
   - node_modules/better-sqlite3-multiple-ciphers/**
-# better-sqlite3-multiple-ciphers usa N-API com prebuilds: não recompilar para o Electron
+# better-sqlite3-multiple-ciphers usa N-API com prebuilds (inclui win32-x64): não recompilar para o Electron
 npmRebuild: false
 win:
+  icon: resources/icon.png
+  files:
+    # No Windows, só o binário win32-x64 é necessário
+    - "!node_modules/better-sqlite3-multiple-ciphers/prebuilds/{linux,linuxmusl,darwin}-*.node"
+    - "!node_modules/better-sqlite3-multiple-ciphers/prebuilds/win32-arm64.node"
   target:
     - target: portable
       arch: [x64]
 portable:
-  artifactName: CRM-Assessor-${version}-portable.exe
+  # Um único .exe. O banco (crm.db) e a pasta backups ficam ao lado do .exe (PORTABLE_EXECUTABLE_DIR).
+  artifactName: CRM-Assessor-${version}-portatil.exe
+  unpackDirName: crm-assessor

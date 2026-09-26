@@ -1,7 +1,8 @@
 import { app, BrowserWindow, shell, nativeTheme } from 'electron'
 import { join } from 'path'
 import { registrarIpc } from './ipc'
-import { fecharBanco } from './db/connection'
+import { fecharComBackup } from './backup'
+import { pastaDados } from './paths'
 
 function criarJanela(): void {
   const win = new BrowserWindow({
@@ -36,6 +37,10 @@ function criarJanela(): void {
   }
 }
 
+// Versão empacotada 100% portátil: até o cache e as preferências do Electron ficam
+// na pasta do .exe (subpasta dados-do-app), nada no perfil do Windows (AppData).
+if (app.isPackaged) app.setPath('userData', join(pastaDados(), 'dados-do-app'))
+
 const unicaInstancia = app.requestSingleInstanceLock()
 if (!unicaInstancia) {
   app.quit()
@@ -56,10 +61,11 @@ if (!unicaInstancia) {
     })
   })
 
+  // Ao fechar: fecha o banco e faz o backup automático (mantém os 10 mais recentes).
   app.on('window-all-closed', () => {
-    fecharBanco()
+    fecharComBackup()
     if (process.platform !== 'darwin') app.quit()
   })
 
-  app.on('before-quit', () => fecharBanco())
+  app.on('before-quit', () => fecharComBackup())
 }

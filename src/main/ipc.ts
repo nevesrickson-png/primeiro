@@ -1,5 +1,6 @@
-import { app, ipcMain, Notification, BrowserWindow } from 'electron'
-import { caminhoBanco, pastaDados } from './paths'
+import { app, ipcMain, Notification, BrowserWindow, dialog, shell } from 'electron'
+import { basename, join } from 'path'
+import { caminhoBanco, pastaBackups, pastaDados } from './paths'
 import * as conn from './db/connection'
 import * as leads from './db/leads'
 import * as tags from './db/tags'
@@ -9,6 +10,10 @@ import * as tarefas from './db/tarefas'
 import * as aplicacoes from './db/aplicacoes'
 import { obterAgenda, resumoLembretes } from './db/agenda'
 import * as sync from './sync'
+import * as posvenda from './db/posvenda'
+import * as backup from './backup'
+import { salvarCsv } from './exportar'
+import type { FiltrosLeads } from '@shared/types'
 import * as config from './db/configuracoes'
 import { gerarLeadsFicticios } from './db/seed'
 import type { AppInfo, AuthStatus, Resultado } from '@shared/types'
@@ -101,6 +106,53 @@ export function registrarIpc(): void {
   handle('sync:conflitos', sync.listarConflitos)
   handle('sync:resolverConflito', sync.resolverConflito)
   handle('sync:resolverTodos', sync.resolverTodosConflitos)
+
+  // Pós-venda
+  handle('posvenda:revisoes', posvenda.listarRevisoes)
+  handle('posvenda:criarRevisao', posvenda.criarRevisao)
+  handle('posvenda:atualizarRevisao', posvenda.atualizarRevisao)
+  handle('posvenda:excluirRevisao', posvenda.excluirRevisao)
+  handle('posvenda:nps', posvenda.listarNps)
+  handle('posvenda:criarNps', posvenda.criarNps)
+  handle('posvenda:excluirNps', posvenda.excluirNps)
+  handle('posvenda:resumoNps', posvenda.resumoNps)
+  handle('posvenda:indicacoes', posvenda.indicacoesRecebidas)
+
+  // Backup e restauração
+  handle('backup:listar', backup.listarBackups)
+  handle('backup:fazer', backup.fazerBackup)
+  handle('backup:restaurar', (arquivo: string) => {
+    // Só aceita arquivos da pasta de backups (pelo nome), nunca um caminho arbitrário vindo da interface.
+    if (basename(arquivo) !== arquivo) throw new Error('Arquivo inválido.')
+    backup.restaurarBackup(join(pastaBackups(), arquivo))
+  })
+  handle('backup:restaurarArquivo', async () => {
+    const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+    const r = await dialog.showOpenDialog(win, {
+      title: 'Restaurar backup do CRM',
+      defaultPath: pastaBackups(),
+      filters: [{ name: 'Banco do CRM', extensions: ['db'] }],
+      properties: ['openFile']
+    })
+    if (r.canceled || !r.filePaths[0]) return false
+    backup.restaurarBackup(r.filePaths[0])
+    return true
+  })
+  handle('backup:abrirPasta', () => shell.openPath(pastaBackups()))
+
+  // Exportação
+  handle('exportar:leadsCsv', async (filtros: FiltrosLeads, incluirSensiveis: boolean) => {
+    const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+    const hoje = new Date().toISOString().slice(0, 10)
+    const r = await dialog.showSaveDialog(win, {
+      title: 'Exportar leads (CSV)',
+      defaultPath: join(app.getPath('documents'), `leads-${hoje}.csv`),
+      filters: [{ name: 'CSV (Excel)', extensions: ['csv'] }]
+    })
+    if (r.canceled || !r.filePath) return null
+    const total = salvarCsv(r.filePath, filtros ?? {}, !!incluirSensiveis)
+    return { total, caminho: r.filePath }
+  })
 
   // Painel
   handle('painel:obter', obterPainel)

@@ -142,6 +142,9 @@ export function gerarLeadsFicticios(qtd = 50): number {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
   const insAplic = db.prepare(`INSERT INTO aplicacoes (id, created_at, updated_at, lead_id, produto, valor, data_vencimento)
       VALUES (?, ?, ?, ?, ?, ?, ?)`)
+  const insRev = db.prepare(`INSERT INTO revisoes_carteira (id, created_at, updated_at, lead_id, data, notas, proxima_revisao)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`)
+  const insNps = db.prepare(`INSERT INTO nps (id, created_at, updated_at, lead_id, data, nota, comentario) VALUES (?, ?, ?, ?, ?, ?, ?)`)
   const insTag = db.prepare('INSERT OR IGNORE INTO lead_tags (id, created_at, updated_at, lead_id, tag_id) VALUES (?, ?, ?, ?, ?)')
 
   db.transaction(() => {
@@ -248,6 +251,22 @@ export function gerarLeadsFicticios(qtd = 50): number {
           const produto = pick(['CDB Banco Master 2027', 'LCI Banco Inter', 'LCA BTG', 'Tesouro IPCA+ 2035', 'CRA Raízen', 'Debênture Eneva', 'CDB Sofisa 110% CDI', 'COE Ibovespa'])
           const venc = chance(0.6) ? new Date(agora + int(-5, 45) * 86_400_000) : new Date(agora + int(60, 900) * 86_400_000)
           insAplic.run(randomUUID(), createdISO, createdISO, id, produto, Math.round((20_000 + rnd() * 480_000) / 1000) * 1000, dataISO(venc))
+        }
+      }
+      // Pós-venda: revisões de carteira e NPS para clientes ativos.
+      if (etapa === 'cliente_ativo') {
+        const nRev = int(1, 3)
+        for (let k = nRev; k >= 1; k--) {
+          const dRev = new Date(agora - (k * 90 - int(0, 20)) * 86_400_000)
+          const proxima = new Date(dRev.getTime() + 90 * 86_400_000)
+          insRev.run(randomUUID(), dRev.toISOString(), dRev.toISOString(), id, dataISO(dRev),
+            pick(['Rebalanceamento: reduzimos pós-fixado e aumentamos IPCA+.', 'Cliente satisfeito com o resultado; aportou mais R$ 50 mil.', 'Revisamos objetivos: foco em previdência para sucessão.', 'Mercado volátil; mantivemos a alocação e reforçamos a reserva.']),
+            dataISO(proxima))
+        }
+        if (chance(0.8)) {
+          const nota = pick([10, 10, 9, 9, 9, 8, 8, 7, 6, 4])
+          insNps.run(randomUUID(), createdISO, createdISO, id, dataISO(new Date(agora - int(5, 120) * 86_400_000)), nota,
+            nota >= 9 ? pick(['Atendimento excelente, sempre disponível.', 'Recomendo para todos os amigos.', null]) : nota >= 7 ? pick(['Bom, mas poderia ter mais contato.', null]) : 'Esperava retorno mais rápido nas dúvidas.')
         }
       }
       for (const tag of algunsDe(tags, 0, 2)) insTag.run(randomUUID(), createdISO, createdISO, id, tag.id)

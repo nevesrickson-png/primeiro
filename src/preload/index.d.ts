@@ -1,6 +1,6 @@
 import type { Etapa } from '../shared/constants'
 import type {
-  Agenda, Aplicacao, ConfigSync, ConflitoSync, RegistroSync, ResultadoSync, AplicacaoInput, AppInfo, AuthStatus, DadosPainel, FiltroTarefas, ResumoLembretes, Tarefa, TarefaInput, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
+  Agenda, Aplicacao, Backup, Indicacao, Nps, NpsInput, Revisao, RevisaoInput, ConfigSync, ConflitoSync, RegistroSync, ResultadoSync, AplicacaoInput, AppInfo, AuthStatus, DadosPainel, FiltroTarefas, ResumoLembretes, Tarefa, TarefaInput, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
   Resultado, Tag
 } from '../shared/types'
 
@@ -53,6 +53,25 @@ export interface Api {
     excluir(id: string): P<void>
   }
   agenda: { obter(): P<Agenda> }
+  posvenda: {
+    revisoes(leadId: string): P<Revisao[]>
+    criarRevisao(dados: RevisaoInput): P<Revisao>
+    atualizarRevisao(id: string, dados: RevisaoInput): P<Revisao>
+    excluirRevisao(id: string): P<void>
+    nps(leadId: string): P<Nps[]>
+    criarNps(dados: NpsInput): P<Nps>
+    excluirNps(id: string): P<void>
+    resumoNps(): P<{ nps: number | null; respostas: number; promotores: number; neutros: number; detratores: number }>
+    indicacoes(leadId: string): P<Indicacao[]>
+  }
+  backup: {
+    listar(): P<Backup[]>
+    fazer(): P<Backup>
+    restaurar(arquivo: string): P<void>
+    restaurarArquivo(): P<boolean>
+    abrirPasta(): P<string>
+  }
+  exportar: { leadsCsv(filtros: FiltrosLeads, incluirSensiveis: boolean): P<{ total: number; caminho: string } | null> }
   sync: {
     obterConfig(): P<ConfigSync>
     salvarConfig(url: string, token?: string): P<void>

@@ -1,8 +1,8 @@
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import clsx from 'clsx'
 import {
-  ArrowLeft, Mail, MessageCircle, Trash2, Save, ShieldCheck, Lock, Construction, Phone, MessageSquarePlus
+  ArrowLeft, Mail, MessageCircle, Trash2, Save, ShieldCheck, Lock, Phone, MessageSquarePlus
 } from 'lucide-react'
 import {
   BASES_LEGAIS, ESTADOS_CIVIS, ETAPAS, FAIXAS_PATRIMONIO, FAIXAS_RENDA, HORIZONTES, OBJETIVOS, ORIGENS,
@@ -19,6 +19,7 @@ import { useToast } from '../components/toast'
 import { HistoricoLead, type HistoricoLeadRef } from '../components/HistoricoLead'
 import { TarefasLead } from '../components/TarefasLead'
 import { AplicacoesLead } from '../components/AplicacoesLead'
+import { PosVendaLead } from '../components/PosVendaLead'
 
 const VAZIO: LeadInput = {
   nome: '', telefone: null, whatsapp: null, email: null, cidade: null, estado: null, profissao: null,
@@ -45,7 +46,7 @@ const ABAS = [
   { id: 'preferencias', label: 'Preferências' },
   { id: 'historico', label: 'Histórico', novo: false },
   { id: 'tarefas', label: 'Tarefas', novo: false },
-  { id: 'posvenda', label: 'Pós-venda', fase: 6 }
+  { id: 'posvenda', label: 'Pós-venda', novo: false }
 ] as const
 type Aba = (typeof ABAS)[number]['id']
 
@@ -76,12 +77,21 @@ export function LeadFicha() {
   const [confirmarSaida, setConfirmarSaida] = useState(false)
   const historicoRef = useRef<HistoricoLeadRef>(null)
 
+  const [busca] = useSearchParams()
+  useEffect(() => {
+    // Ao abrir outro lead (ou um novo), sempre começa pela aba Dados.
+    setAba('dados')
+  }, [id])
+
   useEffect(() => {
     if (!id) {
+      // "Cadastrar indicação" (aba Pós-venda) abre o novo lead já com a indicação preenchida.
+      const indicadoPor = busca.get('indicado_por')
+      const inicial = indicadoPor ? { ...VAZIO, indicado_por: indicadoPor, origem: 'indicacao' as const } : VAZIO
       setLead(null)
-      setForm(VAZIO)
+      setForm(inicial)
       setOriginal(JSON.stringify(VAZIO))
-      setIndicadoNome(null)
+      setIndicadoNome(indicadoPor ? busca.get('indicado_nome') : null)
       return
     }
     chamar(api.leads.obter(id))
@@ -98,7 +108,7 @@ export function LeadFicha() {
         setIndicadoNome(l.indicado_por_nome)
       })
       .catch((e) => avisar(e.message, 'erro'))
-  }, [id, navigate, avisar])
+  }, [id, navigate, avisar, busca])
 
   const alterado = useMemo(() => JSON.stringify(form) !== original, [form, original])
   const set = <K extends keyof LeadInput>(k: K, v: LeadInput[K]) => setForm((f) => ({ ...f, [k]: v }))
@@ -231,7 +241,7 @@ export function LeadFicha() {
           {/* Abas */}
           <div className="mt-6 flex gap-1 border-b border-zinc-200 dark:border-zinc-800">
             {ABAS.map((a) => {
-              const bloqueada = novo && ('fase' in a || 'novo' in a)
+              const bloqueada = novo && 'novo' in a
               return (
                 <button
                   key={a.id}
@@ -377,12 +387,7 @@ export function LeadFicha() {
 
             {aba === 'tarefas' && id && lead && <TarefasLead leadId={id} leadNome={lead.nome} />}
 
-            {aba === 'posvenda' && (
-              <div className="flex flex-col items-center py-20 text-center text-sm text-zinc-500">
-                <Construction size={22} className="mb-2 text-zinc-400" />
-                Disponível na Fase {(ABAS.find((a) => a.id === aba) as { fase?: number }).fase}.
-              </div>
-            )}
+            {aba === 'posvenda' && id && lead && <PosVendaLead leadId={id} leadNome={lead.nome} />}
 
             {lead && (
               <p className="mt-4 text-xs text-zinc-400">

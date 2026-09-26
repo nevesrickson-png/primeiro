@@ -1,12 +1,13 @@
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { KeyRound, Sparkles, Tag as TagIcon, Trash2, FolderOpen, Clock, Construction, Sheet } from 'lucide-react'
+import { KeyRound, Sparkles, Tag as TagIcon, Trash2, FolderOpen, Clock, Sheet, DatabaseBackup, FileDown, Download } from 'lucide-react'
 import { CORES_TAG } from '@shared/constants'
 import type { AppInfo, Tag } from '@shared/types'
 import { api, chamar } from '../lib/api'
 import { Confirmar, Field, TagChip } from '../components/ui'
 import { useToast } from '../components/toast'
 import { ConfigSincronizacao } from '../components/Sincronizacao'
+import { ConfigBackup, ExportarCsv } from '../components/BackupExportacao'
 
 function Bloco({ icone, titulo, descricao, children }: { icone: ReactNode; titulo: string; descricao?: string; children: ReactNode }) {
   return (
@@ -132,6 +133,7 @@ export function Configuracoes() {
   const [info, setInfo] = useState<AppInfo | null>(null)
   const [config, setConfig] = useState<Record<string, string>>({})
   const [gerando, setGerando] = useState(false)
+  const [exportar, setExportar] = useState(false)
 
   useEffect(() => {
     chamar(api.app.info()).then(setInfo)
@@ -181,8 +183,13 @@ export function Configuracoes() {
           <ConfigSincronizacao />
         </Bloco>
 
-        <Bloco icone={<Construction size={16} />} titulo="Em breve" descricao="Backup/restauração e exportação CSV (Fase 6).">
-          <p className="text-sm text-zinc-500">Essas opções aparecerão aqui nas próximas fases.</p>
+        <Bloco icone={<DatabaseBackup size={16} />} titulo="Backup e restauração">
+          <ConfigBackup />
+        </Bloco>
+
+        <Bloco icone={<FileDown size={16} />} titulo="Exportar CSV" descricao="Todos os leads em um arquivo CSV para Excel. Para exportar só uma parte, use o botão Exportar na tela Leads (respeita busca e filtros).">
+          <button className="btn-secondary" onClick={() => setExportar(true)}><Download size={14} /> Exportar todos os leads</button>
+          <ExportarCsv aberto={exportar} filtros={{}} onFechar={() => setExportar(false)} />
         </Bloco>
 
         {info?.dev && (
