@@ -13,6 +13,8 @@ import * as sync from './sync'
 import * as posvenda from './db/posvenda'
 import * as backup from './backup'
 import { salvarCsv } from './exportar'
+import * as emailCfg from './email/config'
+import * as campanhas from './email/campanhas'
 import type { FiltrosLeads } from '@shared/types'
 import * as config from './db/configuracoes'
 import { gerarLeadsFicticios } from './db/seed'
@@ -49,12 +51,18 @@ export function registrarIpc(): void {
     validarSenha(senha)
     conn.criarBanco(caminhoBanco(), senha)
   })
-  handle('auth:desbloquear', (senha: string) => conn.desbloquear(caminhoBanco(), senha))
+  handle('auth:desbloquear', (senha: string) => {
+    conn.desbloquear(caminhoBanco(), senha)
+    campanhas.recuperarInterrompidas()
+  })
   handle('auth:trocarSenha', (atual: string, nova: string) => {
     validarSenha(nova)
     conn.trocarSenha(atual, nova, caminhoBanco())
   })
-  handle('auth:bloquear', () => conn.fecharBanco())
+  handle('auth:bloquear', () => {
+    campanhas.pararMotor()
+    conn.fecharBanco()
+  })
 
   // Leads
   handle('leads:listar', leads.listarLeads)
@@ -154,13 +162,40 @@ export function registrarIpc(): void {
     return { total, caminho: r.filePath }
   })
 
+  // E-mail em massa
+  handle('email:obterConfig', emailCfg.obterConfigEmail)
+  handle('email:salvarConfig', emailCfg.salvarConfigEmail)
+  handle('email:testarConexao', emailCfg.testarConexaoEmail)
+  handle('email:enviadosHoje', campanhas.enviadosHoje)
+  handle('email:escolherAnexos', async () => {
+    const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+    const r = await dialog.showOpenDialog(win, { title: 'Anexar arquivos', properties: ['openFile', 'multiSelections'] })
+    return r.canceled ? [] : campanhas.registrarAnexosEscolhidos(r.filePaths)
+  })
+  handle('campanhas:listar', campanhas.listarCampanhas)
+  handle('campanhas:obter', campanhas.obterCampanha)
+  handle('campanhas:salvar', campanhas.salvarCampanha)
+  handle('campanhas:duplicar', campanhas.duplicarCampanha)
+  handle('campanhas:excluir', campanhas.excluirCampanha)
+  handle('campanhas:previa', campanhas.previaDestinatarios)
+  handle('campanhas:enviarTeste', campanhas.enviarTeste)
+  handle('campanhas:iniciar', campanhas.iniciarCampanha)
+  handle('campanhas:pausar', campanhas.pausarCampanha)
+  handle('campanhas:retomar', campanhas.retomarCampanha)
+  handle('campanhas:cancelar', campanhas.cancelarCampanha)
+  handle('campanhas:envios', campanhas.listarEnvios)
+  handle('campanhas:emAndamento', campanhas.campanhaEmAndamento)
+  handle('descadastro:definir', campanhas.definirDescadastro)
+  handle('descadastro:emails', campanhas.descadastrarEmails)
+  handle('descadastro:listar', campanhas.listarDescadastrados)
+
   // Painel
   handle('painel:obter', obterPainel)
 
   // Configurações
   handle('config:obter', () => {
-    // O token da planilha nunca vai para a interface.
-    const { sync_token: _token, ...resto } = config.obterConfiguracoes()
+    // Segredos (token da planilha e senha do e-mail) nunca vão para a interface.
+    const { sync_token: _token, email_senha: _senha, ...resto } = config.obterConfiguracoes()
     return resto
   })
   handle('config:salvar', (chave: string, valor: string) => {

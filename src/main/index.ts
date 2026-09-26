@@ -30,6 +30,14 @@ function criarJanela(): void {
     return { action: 'deny' }
   })
 
+  // Nenhuma página (nem os quadros de prévia de e-mail) pode navegar para fora do app.
+  const urlDoApp = (url: string) => url.startsWith('file://') || url.startsWith('about:') || (!!process.env['ELECTRON_RENDERER_URL'] && url.startsWith(process.env['ELECTRON_RENDERER_URL']))
+  win.webContents.on('will-frame-navigate', (e) => {
+    if (urlDoApp(e.url)) return
+    e.preventDefault()
+    if (/^(https?:|mailto:)/.test(e.url)) shell.openExternal(e.url)
+  })
+
   if (!app.isPackaged && process.env['ELECTRON_RENDERER_URL']) {
     win.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {

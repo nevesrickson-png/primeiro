@@ -1,6 +1,6 @@
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { KeyRound, Sparkles, Tag as TagIcon, Trash2, FolderOpen, Clock, Sheet, DatabaseBackup, FileDown, Download } from 'lucide-react'
+import { KeyRound, Sparkles, Tag as TagIcon, Trash2, FolderOpen, Clock, Sheet, DatabaseBackup, FileDown, Download, Mail } from 'lucide-react'
 import { CORES_TAG } from '@shared/constants'
 import type { AppInfo, Tag } from '@shared/types'
 import { api, chamar } from '../lib/api'
@@ -8,6 +8,7 @@ import { Confirmar, Field, TagChip } from '../components/ui'
 import { useToast } from '../components/toast'
 import { ConfigSincronizacao } from '../components/Sincronizacao'
 import { ConfigBackup, ExportarCsv } from '../components/BackupExportacao'
+import { ConfigEmail } from '../components/ConfigEmail'
 
 function Bloco({ icone, titulo, descricao, children }: { icone: ReactNode; titulo: string; descricao?: string; children: ReactNode }) {
   return (
@@ -181,6 +182,10 @@ export function Configuracoes() {
 
         <Bloco icone={<Sheet size={16} />} titulo="Sincronização com Google Planilhas" descricao="Espelho da aba Leads e importação das respostas do Google Forms (aba Entradas). Manual, pelo botão Sincronizar do menu.">
           <ConfigSincronizacao />
+        </Bloco>
+
+        <Bloco icone={<Mail size={16} />} titulo="E-mail (envios em massa)" descricao="A caixa de e-mail usada nas campanhas da tela E-mails. Os envios saem do seu próprio endereço.">
+          <ConfigEmail />
         </Bloco>
 
         <Bloco icone={<DatabaseBackup size={16} />} titulo="Backup e restauração">

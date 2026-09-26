@@ -1,5 +1,5 @@
 import type {
-  Etapa, TipoInteracao, TipoTarefa, FaixaPatrimonio, FaixaRenda, Horizonte, Objetivo, Origem, Produto, Suitability
+  Etapa, ProvedorEmail, PublicoCampanha, TipoInteracao, TipoTarefa, FaixaPatrimonio, FaixaRenda, Horizonte, Objetivo, Origem, Produto, Suitability
 } from './constants'
 
 /** Campos editáveis de um lead (o que a ficha envia para criar/atualizar). */
@@ -51,6 +51,8 @@ export interface Lead extends Omit<LeadInput, 'tag_ids'> {
   created_by: string | null
   tags: Tag[]
   indicado_por_nome: string | null
+  /** Pediu para não receber e-mails em massa (data do pedido). */
+  email_descadastrado_em: string | null
 }
 
 /** Linha enxuta usada na lista virtualizada. */
@@ -334,4 +336,88 @@ export interface Backup {
   caminho: string
   tamanho: number
   data: string
+}
+
+export type SegurancaSmtp = 'ssl' | 'starttls' | 'nenhuma'
+
+/** Configuração da caixa de e-mail (a senha nunca vai para a interface). */
+export interface ConfigEmail {
+  provedor: ProvedorEmail
+  host: string
+  porta: number
+  seguranca: SegurancaSmtp
+  usuario: string
+  senhaDefinida: boolean
+  remetenteNome: string
+  responderPara: string
+  intervaloSeg: number
+  limiteDiario: number
+  rodape: string
+}
+
+export interface ConfigEmailInput extends Omit<ConfigEmail, 'senhaDefinida'> {
+  /** Vazio mantém a senha atual. */
+  senha?: string
+}
+
+export interface Anexo {
+  nome: string
+  caminho: string
+  tamanho: number
+}
+
+export type StatusCampanha = 'rascunho' | 'enviando' | 'pausada' | 'concluida' | 'cancelada'
+
+export interface CampanhaInput {
+  nome: string
+  assunto: string
+  corpo: string
+  publico: PublicoCampanha
+  filtros: FiltrosLeads
+  incluir_sem_consentimento: boolean
+  anexos: Anexo[]
+}
+
+export interface Campanha extends CampanhaInput {
+  id: string
+  status: StatusCampanha
+  mensagem_status: string | null
+  total: number
+  enviados: number
+  erros: number
+  pendentes: number
+  iniciada_em: string | null
+  concluida_em: string | null
+  created_at: string
+  updated_at: string
+}
+
+/** Prévia do público: quem recebe e quem fica de fora (e por quê). */
+export interface PreviaDestinatarios {
+  recebem: number
+  semEmail: number
+  semConsentimento: number
+  descadastrados: number
+  repetidos: number
+  amostra: { nome: string; email: string }[]
+}
+
+export interface EnvioCampanha {
+  id: string
+  lead_id: string | null
+  nome: string | null
+  email: string
+  status: 'pendente' | 'enviado' | 'erro' | 'ignorado'
+  erro: string | null
+  enviado_em: string | null
+}
+
+export interface ProgressoCampanha {
+  campanhaId: string
+  status: StatusCampanha
+  total: number
+  enviados: number
+  erros: number
+  pendentes: number
+  mensagem: string | null
 }

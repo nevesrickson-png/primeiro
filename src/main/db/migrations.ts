@@ -211,6 +211,44 @@ export const migrations: { versao: number; descricao: string; sql: string }[] = 
       CREATE INDEX idx_conflitos_lead ON sync_conflitos(lead_id);
       CREATE INDEX idx_sync_log_inicio ON sync_log(iniciado_em);
     `
+  },
+  {
+    versao: 3,
+    descricao: 'E-mail em massa (campanhas) e descadastro',
+    sql: `
+      -- Quando preenchido, o lead não recebe e-mails em massa (pedido de descadastro).
+      ALTER TABLE leads ADD COLUMN email_descadastrado_em TEXT;
+
+      CREATE TABLE campanhas (${colunasPadrao},
+        nome TEXT NOT NULL,
+        assunto TEXT NOT NULL DEFAULT '',
+        corpo TEXT NOT NULL DEFAULT '',
+        publico TEXT NOT NULL DEFAULT 'todos',       -- todos | clientes | negociacao | personalizado
+        filtros TEXT NOT NULL DEFAULT '{}',          -- FiltrosLeads (JSON) quando personalizado
+        incluir_sem_consentimento INTEGER NOT NULL DEFAULT 0,
+        anexos TEXT NOT NULL DEFAULT '[]',           -- [{nome, caminho, tamanho}]
+        status TEXT NOT NULL DEFAULT 'rascunho',     -- rascunho | enviando | pausada | concluida | cancelada
+        mensagem_status TEXT,
+        total INTEGER NOT NULL DEFAULT 0,
+        iniciada_em TEXT,
+        concluida_em TEXT,
+        usuario_id TEXT REFERENCES usuarios(id)
+      );
+      CREATE INDEX idx_campanhas_status ON campanhas(status);
+
+      -- Um registro por destinatário, criado ao iniciar o envio (lista congelada).
+      CREATE TABLE campanha_envios (${colunasPadrao},
+        campanha_id TEXT NOT NULL REFERENCES campanhas(id) ON DELETE CASCADE,
+        lead_id TEXT REFERENCES leads(id) ON DELETE SET NULL,
+        email TEXT NOT NULL,
+        nome TEXT,
+        status TEXT NOT NULL DEFAULT 'pendente',     -- pendente | enviado | erro | ignorado
+        erro TEXT,
+        enviado_em TEXT
+      );
+      CREATE INDEX idx_envios_campanha ON campanha_envios(campanha_id, status);
+      CREATE INDEX idx_envios_enviado ON campanha_envios(enviado_em);
+    `
   }
 ]
 

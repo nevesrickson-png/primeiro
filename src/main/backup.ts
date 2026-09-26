@@ -2,6 +2,7 @@ import { copyFileSync, existsSync, readdirSync, rmSync, statSync } from 'fs'
 import { basename, join } from 'path'
 import { caminhoBanco, pastaBackups } from './paths'
 import { estaDesbloqueado, fecharBanco, getDb } from './db/connection'
+import { pararMotor } from './email/campanhas'
 import type { Backup } from '@shared/types'
 
 export const MANTER_BACKUPS = 10
@@ -56,6 +57,7 @@ let backupAoFecharFeito = false
 /** Chamado ao fechar o app: fecha o banco e faz o backup (uma única vez, só se o banco foi aberto). */
 export function fecharComBackup(): void {
   if (backupAoFecharFeito) return
+  pararMotor() // um envio em andamento fica "pausado" e pode ser retomado ao reabrir
   const estavaAberto = estaDesbloqueado()
   fecharBanco()
   if (!estavaAberto) return
@@ -76,6 +78,7 @@ export function restaurarBackup(caminho: string): void {
   const destino = caminhoBanco()
   if (caminho === destino) throw new Error('Escolha um arquivo de backup, não o banco em uso.')
   if (statSync(caminho).size < 1024) throw new Error('O arquivo escolhido não parece ser um banco do CRM.')
+  pararMotor()
   if (estaDesbloqueado()) getDb().pragma('wal_checkpoint(TRUNCATE)')
   fecharBanco()
   if (existsSync(destino)) copyFileSync(destino, join(pastaBackups(), `${PREFIXO}antes-restauracao-${carimbo()}.db`))

@@ -1,6 +1,6 @@
 import type { Etapa } from '../shared/constants'
 import type {
-  Agenda, Aplicacao, Backup, Indicacao, Nps, NpsInput, Revisao, RevisaoInput, ConfigSync, ConflitoSync, RegistroSync, ResultadoSync, AplicacaoInput, AppInfo, AuthStatus, DadosPainel, FiltroTarefas, ResumoLembretes, Tarefa, TarefaInput, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
+  Agenda, Anexo, Aplicacao, Campanha, CampanhaInput, ConfigEmail, ConfigEmailInput, EnvioCampanha, PreviaDestinatarios, ProgressoCampanha, Backup, Indicacao, Nps, NpsInput, Revisao, RevisaoInput, ConfigSync, ConflitoSync, RegistroSync, ResultadoSync, AplicacaoInput, AppInfo, AuthStatus, DadosPainel, FiltroTarefas, ResumoLembretes, Tarefa, TarefaInput, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
   Resultado, Tag
 } from '../shared/types'
 
@@ -70,6 +70,34 @@ export interface Api {
     restaurar(arquivo: string): P<void>
     restaurarArquivo(): P<boolean>
     abrirPasta(): P<string>
+  }
+  email: {
+    obterConfig(): P<ConfigEmail>
+    salvarConfig(dados: ConfigEmailInput): P<void>
+    testarConexao(): P<void>
+    enviadosHoje(): P<number>
+    escolherAnexos(): P<Anexo[]>
+  }
+  campanhas: {
+    listar(): P<Campanha[]>
+    obter(id: string): P<Campanha>
+    salvar(id: string | null, dados: CampanhaInput): P<Campanha>
+    duplicar(id: string): P<Campanha>
+    excluir(id: string): P<void>
+    previa(dados: Pick<CampanhaInput, 'publico' | 'filtros' | 'incluir_sem_consentimento'>): P<PreviaDestinatarios>
+    enviarTeste(dados: CampanhaInput, para?: string): P<string>
+    iniciar(id: string): P<Campanha>
+    pausar(id: string): P<Campanha>
+    retomar(id: string): P<Campanha>
+    cancelar(id: string): P<Campanha>
+    envios(id: string, status?: string): P<EnvioCampanha[]>
+    emAndamento(): P<string | null>
+    aoProgredir(fn: (p: ProgressoCampanha) => void): () => void
+  }
+  descadastro: {
+    definir(leadId: string, descadastrado: boolean): P<void>
+    emails(texto: string): P<{ marcados: number; naoEncontrados: string[] }>
+    listar(): P<{ id: string; nome: string; email: string | null; email_descadastrado_em: string }[]>
   }
   exportar: { leadsCsv(filtros: FiltrosLeads, incluirSensiveis: boolean): P<{ total: number; caminho: string } | null> }
   sync: {

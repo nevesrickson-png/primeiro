@@ -69,6 +69,39 @@ const api = {
     abrirPasta: inv('backup:abrirPasta')
   },
   exportar: { leadsCsv: inv('exportar:leadsCsv') },
+  email: {
+    obterConfig: inv('email:obterConfig'),
+    salvarConfig: inv('email:salvarConfig'),
+    testarConexao: inv('email:testarConexao'),
+    enviadosHoje: inv('email:enviadosHoje'),
+    escolherAnexos: inv('email:escolherAnexos')
+  },
+  campanhas: {
+    listar: inv('campanhas:listar'),
+    obter: inv('campanhas:obter'),
+    salvar: inv('campanhas:salvar'),
+    duplicar: inv('campanhas:duplicar'),
+    excluir: inv('campanhas:excluir'),
+    previa: inv('campanhas:previa'),
+    enviarTeste: inv('campanhas:enviarTeste'),
+    iniciar: inv('campanhas:iniciar'),
+    pausar: inv('campanhas:pausar'),
+    retomar: inv('campanhas:retomar'),
+    cancelar: inv('campanhas:cancelar'),
+    envios: inv('campanhas:envios'),
+    emAndamento: inv('campanhas:emAndamento'),
+    /** Progresso do envio em tempo real. */
+    aoProgredir: (fn: (p: unknown) => void) => {
+      const h = (_e: unknown, p: unknown) => fn(p)
+      ipcRenderer.on('campanha:progresso', h)
+      return () => ipcRenderer.removeListener('campanha:progresso', h)
+    }
+  },
+  descadastro: {
+    definir: inv('descadastro:definir'),
+    emails: inv('descadastro:emails'),
+    listar: inv('descadastro:listar')
+  },
   sync: {
     obterConfig: inv('sync:obterConfig'),
     salvarConfig: inv('sync:salvarConfig'),

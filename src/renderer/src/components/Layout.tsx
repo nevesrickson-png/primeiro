@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
-import { Home, Users, KanbanSquare, BarChart3, Settings, Lock, Moon, Sun, CheckSquare } from 'lucide-react'
+import { Home, Users, KanbanSquare, BarChart3, Settings, Lock, Moon, Sun, CheckSquare, Mail, Loader2 } from 'lucide-react'
 import { api, chamar } from '../lib/api'
 import { aoAlterarTarefas } from '../lib/eventos'
 import { BotaoSincronizar } from './Sincronizacao'
@@ -13,6 +13,7 @@ const ITENS = [
   { to: '/leads', label: 'Leads', icone: Users },
   { to: '/funil', label: 'Funil', icone: KanbanSquare },
   { to: '/painel', label: 'Painel', icone: BarChart3 },
+  { to: '/campanhas', label: 'E-mails', icone: Mail },
   { to: '/configuracoes', label: 'Configurações', icone: Settings }
 ]
 
@@ -24,6 +25,13 @@ export function Layout({ onBloquear }: { onBloquear: () => void }) {
   const [pendentes, setPendentes] = useState(0)
   // Incrementado após sincronizar: recria a tela atual para recarregar os dados.
   const [versaoDados, setVersaoDados] = useState(0)
+  const [enviando, setEnviando] = useState(false)
+
+  // Indicador no menu enquanto uma campanha de e-mail está sendo enviada.
+  useEffect(() => {
+    chamar(api.campanhas.emAndamento()).then((id) => setEnviando(!!id)).catch(() => {})
+    return api.campanhas.aoProgredir((p) => setEnviando(p.status === 'enviando'))
+  }, [])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -73,6 +81,7 @@ export function Layout({ onBloquear }: { onBloquear: () => void }) {
             >
               <Icone size={16} strokeWidth={1.8} />
               <span className="flex-1">{label}</span>
+              {to === '/campanhas' && enviando && <Loader2 size={13} className="animate-spin text-sky-500" aria-label="Enviando e-mails" />}
               {to === '/inicio' && pendentes > 0 && (
                 <span className="rounded-full bg-red-500 px-1.5 text-[10px] font-semibold tabular-nums text-white" title="Tarefas atrasadas e de hoje">{pendentes}</span>
               )}

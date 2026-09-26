@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import clsx from 'clsx'
-import { ArrowDownUp, Plus, Search, Users, X, Sparkles, ArrowDown, ArrowUp, Download } from 'lucide-react'
+import { ArrowDownUp, Plus, Search, Users, X, Sparkles, ArrowDown, ArrowUp, Download, Mail } from 'lucide-react'
 import {
   ETAPAS, FAIXAS_PATRIMONIO, ORIGENS, PRODUTOS, SUITABILITY, rotulo
 } from '@shared/constants'
@@ -135,6 +135,17 @@ export function Leads() {
           )}
         </div>
         <div className="flex gap-2">
+          <button
+            className="btn-secondary h-8"
+            disabled={!leads.length}
+            title="Criar uma campanha de e-mail para a lista atual (busca e filtros)"
+            onClick={() => {
+              const { ordenacao: _o, direcao: _d, ...f } = filtros
+              navigate(`/campanhas/nova?filtros=${encodeURIComponent(JSON.stringify(f))}`)
+            }}
+          >
+            <Mail size={14} /> Enviar e-mail
+          </button>
           <button className="btn-secondary h-8" onClick={() => setExportar(true)} disabled={!leads.length} title="Exportar a lista atual para CSV">
             <Download size={14} /> Exportar
           </button>

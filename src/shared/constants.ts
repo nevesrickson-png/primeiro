@@ -121,6 +121,41 @@ export const TIPOS_TAREFA = [
 ] as const satisfies readonly Opcao[]
 export type TipoTarefa = (typeof TIPOS_TAREFA)[number]['value']
 
+/** Públicos prontos para campanhas de e-mail. */
+export const PUBLICOS_CAMPANHA = [
+  { value: 'todos', label: 'Todos os leads', descricao: 'Toda a base, em qualquer etapa' },
+  { value: 'clientes', label: 'Clientes', descricao: 'Conta aberta e clientes ativos' },
+  { value: 'negociacao', label: 'Leads em negociação', descricao: 'De Novo até Proposta' },
+  { value: 'personalizado', label: 'Personalizado', descricao: 'Escolha etapa, origem, tag, produto…' }
+] as const
+export type PublicoCampanha = (typeof PUBLICOS_CAMPANHA)[number]['value']
+
+/** Variáveis aceitas no assunto e no corpo dos e-mails. */
+export const VARIAVEIS_EMAIL = [
+  { chave: 'primeiro_nome', descricao: 'Primeiro nome', exemplo: 'Mariana' },
+  { chave: 'nome', descricao: 'Nome completo', exemplo: 'Mariana Costa Almeida' },
+  { chave: 'empresa', descricao: 'Empresa', exemplo: 'Clínica Sorriso' },
+  { chave: 'cidade', descricao: 'Cidade', exemplo: 'Campinas' },
+  { chave: 'profissao', descricao: 'Profissão', exemplo: 'Dentista' }
+] as const
+
+/** Servidores SMTP conhecidos. */
+export const PROVEDORES_EMAIL = [
+  { value: 'gmail', label: 'Gmail / Google Workspace', host: 'smtp.gmail.com', porta: 465, seguranca: 'ssl', limite: 400,
+    ajuda: 'Ative a verificação em duas etapas e crie uma "senha de app" em myaccount.google.com/apppasswords. Use essa senha aqui, não a senha normal.' },
+  { value: 'outlook', label: 'Outlook / Hotmail (pessoal)', host: 'smtp-mail.outlook.com', porta: 587, seguranca: 'starttls', limite: 250,
+    ajuda: 'Pode exigir verificação em duas etapas e uma senha de app (account.microsoft.com → Segurança). Algumas contas Microsoft não permitem mais SMTP.' },
+  { value: 'office365', label: 'Microsoft 365 (empresa)', host: 'smtp.office365.com', porta: 587, seguranca: 'starttls', limite: 250,
+    ajuda: 'O administrador do Microsoft 365 precisa liberar "SMTP autenticado" para a sua caixa.' },
+  { value: 'yahoo', label: 'Yahoo', host: 'smtp.mail.yahoo.com', porta: 465, seguranca: 'ssl', limite: 250,
+    ajuda: 'Crie uma senha de app em Segurança da conta do Yahoo.' },
+  { value: 'zoho', label: 'Zoho Mail', host: 'smtp.zoho.com', porta: 465, seguranca: 'ssl', limite: 250,
+    ajuda: 'Se a verificação em duas etapas estiver ativa, use uma senha específica de aplicativo.' },
+  { value: 'outro', label: 'Outro (SMTP do meu provedor)', host: '', porta: 587, seguranca: 'starttls', limite: 200,
+    ajuda: 'Consulte o seu provedor (ex.: UOL, Locaweb, KingHost, HostGator) para servidor, porta e tipo de segurança.' }
+] as const
+export type ProvedorEmail = (typeof PROVEDORES_EMAIL)[number]['value']
+
 export const UFS = [
   'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
   'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'

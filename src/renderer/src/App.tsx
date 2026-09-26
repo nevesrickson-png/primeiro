@@ -12,6 +12,7 @@ import { Inicio } from './pages/Inicio'
 import { Tarefas } from './pages/Tarefas'
 import { Funil } from './pages/Funil'
 import { Painel } from './pages/Painel'
+import { CampanhaPagina, Campanhas } from './pages/Campanhas'
 
 export default function App() {
   const [status, setStatus] = useState<AuthStatus | null>(null)
@@ -39,6 +40,9 @@ export default function App() {
               <Route path="/leads/:id" element={<LeadFicha />} />
               <Route path="/funil" element={<Funil />} />
               <Route path="/painel" element={<Painel />} />
+              <Route path="/campanhas" element={<Campanhas />} />
+              <Route path="/campanhas/nova" element={<CampanhaPagina />} />
+              <Route path="/campanhas/:id" element={<CampanhaPagina />} />
               <Route path="/configuracoes" element={<Configuracoes />} />
               <Route path="*" element={<Navigate to="/inicio" replace />} />
             </Route>

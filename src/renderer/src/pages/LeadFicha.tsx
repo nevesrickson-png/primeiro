@@ -272,6 +272,19 @@ export function LeadFicha() {
                     </button>
                   </div>
                   <Field label="E-mail" className="col-span-4"><input className="input" type="email" {...txt('email')} /></Field>
+                  {lead && (
+                    <div className="col-span-2 flex items-end pb-1">
+                      <Toggle
+                        checked={!!lead.email_descadastrado_em}
+                        onChange={async (v) => {
+                          await chamar(api.descadastro.definir(lead.id, v))
+                          setLead({ ...lead, email_descadastrado_em: v ? new Date().toISOString() : null })
+                          avisar(v ? 'Não receberá mais e-mails em massa.' : 'Voltará a receber e-mails em massa.')
+                        }}
+                        label="Não receber e-mails em massa"
+                      />
+                    </div>
+                  )}
                   <Field label="Cidade" className="col-span-3"><input className="input" {...txt('cidade')} /></Field>
                   <Field label="Estado" className="col-span-1">
                     <Select value={form.estado} onChange={(v) => set('estado', v)} opcoes={UFS.map((u) => ({ value: u, label: u }))} vazio="UF" />

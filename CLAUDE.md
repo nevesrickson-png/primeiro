@@ -52,7 +52,16 @@ Crie índices e uma tabela FTS5 para busca rápida por nome, e-mail, telefone, e
 3. Funil: Kanban com drag-and-drop entre etapas (cada mudança grava em historico_etapas) e alternância para a visão de lista
 4. Ficha do lead: abas Dados, Perfil financeiro, Preferências, Histórico (timeline de interações), Tarefas, Pós-venda (revisões, indicações recebidas, NPS)
 5. Painel: leads por origem, conversão por etapa, patrimônio potencial no funil por etapa, leads parados, novos leads por mês, tarefas atrasadas (gráficos com Recharts)
-6. Configurações: senha, dias para "lead parado", sincronização, backup/restauração, exportar CSV
+6. Configurações: senha, dias para "lead parado", sincronização, backup/restauração, exportar CSV, caixa de e-mail
+7. E-mails: campanhas de e-mail em massa (ver seção abaixo)
+
+## E-mail em massa (campanhas)
+- Envio pela caixa de e-mail do próprio assessor via SMTP (Gmail, Outlook, Microsoft 365, Yahoo, Zoho ou outro), com senha de app guardada no banco criptografado.
+- Público: todos os leads, clientes (conta aberta + cliente ativo), leads em negociação ou filtros personalizados (os mesmos da tela Leads; botão "Enviar e-mail" na lista).
+- Um e-mail individual por pessoa (nunca cópia oculta), com variáveis ({{primeiro_nome}}, {{nome}}, {{empresa}}, {{cidade}}, {{profissao}}), negrito/itálico/links, anexos até 15 MB e rodapé de descadastro.
+- LGPD: por padrão só leads com consentimento; descadastrados ("não receber e-mails") nunca recebem; e-mails repetidos e inválidos são excluídos.
+- Envio sequencial com intervalo e limite diário configuráveis; progresso em tempo real, pausa, retomada e cancelamento; campanhas interrompidas (app fechado) viram "pausadas".
+- Cada e-mail enviado vira uma interação do tipo e-mail no histórico do lead.
 
 ## Sincronização com Google Planilhas (manual, botão "Sincronizar")
 - Ponte via Google Apps Script publicado como Web App, autenticado por token secreto guardado nas Configurações. Gere o código do Apps Script em /apps-script/Code.gs com instruções de instalação passo a passo em português.
@@ -68,6 +77,7 @@ Crie índices e uma tabela FTS5 para busca rápida por nome, e-mail, telefone, e
 4. Tarefas, lembretes e tela Início
 5. Sincronização com Google Planilhas + Google Forms
 6. Pós-venda (revisões, indicações, NPS), backup, exportação e build do .exe portátil
+7. E-mail em massa (campanhas pela caixa de e-mail do assessor)
 
 Ao final de cada fase, gere 50 leads fictícios realistas para teste (apenas em modo de desenvolvimento) e explique como rodar.
 
@@ -100,4 +110,5 @@ Ao final de cada fase, gere 50 leads fictícios realistas para teste (apenas em 
 - **Backup** (`src/main/backup.ts`): cópia do crm.db criptografado (após `wal_checkpoint`) em `backups/crm-AAAAMMDD-HHMMSS.db` ao fechar o app (`fecharComBackup`, uma vez, só se o banco foi aberto) e sob demanda; mantém os 10 mais recentes (por data do arquivo); nunca sobrescreve (sufixo -2…). Restaurar guarda `crm-antes-restauracao-*.db`, substitui o banco e bloqueia o app (senha = a da data do backup). A interface só restaura por nome de arquivo da pasta de backups ou por arquivo escolhido no diálogo do sistema.
 - **Exportação CSV** (`src/main/exportar.ts`): separador `;` + BOM UTF-8 (Excel pt-BR), mesmos formatos legíveis da planilha, respeita busca/filtros da tela Leads; dados sensíveis só com opção explícita; células iniciadas por `= + - @` são neutralizadas.
 - **Build portátil**: `npm run dist` → `release/CRM-Assessor-<versão>-portatil.exe`. `electron-builder.yml` exclui fontes C e binários de outros sistemas. Empacotado, `userData` do Electron também fica ao lado do .exe (`dados-do-app/`), nada em AppData. Ícone gerado por `scripts/gerar-icone.cjs` (resources/icon.png).
+- **E-mail em massa** (`src/main/email/`): `config.ts` (SMTP via nodemailer; presets em `PROVEDORES_EMAIL`; segurança SSL/STARTTLS obrigatória — "nenhuma" só para localhost em dev; senha em `configuracoes.email_senha`, nunca enviada ao renderer; `mensagemErroSmtp` traduz erros) e `campanhas.ts` (público via `listarLeads` + exclusões; lista de destinatários congelada em `campanha_envios` ao iniciar; motor único e sequencial: erro 550–553/EENVELOPE marca só o destinatário, qualquer outro erro pausa a campanha mantendo-o pendente; limite diário conta `campanha_envios` enviados hoje; `pararMotor` ao bloquear/fechar/restaurar; `recuperarInterrompidas` ao desbloquear; progresso pelo canal `campanha:progresso`). Montagem da mensagem em `src/shared/emailModelo.ts` (usada no envio e na prévia; texto sempre escapado). Descadastro em `leads.email_descadastrado_em` (migration 3; local, não altera updated_at, não sincroniza). Anexos só de arquivos escolhidos no diálogo do sistema. Prévia em iframe `sandbox="allow-same-origin"` (sem scripts); navegação para fora do app é bloqueada (`will-frame-navigate`) e links abrem no navegador. Testar com `npm run caixa-teste` (servidor SMTP local, `scripts/caixa-teste-smtp.cjs`).
 - **Dados fictícios**: `src/main/db/seed.ts`, disponível apenas quando `!app.isPackaged` (botão em Configurações e na lista vazia).
