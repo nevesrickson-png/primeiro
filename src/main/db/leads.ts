@@ -65,7 +65,7 @@ function linhaParaLead(l: LinhaLead, tags: Tag[]): Lead {
   }
 }
 
-function registrarEtapa(leadId: string, de: string | null, para: string, data: string): void {
+export function registrarEtapa(leadId: string, de: string | null, para: string, data: string): void {
   getDb()
     .prepare(
       `INSERT INTO historico_etapas (id, created_at, updated_at, lead_id, etapa_de, etapa_para, data, usuario_id)
@@ -74,7 +74,7 @@ function registrarEtapa(leadId: string, de: string | null, para: string, data: s
     .run(randomUUID(), data, data, leadId, de, para, data, usuarioAtualId())
 }
 
-function definirTags(leadId: string, tagIds: string[]): void {
+export function definirTags(leadId: string, tagIds: string[]): void {
   const db = getDb()
   const ts = agora()
   db.prepare('DELETE FROM lead_tags WHERE lead_id = ?').run(leadId)

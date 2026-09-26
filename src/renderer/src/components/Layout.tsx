@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { Home, Users, KanbanSquare, BarChart3, Settings, Lock, Moon, Sun, CheckSquare } from 'lucide-react'
 import { api, chamar } from '../lib/api'
 import { aoAlterarTarefas } from '../lib/eventos'
+import { BotaoSincronizar } from './Sincronizacao'
 import { aplicarTema, temaAtual, type Tema } from '../lib/tema'
 
 const ITENS = [
@@ -21,6 +22,8 @@ let notificado = false
 export function Layout({ onBloquear }: { onBloquear: () => void }) {
   const [tema, setTema] = useState<Tema>(temaAtual())
   const [pendentes, setPendentes] = useState(0)
+  // Incrementado após sincronizar: recria a tela atual para recarregar os dados.
+  const [versaoDados, setVersaoDados] = useState(0)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -77,6 +80,7 @@ export function Layout({ onBloquear }: { onBloquear: () => void }) {
           ))}
         </nav>
         <div className="space-y-0.5 border-t border-zinc-200 p-2 dark:border-zinc-800">
+          <BotaoSincronizar onSincronizado={() => setVersaoDados((v) => v + 1)} />
           <button onClick={alternarTema} className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm text-zinc-600 hover:bg-zinc-200/60 dark:text-zinc-400 dark:hover:bg-zinc-800/60">
             {tema === 'escuro' ? <Sun size={16} /> : <Moon size={16} />}
             {tema === 'escuro' ? 'Modo claro' : 'Modo escuro'}
@@ -94,7 +98,9 @@ export function Layout({ onBloquear }: { onBloquear: () => void }) {
         </div>
       </aside>
       <main className="min-w-0 flex-1 overflow-hidden">
-        <Outlet />
+        <div key={versaoDados} className="h-full">
+          <Outlet />
+        </div>
       </main>
     </div>
   )

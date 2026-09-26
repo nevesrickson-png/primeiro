@@ -1,11 +1,12 @@
 import { FormEvent, ReactNode, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { KeyRound, Sparkles, Tag as TagIcon, Trash2, FolderOpen, Clock, Construction } from 'lucide-react'
+import { KeyRound, Sparkles, Tag as TagIcon, Trash2, FolderOpen, Clock, Construction, Sheet } from 'lucide-react'
 import { CORES_TAG } from '@shared/constants'
 import type { AppInfo, Tag } from '@shared/types'
 import { api, chamar } from '../lib/api'
 import { Confirmar, Field, TagChip } from '../components/ui'
 import { useToast } from '../components/toast'
+import { ConfigSincronizacao } from '../components/Sincronizacao'
 
 function Bloco({ icone, titulo, descricao, children }: { icone: ReactNode; titulo: string; descricao?: string; children: ReactNode }) {
   return (
@@ -176,7 +177,11 @@ export function Configuracoes() {
           <code className="block truncate rounded bg-zinc-100 px-2 py-1.5 text-xs dark:bg-zinc-800" title={info?.pastaDados}>{info?.pastaDados}</code>
         </Bloco>
 
-        <Bloco icone={<Construction size={16} />} titulo="Em breve" descricao="Sincronização com Google Planilhas (Fase 5), backup/restauração e exportação CSV (Fase 6).">
+        <Bloco icone={<Sheet size={16} />} titulo="Sincronização com Google Planilhas" descricao="Espelho da aba Leads e importação das respostas do Google Forms (aba Entradas). Manual, pelo botão Sincronizar do menu.">
+          <ConfigSincronizacao />
+        </Bloco>
+
+        <Bloco icone={<Construction size={16} />} titulo="Em breve" descricao="Backup/restauração e exportação CSV (Fase 6).">
           <p className="text-sm text-zinc-500">Essas opções aparecerão aqui nas próximas fases.</p>
         </Bloco>
 

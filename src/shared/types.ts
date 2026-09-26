@@ -251,3 +251,47 @@ export interface ResumoLembretes {
   aniversariosHoje: number
   vencimentos7dias: number
 }
+
+export interface ResultadoSync {
+  enviados: number
+  recebidos: number
+  criadosDaPlanilha: number
+  removidosNaPlanilha: number
+  importadosForms: number
+  duplicadosForms: number
+  conflitos: number
+  avisos: string[]
+}
+
+export interface ConfigSync {
+  url: string
+  tokenDefinido: boolean
+  ultima: string | null
+  conflitosPendentes: number
+}
+
+export interface RegistroSync {
+  id: string
+  iniciado_em: string
+  finalizado_em: string | null
+  status: 'em_andamento' | 'sucesso' | 'parcial' | 'erro'
+  enviados: number
+  recebidos: number
+  importados_forms: number
+  conflitos: number
+  mensagem: string | null
+}
+
+export interface ConflitoSync {
+  id: string
+  lead_id: string
+  lead_nome: string | null
+  campo: string
+  campo_titulo: string
+  valor_local: string
+  valor_planilha: string
+  updated_at_local: string
+  updated_at_planilha: string
+  vencedor: 'local' | 'planilha'
+  created_at: string
+}

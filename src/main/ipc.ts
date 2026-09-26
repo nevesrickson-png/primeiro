@@ -8,6 +8,7 @@ import { obterPainel } from './db/painel'
 import * as tarefas from './db/tarefas'
 import * as aplicacoes from './db/aplicacoes'
 import { obterAgenda, resumoLembretes } from './db/agenda'
+import * as sync from './sync'
 import * as config from './db/configuracoes'
 import { gerarLeadsFicticios } from './db/seed'
 import type { AppInfo, AuthStatus, Resultado } from '@shared/types'
@@ -24,6 +25,8 @@ function handle<A extends unknown[], R>(canal: string, fn: (...args: A) => R): v
     }
   })
 }
+
+const CONFIGS_EDITAVEIS = ['dias_lead_parado']
 
 function validarSenha(senha: string): void {
   if (typeof senha !== 'string' || senha.length < 6) throw new Error('A senha deve ter pelo menos 6 caracteres.')
@@ -89,12 +92,29 @@ export function registrarIpc(): void {
   handle('lembretes:resumo', resumoLembretes)
   handle('lembretes:notificar', () => notificarLembretes())
 
+  // Sincronização com Google Planilhas
+  handle('sync:obterConfig', sync.obterConfigSync)
+  handle('sync:salvarConfig', sync.salvarConfigSync)
+  handle('sync:testar', sync.testarConexao)
+  handle('sync:executar', sync.sincronizar)
+  handle('sync:historico', sync.historicoSync)
+  handle('sync:conflitos', sync.listarConflitos)
+  handle('sync:resolverConflito', sync.resolverConflito)
+  handle('sync:resolverTodos', sync.resolverTodosConflitos)
+
   // Painel
   handle('painel:obter', obterPainel)
 
   // Configurações
-  handle('config:obter', config.obterConfiguracoes)
-  handle('config:salvar', config.salvarConfiguracao)
+  handle('config:obter', () => {
+    // O token da planilha nunca vai para a interface.
+    const { sync_token: _token, ...resto } = config.obterConfiguracoes()
+    return resto
+  })
+  handle('config:salvar', (chave: string, valor: string) => {
+    if (!CONFIGS_EDITAVEIS.includes(chave)) throw new Error('Configuração não editável.')
+    config.salvarConfiguracao(chave, valor)
+  })
 
   // Desenvolvimento
   handle('dev:gerarLeads', (qtd?: number) => {

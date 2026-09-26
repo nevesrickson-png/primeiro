@@ -1,6 +1,6 @@
 import type { Etapa } from '../shared/constants'
 import type {
-  Agenda, Aplicacao, AplicacaoInput, AppInfo, AuthStatus, DadosPainel, FiltroTarefas, ResumoLembretes, Tarefa, TarefaInput, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
+  Agenda, Aplicacao, ConfigSync, ConflitoSync, RegistroSync, ResultadoSync, AplicacaoInput, AppInfo, AuthStatus, DadosPainel, FiltroTarefas, ResumoLembretes, Tarefa, TarefaInput, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
   Resultado, Tag
 } from '../shared/types'
 
@@ -53,6 +53,16 @@ export interface Api {
     excluir(id: string): P<void>
   }
   agenda: { obter(): P<Agenda> }
+  sync: {
+    obterConfig(): P<ConfigSync>
+    salvarConfig(url: string, token?: string): P<void>
+    testar(url?: string, token?: string): P<{ planilha: string }>
+    executar(): P<ResultadoSync>
+    historico(): P<RegistroSync[]>
+    conflitos(): P<ConflitoSync[]>
+    resolverConflito(id: string, acao: 'manter' | 'usar_outro'): P<void>
+    resolverTodos(): P<number>
+  }
   lembretes: {
     resumo(): P<ResumoLembretes>
     notificar(): P<boolean>

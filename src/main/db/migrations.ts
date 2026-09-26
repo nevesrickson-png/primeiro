@@ -196,6 +196,21 @@ export const migrations: { versao: number; descricao: string; sql: string }[] = 
       );
       CREATE INDEX idx_conflitos_resolvido ON sync_conflitos(resolvido);
     `
+  },
+  {
+    versao: 2,
+    descricao: 'Base da sincronização por lead',
+    sql: `
+      -- Últimos updated_at (local e da planilha) vistos na última sincronização de cada lead.
+      -- Serve para saber quem mudou desde então e detectar edição dos dois lados.
+      CREATE TABLE sync_leads (${colunasPadrao},
+        lead_id TEXT NOT NULL UNIQUE,
+        local_updated_at TEXT,
+        planilha_updated_at TEXT
+      );
+      CREATE INDEX idx_conflitos_lead ON sync_conflitos(lead_id);
+      CREATE INDEX idx_sync_log_inicio ON sync_log(iniciado_em);
+    `
   }
 ]
 

@@ -9,7 +9,7 @@ Especificação completa e decisões técnicas: [CLAUDE.md](CLAUDE.md).
 - [x] **Fase 2** — Funil Kanban + lista, histórico de etapas, interações
 - [x] **Fase 3** — Painel de métricas
 - [x] **Fase 4** — Tarefas, lembretes e tela Início
-- [ ] Fase 5 — Sincronização com Google Planilhas + Google Forms
+- [x] **Fase 5** — Sincronização com Google Planilhas + Google Forms (instalação: [apps-script/LEIA-ME.md](apps-script/LEIA-ME.md))
 - [ ] Fase 6 — Pós-venda, backup, exportação e build do .exe portátil
 
 ## Como rodar (desenvolvimento)
@@ -30,6 +30,7 @@ Outros comandos:
 | Comando | O que faz |
 | --- | --- |
 | `npm run typecheck` | Verifica os tipos TypeScript |
+| `npm run simulador` | Simula a planilha Google localmente (para testar a sincronização em dev) |
 | `npm run build` | Compila para `out/` |
 | `npm run dist` | Gera o `.exe` portátil em `release/` (será finalizado na Fase 6) |
 

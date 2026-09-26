@@ -50,6 +50,16 @@ const api = {
     excluir: inv('aplicacoes:excluir')
   },
   agenda: { obter: inv('agenda:obter') },
+  sync: {
+    obterConfig: inv('sync:obterConfig'),
+    salvarConfig: inv('sync:salvarConfig'),
+    testar: inv('sync:testar'),
+    executar: inv('sync:executar'),
+    historico: inv('sync:historico'),
+    conflitos: inv('sync:conflitos'),
+    resolverConflito: inv('sync:resolverConflito'),
+    resolverTodos: inv('sync:resolverTodos')
+  },
   lembretes: {
     resumo: inv('lembretes:resumo'),
     notificar: inv('lembretes:notificar')
