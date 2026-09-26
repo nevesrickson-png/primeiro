@@ -101,3 +101,23 @@ export function tempoRelativo(iso: string): string {
   const anos = Math.floor(meses / 12)
   return `há ${anos} ${anos === 1 ? 'ano' : 'anos'}`
 }
+
+/** Dias inteiros desde um timestamp ISO. */
+export function diasDesde(iso: string | null | undefined): number | null {
+  if (!iso) return null
+  return Math.max(0, Math.floor((Date.now() - Date.parse(iso)) / 86_400_000))
+}
+
+/** "AAAA-MM-DD" + "HH:MM" locais → ISO UTC. */
+export function dataHoraLocalParaISO(dataISO: string, hora: string): string {
+  const [a, m, d] = dataISO.split('-').map(Number)
+  const [h, min] = (hora || '00:00').split(':').map(Number)
+  return new Date(a, m - 1, d, h || 0, min || 0).toISOString()
+}
+
+/** ISO UTC → { data: "AAAA-MM-DD", hora: "HH:MM" } no fuso local. */
+export function isoParaDataHoraLocal(iso: string): { data: string; hora: string } {
+  const d = new Date(iso)
+  const p = (n: number) => String(n).padStart(2, '0')
+  return { data: `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`, hora: `${p(d.getHours())}:${p(d.getMinutes())}` }
+}

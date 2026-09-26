@@ -1,5 +1,5 @@
 import type {
-  Etapa, FaixaPatrimonio, FaixaRenda, Horizonte, Objetivo, Origem, Produto, Suitability
+  Etapa, TipoInteracao, FaixaPatrimonio, FaixaRenda, Horizonte, Objetivo, Origem, Produto, Suitability
 } from './constants'
 
 /** Campos editáveis de um lead (o que a ficha envia para criar/atualizar). */
@@ -71,10 +71,13 @@ export interface LeadResumo {
   created_at: string
   updated_at: string
   tag_ids: string[]
+  /** Quando o lead entrou na etapa atual (último registro em historico_etapas). */
+  etapa_desde: string | null
+  ultima_interacao: string | null
 }
 
 export type OrdenacaoLeads =
-  | 'nome' | 'created_at' | 'updated_at' | 'valor_potencial' | 'etapa' | 'patrimonio'
+  | 'nome' | 'created_at' | 'updated_at' | 'valor_potencial' | 'etapa' | 'patrimonio' | 'ultima_interacao'
 
 export interface FiltrosLeads {
   busca?: string
@@ -108,3 +111,26 @@ export interface AppInfo {
 
 /** Resultado padrão das chamadas IPC: erros viram mensagens em português. */
 export type Resultado<T> = { ok: true; data: T } | { ok: false; erro: string }
+
+export interface HistoricoEtapa {
+  id: string
+  lead_id: string
+  etapa_de: Etapa | null
+  etapa_para: Etapa
+  data: string
+}
+
+export interface InteracaoInput {
+  lead_id: string
+  tipo: TipoInteracao
+  /** Timestamp ISO (UTC). */
+  data: string
+  resumo: string | null
+  proximo_passo: string | null
+}
+
+export interface Interacao extends InteracaoInput {
+  id: string
+  created_at: string
+  updated_at: string
+}

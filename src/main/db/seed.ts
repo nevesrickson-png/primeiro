@@ -33,6 +33,43 @@ const HOBBIES = ['Corrida de rua, já fez 3 maratonas', 'Torce para o Corinthian
 const MOTIVOS_PERDA = ['Preferiu ficar com o gerente do banco', 'Sem patrimônio disponível no momento', 'Achou as taxas altas', 'Parou de responder', 'Fechou com outro assessor']
 const OBS = ['Prefere contato por WhatsApp no fim da tarde.', 'Veio de uma live sobre previdência.', 'Tem recursos parados na poupança.', 'Quer diversificar para o exterior.', 'Recebeu herança recentemente.', 'Vai vender um imóvel no próximo semestre.', 'Insatisfeito com a rentabilidade atual.', 'Pediu material sobre FIIs.', 'Interessado em planejamento sucessório.', 'Empresa em crescimento; avaliar PGBL.', '']
 
+/** Interações típicas ao chegar em cada etapa: [tipo, resumo, próximo passo]. */
+const INTERACOES_POR_ETAPA: Record<string, [string, string, string | null][]> = {
+  novo: [
+    ['whatsapp', 'Lead chegou pelo formulário; mandei mensagem de boas-vindas.', 'Ligar para qualificar'],
+    ['outro', 'Comentou num post pedindo mais informações sobre investimentos.', 'Chamar no direct']
+  ],
+  primeiro_contato: [
+    ['ligacao', 'Primeira ligação: se apresentou, contou que investe só na poupança e no banco.', 'Agendar reunião de diagnóstico'],
+    ['whatsapp', 'Conversa inicial pelo WhatsApp; demonstrou interesse em diversificar.', 'Enviar convite de reunião'],
+    ['ligacao', 'Tentativa de contato, caiu na caixa postal. Deixei recado.', 'Tentar de novo amanhã à tarde']
+  ],
+  reuniao_agendada: [
+    ['whatsapp', 'Reunião confirmada por videochamada.', 'Preparar pauta e questionário de perfil'],
+    ['email', 'Enviei convite da reunião com link do Meet e questionário prévio.', 'Confirmar presença na véspera']
+  ],
+  diagnostico: [
+    ['reuniao', 'Reunião de diagnóstico: mapeamos patrimônio, objetivos e horizonte. Carteira concentrada em renda fixa bancária.', 'Montar proposta de alocação'],
+    ['reuniao', 'Diagnóstico com o casal; principal objetivo é aposentadoria e educação dos filhos.', 'Aplicar suitability e montar proposta']
+  ],
+  proposta: [
+    ['reuniao', 'Apresentei a proposta de alocação. Gostou, mas quer comparar custos com o banco.', 'Enviar comparativo de taxas'],
+    ['email', 'Enviei a proposta em PDF com a alocação sugerida e cenários.', 'Ligar em 3 dias para tirar dúvidas']
+  ],
+  conta_aberta: [
+    ['whatsapp', 'Conta aberta! Ajudei com o envio dos documentos.', 'Acompanhar a transferência dos recursos'],
+    ['ligacao', 'Cadastro aprovado. Combinamos a portabilidade dos investimentos do banco.', 'Solicitar portabilidade']
+  ],
+  cliente_ativo: [
+    ['reuniao', 'Primeira alocação feita conforme a proposta. Cliente satisfeito.', 'Agendar revisão trimestral'],
+    ['whatsapp', 'Recursos transferidos e aplicados. Mandei o resumo da carteira.', 'Revisão em 90 dias']
+  ],
+  perdido: [
+    ['ligacao', 'Informou que decidiu não seguir no momento.', null],
+    ['whatsapp', 'Sem resposta após várias tentativas; encerrando o contato por enquanto.', 'Retomar daqui a 6 meses']
+  ]
+}
+
 const TAGS_SEED: [string, string][] = [['VIP', '#eab308'], ['Médicos', '#ef4444'], ['Quente', '#f97316'], ['Evento XP', '#6366f1'], ['Retomar em 2027', '#64748b'], ['Empresário', '#22c55e']]
 
 let semente = 42
@@ -98,6 +135,8 @@ export function gerarLeadsFicticios(qtd = 50): number {
     ) VALUES (${Array(40).fill('?').join(', ')})`)
   const insHist = db.prepare(`INSERT INTO historico_etapas (id, created_at, updated_at, lead_id, etapa_de, etapa_para, data, usuario_id)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
+  const insInt = db.prepare(`INSERT INTO interacoes (id, created_at, updated_at, lead_id, tipo, data, resumo, proximo_passo, usuario_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
   const insTag = db.prepare('INSERT OR IGNORE INTO lead_tags (id, created_at, updated_at, lead_id, tag_id) VALUES (?, ?, ?, ?, ?)')
 
   db.transaction(() => {
@@ -118,7 +157,9 @@ export function gerarLeadsFicticios(qtd = 50): number {
       const etapa = etapaAleatoria()
       const origem = pick(['instagram', 'instagram', 'youtube', 'linkedin', 'indicacao', 'indicacao', 'indicacao', 'eventos', 'site', 'google_forms', 'outro'])
       const casado = chance(0.6)
-      const createdMs = agora - int(1, 330) * 86_400_000 - int(0, 86_000_000)
+      // Leads nas primeiras etapas tendem a ser recentes; os demais se espalham pelo último ano.
+      const diasAtras = etapa === 'novo' ? int(1, 25) : etapa === 'primeiro_contato' ? int(3, 60) : int(20, 330)
+      const createdMs = agora - diasAtras * 86_400_000 - int(0, 86_000_000)
       const avaliado = ['diagnostico', 'proposta', 'conta_aberta', 'cliente_ativo'].includes(etapa) || chance(0.15)
       const lgpd = chance(0.85)
       const indicador = origem === 'indicacao' && idsCriados.length > 3 && chance(0.7) ? pick(idsCriados) : null
@@ -169,7 +210,18 @@ export function gerarLeadsFicticios(qtd = 50): number {
         lgpd ? 1 : 0, lgpd ? dataISO(new Date(createdMs)) : null, lgpd ? pick(['consentimento', 'consentimento', 'legitimo_interesse']) : null,
         pick(OBS) || null, usuario, usuario
       )
-      for (const p of passos) insHist.run(randomUUID(), p.data, p.data, id, p.de, p.para, p.data, usuario)
+      for (const p of passos) {
+        insHist.run(randomUUID(), p.data, p.data, id, p.de, p.para, p.data, usuario)
+        // Uma interação por etapa percorrida (às vezes duas), pouco depois da mudança.
+        const qtdInt = chance(0.8) ? 1 : chance(0.5) ? 2 : 0
+        for (let k = 0; k < qtdInt; k++) {
+          const [tipo, resumo, proximo] = pick(INTERACOES_POR_ETAPA[p.para])
+          const d = new Date(Math.min(Date.parse(p.data) + int(1, 72) * 3_600_000 * (k + 1), agora - 60_000))
+          d.setHours(int(8, 19), pick([0, 15, 30, 45]), 0, 0)
+          const dIso = new Date(Math.min(d.getTime(), agora - 60_000)).toISOString()
+          insInt.run(randomUUID(), dIso, dIso, id, tipo, dIso, resumo, proximo, usuario)
+        }
+      }
       for (const tag of algunsDe(tags, 0, 2)) insTag.run(randomUUID(), createdISO, createdISO, id, tag.id)
       idsCriados.push(id)
     }

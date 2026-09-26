@@ -6,7 +6,7 @@ Especificação completa e decisões técnicas: [CLAUDE.md](CLAUDE.md).
 ## Status
 
 - [x] **Fase 1** — estrutura, banco criptografado com migrations, tela de senha, CRUD de leads com ficha detalhada, busca e filtros
-- [ ] Fase 2 — Funil Kanban + lista, histórico de etapas, interações
+- [x] **Fase 2** — Funil Kanban + lista, histórico de etapas, interações
 - [ ] Fase 3 — Painel de métricas
 - [ ] Fase 4 — Tarefas, lembretes e tela Início
 - [ ] Fase 5 — Sincronização com Google Planilhas + Google Forms
@@ -40,4 +40,5 @@ Outros comandos:
 | `Ctrl+K` ou `/` | Leads | Foca a busca |
 | `Ctrl+N` | Leads | Novo lead |
 | `Ctrl+S` | Ficha | Salvar |
+| `Ctrl+Enter` | Histórico da ficha | Registrar interação |
 | `Esc` | Menus/diálogos | Fechar |

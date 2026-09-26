@@ -3,6 +3,7 @@ import { caminhoBanco, pastaDados } from './paths'
 import * as conn from './db/connection'
 import * as leads from './db/leads'
 import * as tags from './db/tags'
+import * as interacoes from './db/interacoes'
 import * as config from './db/configuracoes'
 import { gerarLeadsFicticios } from './db/seed'
 import type { AppInfo, AuthStatus, Resultado } from '@shared/types'
@@ -51,6 +52,14 @@ export function registrarIpc(): void {
   handle('leads:excluir', leads.excluirLead)
   handle('leads:buscarPorNome', leads.buscarLeadsPorNome)
   handle('leads:contar', leads.contarLeads)
+  handle('leads:moverEtapa', leads.moverEtapa)
+  handle('leads:historicoEtapas', leads.historicoEtapas)
+
+  // Interações
+  handle('interacoes:listar', interacoes.listarInteracoes)
+  handle('interacoes:criar', interacoes.criarInteracao)
+  handle('interacoes:atualizar', interacoes.atualizarInteracao)
+  handle('interacoes:excluir', interacoes.excluirInteracao)
 
   // Tags
   handle('tags:listar', tags.listarTags)

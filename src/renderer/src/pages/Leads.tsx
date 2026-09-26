@@ -24,7 +24,8 @@ const ORDENACOES: { value: OrdenacaoLeads; label: string }[] = [
   { value: 'updated_at', label: 'Última atualização' },
   { value: 'valor_potencial', label: 'Valor potencial' },
   { value: 'patrimonio', label: 'Faixa de patrimônio' },
-  { value: 'etapa', label: 'Etapa do funil' }
+  { value: 'etapa', label: 'Etapa do funil' },
+  { value: 'ultima_interacao', label: 'Última interação' }
 ]
 
 const COLUNAS = 'grid-cols-[minmax(200px,2fr)_140px_minmax(120px,1fr)_130px_100px_120px_90px_minmax(100px,1fr)]'

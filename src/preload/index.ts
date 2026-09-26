@@ -19,7 +19,15 @@ const api = {
     atualizar: inv('leads:atualizar'),
     excluir: inv('leads:excluir'),
     buscarPorNome: inv('leads:buscarPorNome'),
-    contar: inv('leads:contar')
+    contar: inv('leads:contar'),
+    moverEtapa: inv('leads:moverEtapa'),
+    historicoEtapas: inv('leads:historicoEtapas')
+  },
+  interacoes: {
+    listar: inv('interacoes:listar'),
+    criar: inv('interacoes:criar'),
+    atualizar: inv('interacoes:atualizar'),
+    excluir: inv('interacoes:excluir')
   },
   tags: {
     listar: inv('tags:listar'),

@@ -87,4 +87,6 @@ Ao final de cada fase, gere 50 leads fictícios realistas para teste (apenas em 
 - **Busca**: tabela FTS5 `leads_fts` (própria, não external-content, com `lead_id UNINDEXED`), mantida por triggers; tokenizer `unicode61 remove_diacritics 2`; busca por prefixo em todos os termos. Buscas só com dígitos também procuram trecho do telefone (LIKE).
 - **Multiusuário (preparado, não implementado)**: tabela `usuarios` com um usuário padrão; `leads.responsavel_id` e `created_by` apontam para ele.
 - **Configurações**: tabela chave/valor `configuracoes`. Tema (claro/escuro) fica no `localStorage` porque é necessário antes do desbloqueio.
+- **Funil**: Kanban com drag-and-drop nativo do HTML5 (sem biblioteca), colunas virtualizadas; mover card chama `leads:moverEtapa` (atualização otimista na tela). Mover para "perdido" pede o motivo. "Dias na etapa" vem do último registro de `historico_etapas` com `etapa_para = etapa atual`.
+- **Interações**: repositório `src/main/db/interacoes.ts`; `data` é timestamp ISO UTC (data + hora locais na interface). Criar interação NÃO altera `leads.updated_at` (para não gerar falsas edições na sincronização); a lista expõe `ultima_interacao` calculada.
 - **Dados fictícios**: `src/main/db/seed.ts`, disponível apenas quando `!app.isPackaged` (botão em Configurações e na lista vazia).

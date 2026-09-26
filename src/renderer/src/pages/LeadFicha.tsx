@@ -1,8 +1,8 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import clsx from 'clsx'
 import {
-  ArrowLeft, Mail, MessageCircle, Trash2, Save, ShieldCheck, Lock, Construction, Phone
+  ArrowLeft, Mail, MessageCircle, Trash2, Save, ShieldCheck, Lock, Construction, Phone, MessageSquarePlus
 } from 'lucide-react'
 import {
   BASES_LEGAIS, ESTADOS_CIVIS, ETAPAS, FAIXAS_PATRIMONIO, FAIXAS_RENDA, HORIZONTES, OBJETIVOS, ORIGENS,
@@ -16,6 +16,7 @@ import { DataInput, MoedaInput, TelefoneInput } from '../components/inputs'
 import { TagPicker } from '../components/TagPicker'
 import { LeadPicker } from '../components/LeadPicker'
 import { useToast } from '../components/toast'
+import { HistoricoLead, type HistoricoLeadRef } from '../components/HistoricoLead'
 
 const VAZIO: LeadInput = {
   nome: '', telefone: null, whatsapp: null, email: null, cidade: null, estado: null, profissao: null,
@@ -40,7 +41,7 @@ const ABAS = [
   { id: 'dados', label: 'Dados' },
   { id: 'financeiro', label: 'Perfil financeiro' },
   { id: 'preferencias', label: 'Preferências' },
-  { id: 'historico', label: 'Histórico', fase: 2 },
+  { id: 'historico', label: 'Histórico', novo: false },
   { id: 'tarefas', label: 'Tarefas', fase: 4 },
   { id: 'posvenda', label: 'Pós-venda', fase: 6 }
 ] as const
@@ -71,6 +72,7 @@ export function LeadFicha() {
   const [salvando, setSalvando] = useState(false)
   const [confirmarExclusao, setConfirmarExclusao] = useState(false)
   const [confirmarSaida, setConfirmarSaida] = useState(false)
+  const historicoRef = useRef<HistoricoLeadRef>(null)
 
   useEffect(() => {
     if (!id) {
@@ -206,6 +208,17 @@ export function LeadFicha() {
                     <Mail size={14} /> E-mail
                   </a>
                 )}
+                {!novo && (
+                  <button
+                    className="btn-secondary h-8 text-xs"
+                    onClick={() => {
+                      setAba('historico')
+                      setTimeout(() => historicoRef.current?.focar(), 50)
+                    }}
+                  >
+                    <MessageSquarePlus size={14} /> Registrar interação
+                  </button>
+                )}
               </div>
               <div className="mt-3">
                 <TagPicker selecionadas={form.tag_ids} onChange={(v) => set('tag_ids', v)} />
@@ -216,7 +229,7 @@ export function LeadFicha() {
           {/* Abas */}
           <div className="mt-6 flex gap-1 border-b border-zinc-200 dark:border-zinc-800">
             {ABAS.map((a) => {
-              const bloqueada = novo && 'fase' in a
+              const bloqueada = novo && ('fase' in a || 'novo' in a)
               return (
                 <button
                   key={a.id}
@@ -353,7 +366,9 @@ export function LeadFicha() {
               </>
             )}
 
-            {(aba === 'historico' || aba === 'tarefas' || aba === 'posvenda') && (
+            {aba === 'historico' && id && <HistoricoLead ref={historicoRef} leadId={id} versao={lead?.updated_at} />}
+
+            {(aba === 'tarefas' || aba === 'posvenda') && (
               <div className="flex flex-col items-center py-20 text-center text-sm text-zinc-500">
                 <Construction size={22} className="mb-2 text-zinc-400" />
                 Disponível na Fase {(ABAS.find((a) => a.id === aba) as { fase?: number }).fase}.

@@ -1,7 +1,8 @@
 import { randomUUID } from 'crypto'
 import { getDb, usuarioAtualId } from './connection'
 import { FAIXAS_PATRIMONIO, ETAPAS } from '@shared/constants'
-import type { FiltrosLeads, Lead, LeadInput, LeadResumo, Tag } from '@shared/types'
+import type { Etapa } from '@shared/constants'
+import type { FiltrosLeads, HistoricoEtapa, Lead, LeadInput, LeadResumo, Tag } from '@shared/types'
 
 const agora = (): string => new Date().toISOString()
 const collator = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true })
@@ -212,14 +213,18 @@ export function listarLeads(f: FiltrosLeads = {}): LeadResumo[] {
     updated_at: 'l.updated_at',
     valor_potencial: 'coalesce(l.valor_potencial, -1)',
     etapa: ordemEtapa,
-    patrimonio: ordemPatrimonio
+    patrimonio: ordemPatrimonio,
+    ultima_interacao: `coalesce(ultima_interacao, '')`
   }
 
   const linhas = getDb()
     .prepare(
       `SELECT l.id, l.nome, l.telefone, l.whatsapp, l.email, l.cidade, l.estado, l.empresa, l.etapa,
               l.origem, l.faixa_patrimonio, l.suitability, l.valor_potencial, l.created_at, l.updated_at,
-              (SELECT group_concat(lt.tag_id) FROM lead_tags lt WHERE lt.lead_id = l.id) AS tags_csv
+              (SELECT group_concat(lt.tag_id) FROM lead_tags lt WHERE lt.lead_id = l.id) AS tags_csv,
+              (SELECT max(h.data) FROM historico_etapas h
+                WHERE h.lead_id = l.id AND h.etapa_para = l.etapa AND h.deleted_at IS NULL) AS etapa_desde,
+              (SELECT max(i.data) FROM interacoes i WHERE i.lead_id = l.id AND i.deleted_at IS NULL) AS ultima_interacao
        FROM leads l
        WHERE ${where.join(' AND ')}
        ORDER BY ${orderBy[ordem] ?? orderBy.nome} ${dir}, l.nome COLLATE NOCASE`
@@ -253,4 +258,33 @@ export function buscarLeadsPorNome(texto: string, excluirId?: string, limite = 1
 
 export function contarLeads(): number {
   return (getDb().prepare('SELECT count(*) AS n FROM leads WHERE deleted_at IS NULL').get() as { n: number }).n
+}
+
+/**
+ * Muda a etapa de um lead (arrastar no Kanban, seletor na lista) e grava o histórico.
+ * Ao sair de "perdido" o motivo da perda é limpo.
+ */
+export function moverEtapa(id: string, etapa: Etapa, motivoPerda?: string | null): void {
+  if (!ETAPAS.some((e) => e.value === etapa)) throw new Error('Etapa inválida.')
+  const db = getDb()
+  const atual = db.prepare('SELECT etapa, motivo_perda FROM leads WHERE id = ? AND deleted_at IS NULL').get(id) as
+    | { etapa: string; motivo_perda: string | null }
+    | undefined
+  if (!atual) throw new Error('Lead não encontrado.')
+  if (atual.etapa === etapa && etapa !== 'perdido') return
+  const ts = agora()
+  const motivo = etapa === 'perdido' ? textoOuNull(motivoPerda) ?? atual.motivo_perda : null
+  db.transaction(() => {
+    db.prepare('UPDATE leads SET etapa = ?, motivo_perda = ?, updated_at = ? WHERE id = ?').run(etapa, motivo, ts, id)
+    if (atual.etapa !== etapa) registrarEtapa(id, atual.etapa, etapa, ts)
+  })()
+}
+
+export function historicoEtapas(leadId: string): HistoricoEtapa[] {
+  return getDb()
+    .prepare(
+      `SELECT id, lead_id, etapa_de, etapa_para, data FROM historico_etapas
+       WHERE lead_id = ? AND deleted_at IS NULL ORDER BY data DESC`
+    )
+    .all(leadId) as HistoricoEtapa[]
 }

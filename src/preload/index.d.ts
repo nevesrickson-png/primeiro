@@ -1,5 +1,7 @@
+import type { Etapa } from '../shared/constants'
 import type {
-  AppInfo, AuthStatus, FiltrosLeads, Lead, LeadInput, LeadResumo, Resultado, Tag
+  AppInfo, AuthStatus, FiltrosLeads, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
+  Resultado, Tag
 } from '../shared/types'
 
 type P<T> = Promise<Resultado<T>>
@@ -21,6 +23,14 @@ export interface Api {
     excluir(id: string): P<void>
     buscarPorNome(texto: string, excluirId?: string): P<{ id: string; nome: string; cidade: string | null }[]>
     contar(): P<number>
+    moverEtapa(id: string, etapa: Etapa, motivoPerda?: string | null): P<void>
+    historicoEtapas(leadId: string): P<HistoricoEtapa[]>
+  }
+  interacoes: {
+    listar(leadId: string): P<Interacao[]>
+    criar(dados: InteracaoInput): P<Interacao>
+    atualizar(id: string, dados: InteracaoInput): P<Interacao>
+    excluir(id: string): P<void>
   }
   tags: {
     listar(): P<(Tag & { total: number })[]>

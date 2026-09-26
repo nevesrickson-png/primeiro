@@ -104,6 +104,16 @@ export const BASES_LEGAIS = [
   { value: 'obrigacao_legal', label: 'Obrigação legal' }
 ] as const satisfies readonly Opcao[]
 
+export const TIPOS_INTERACAO = [
+  { value: 'ligacao', label: 'Ligação' },
+  { value: 'whatsapp', label: 'WhatsApp' },
+  { value: 'email', label: 'E-mail' },
+  { value: 'reuniao', label: 'Reunião' },
+  { value: 'evento', label: 'Evento' },
+  { value: 'outro', label: 'Outro' }
+] as const satisfies readonly Opcao[]
+export type TipoInteracao = (typeof TIPOS_INTERACAO)[number]['value']
+
 export const UFS = [
   'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
   'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
