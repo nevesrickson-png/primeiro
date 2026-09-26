@@ -10,6 +10,7 @@ import { LeadFicha } from './pages/LeadFicha'
 import { Configuracoes } from './pages/Configuracoes'
 import { EmBreve } from './pages/EmBreve'
 import { Funil } from './pages/Funil'
+import { Painel } from './pages/Painel'
 
 export default function App() {
   const [status, setStatus] = useState<AuthStatus | null>(null)
@@ -35,7 +36,7 @@ export default function App() {
               <Route path="/leads/novo" element={<LeadFicha />} />
               <Route path="/leads/:id" element={<LeadFicha />} />
               <Route path="/funil" element={<Funil />} />
-              <Route path="/painel" element={<EmBreve titulo="Painel" fase={3} texto="Gráficos de origem, conversão por etapa, patrimônio potencial e mais." />} />
+              <Route path="/painel" element={<Painel />} />
               <Route path="/configuracoes" element={<Configuracoes />} />
               <Route path="*" element={<Navigate to="/leads" replace />} />
             </Route>

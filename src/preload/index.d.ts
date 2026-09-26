@@ -1,6 +1,6 @@
 import type { Etapa } from '../shared/constants'
 import type {
-  AppInfo, AuthStatus, FiltrosLeads, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
+  AppInfo, AuthStatus, DadosPainel, FiltrosLeads, PeriodoPainel, HistoricoEtapa, Interacao, InteracaoInput, Lead, LeadInput, LeadResumo,
   Resultado, Tag
 } from '../shared/types'
 
@@ -38,6 +38,7 @@ export interface Api {
     atualizar(id: string, nome: string, cor: string): P<void>
     excluir(id: string): P<void>
   }
+  painel: { obter(periodo: PeriodoPainel): P<DadosPainel> }
   config: {
     obter(): P<Record<string, string>>
     salvar(chave: string, valor: string): P<void>

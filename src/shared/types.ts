@@ -134,3 +134,47 @@ export interface Interacao extends InteracaoInput {
   created_at: string
   updated_at: string
 }
+
+export interface LeadParado {
+  id: string
+  nome: string
+  empresa: string | null
+  etapa: Etapa
+  valor_potencial: number | null
+  ultima_atividade: string
+}
+
+export interface TarefaAtrasada {
+  id: string
+  titulo: string
+  data_vencimento: string
+  lead_id: string | null
+  lead_nome: string | null
+}
+
+/** Período do painel em dias (0 = desde o início). */
+export type PeriodoPainel = 30 | 90 | 180 | 365 | 0
+
+export interface DadosPainel {
+  periodo: PeriodoPainel
+  diasParado: number
+  kpis: {
+    totalLeads: number
+    novosNoPeriodo: number
+    emNegociacao: number
+    potencialFunil: number
+    clientesAtivos: number
+    /** Leads do período que chegaram a "conta aberta" ou além, sobre os leads do período (0–1). */
+    taxaConversao: number | null
+    parados: number
+    tarefasAtrasadas: number
+  }
+  porOrigem: { origem: string; qtd: number; convertidos: number }[]
+  /** Leads do período que alcançaram cada etapa (ou uma posterior). */
+  conversao: { etapa: Etapa; qtd: number }[]
+  perdidos: number
+  potencialPorEtapa: { etapa: Etapa; qtd: number; valor: number }[]
+  novosPorMes: { mes: string; qtd: number }[]
+  parados: LeadParado[]
+  tarefasAtrasadas: TarefaAtrasada[]
+}

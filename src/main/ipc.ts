@@ -4,6 +4,7 @@ import * as conn from './db/connection'
 import * as leads from './db/leads'
 import * as tags from './db/tags'
 import * as interacoes from './db/interacoes'
+import { obterPainel } from './db/painel'
 import * as config from './db/configuracoes'
 import { gerarLeadsFicticios } from './db/seed'
 import type { AppInfo, AuthStatus, Resultado } from '@shared/types'
@@ -66,6 +67,9 @@ export function registrarIpc(): void {
   handle('tags:criar', tags.criarTag)
   handle('tags:atualizar', tags.atualizarTag)
   handle('tags:excluir', tags.excluirTag)
+
+  // Painel
+  handle('painel:obter', obterPainel)
 
   // Configurações
   handle('config:obter', config.obterConfiguracoes)

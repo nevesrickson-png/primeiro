@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { getDb, usuarioAtualId } from './connection'
 import { FAIXAS_PATRIMONIO, ETAPAS } from '@shared/constants'
 import type { Etapa } from '@shared/constants'
-import type { FiltrosLeads, HistoricoEtapa, Lead, LeadInput, LeadResumo, Tag } from '@shared/types'
+import type { FiltrosLeads, HistoricoEtapa, LeadParado, Lead, LeadInput, LeadResumo, Tag } from '@shared/types'
 
 const agora = (): string => new Date().toISOString()
 const collator = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true })
@@ -287,4 +287,26 @@ export function historicoEtapas(leadId: string): HistoricoEtapa[] {
        WHERE lead_id = ? AND deleted_at IS NULL ORDER BY data DESC`
     )
     .all(leadId) as HistoricoEtapa[]
+}
+
+/**
+ * Leads parados: fora de "perdido" e "cliente_ativo", sem nenhuma atividade
+ * (edição, interação ou mudança de etapa) há mais de `dias` dias.
+ */
+export function leadsParados(dias: number, limite = 100): { total: number; leads: LeadParado[] } {
+  const corte = new Date(Date.now() - dias * 86_400_000).toISOString()
+  const base = `
+    FROM (
+      SELECT l.id, l.nome, l.etapa, l.valor_potencial, l.empresa,
+        max(l.updated_at,
+            coalesce((SELECT max(i.data) FROM interacoes i WHERE i.lead_id = l.id AND i.deleted_at IS NULL), ''),
+            coalesce((SELECT max(h.data) FROM historico_etapas h WHERE h.lead_id = l.id AND h.deleted_at IS NULL), '')
+        ) AS ultima_atividade
+      FROM leads l
+      WHERE l.deleted_at IS NULL AND l.etapa NOT IN ('perdido', 'cliente_ativo')
+    ) WHERE ultima_atividade < ?`
+  const db = getDb()
+  const total = (db.prepare(`SELECT count(*) AS n ${base}`).get(corte) as { n: number }).n
+  const leads = db.prepare(`SELECT * ${base} ORDER BY ultima_atividade LIMIT ?`).all(corte, limite) as LeadParado[]
+  return { total, leads }
 }

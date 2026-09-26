@@ -35,6 +35,7 @@ const api = {
     atualizar: inv('tags:atualizar'),
     excluir: inv('tags:excluir')
   },
+  painel: { obter: inv('painel:obter') },
   config: {
     obter: inv('config:obter'),
     salvar: inv('config:salvar')

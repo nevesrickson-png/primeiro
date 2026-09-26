@@ -137,6 +137,8 @@ export function gerarLeadsFicticios(qtd = 50): number {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
   const insInt = db.prepare(`INSERT INTO interacoes (id, created_at, updated_at, lead_id, tipo, data, resumo, proximo_passo, usuario_id)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+  const insTarefa = db.prepare(`INSERT INTO tarefas (id, created_at, updated_at, lead_id, titulo, data_vencimento, concluida, concluida_em, tipo, responsavel_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
   const insTag = db.prepare('INSERT OR IGNORE INTO lead_tags (id, created_at, updated_at, lead_id, tag_id) VALUES (?, ?, ?, ?, ?)')
 
   db.transaction(() => {
@@ -221,6 +223,16 @@ export function gerarLeadsFicticios(qtd = 50): number {
           const dIso = new Date(Math.min(d.getTime(), agora - 60_000)).toISOString()
           insInt.run(randomUUID(), dIso, dIso, id, tipo, dIso, resumo, proximo, usuario)
         }
+      }
+      // Tarefas de follow-up (algumas atrasadas, algumas concluídas) para leads em negociação.
+      if (!['perdido', 'cliente_ativo'].includes(etapa) && chance(0.5)) {
+        const venc = new Date(agora + int(-12, 15) * 86_400_000)
+        const concluida = venc.getTime() < agora && chance(0.4)
+        const titulo = pick(['Ligar para retomar conversa', 'Enviar proposta revisada', 'Confirmar reunião', 'Mandar material sobre previdência', 'Follow-up pós-reunião'])
+        insTarefa.run(randomUUID(), createdISO, createdISO, id, titulo, dataISO(venc), concluida ? 1 : 0, concluida ? new Date(agora).toISOString() : null, 'follow_up', usuario)
+      }
+      if (etapa === 'cliente_ativo' && chance(0.5)) {
+        insTarefa.run(randomUUID(), createdISO, createdISO, id, 'Revisão trimestral da carteira', dataISO(new Date(agora + int(-5, 60) * 86_400_000)), 0, null, 'revisao', usuario)
       }
       for (const tag of algunsDe(tags, 0, 2)) insTag.run(randomUUID(), createdISO, createdISO, id, tag.id)
       idsCriados.push(id)
