@@ -4,32 +4,49 @@ Este diretório roda o [Hermes Agent](https://github.com/NousResearch/hermes-age
 num container Docker, com **tudo guardado em `./dados`**. Para levar o agente com você
 (pendrive, outro PC) ou mandar para uma VPS, basta copiar a pasta inteira.
 
+## 1. No Windows: um clique (Hermes.exe)
+
+1. Coloque o `Hermes.exe` numa pasta só dele (ex.: `D:\Hermes`) e dê dois cliques.
+2. Se o Windows mostrar "O Windows protegeu o computador", clique em
+   **Mais informações → Executar assim mesmo** (o programa não tem assinatura digital paga).
+3. Se o Docker Desktop não estiver instalado, o Hermes pergunta e instala sozinho
+   (pede permissão de administrador). Depois: **reinicie o PC**, abra o Docker Desktop
+   uma vez para aceitar os termos e clique no Hermes de novo.
+4. Na primeira abertura ele baixa o Hermes (~2 GB, alguns minutos), cria uma senha
+   para o painel (mostrada na tela, copiada e salva em `ACESSO.txt`) e abre o navegador.
+5. No painel, entre com `admin` + a senha, abra **Keys** e conecte um provedor de IA
+   (o Nous Portal tem plano grátis; também dá para usar ChatGPT, Claude, OpenRouter...).
+   Depois é só usar o **Chat**.
+
+Das próximas vezes, o clique abre o chat em segundos. Para desligar: `Parar Hermes.cmd`.
+Dica: clique com o botão direito no `Hermes.exe` → *Mostrar mais opções* →
+*Enviar para → Área de trabalho* para ter o ícone na área de trabalho.
+
+O Hermes.exe cria na pasta dele:
+
 ```
-hermes-agent/
+D:\Hermes\
+├── Hermes.exe           # o lançador
 ├── docker-compose.yml   # definição do container
-├── .env.example         # modelo de configuração (copie para .env)
-├── hermes.sh            # atalhos para Linux / macOS / VPS
-├── hermes.ps1           # atalhos para Windows (PowerShell)
-├── dados/               # criado no 1º uso: memórias, sessões, skills, chaves (NÃO vai para o Git)
-└── backups/             # criado pelo comando "backup"
+├── .env                 # configuração (senha do painel etc.)
+├── ACESSO.txt           # usuário e senha do painel
+├── Parar Hermes.cmd     # desliga o agente
+└── dados\               # memórias, sessões, skills e chaves de API
 ```
 
-## 1. No seu PC (Windows)
+### Alternativa: scripts (Linux, macOS, VPS ou Windows sem o .exe)
 
-1. Instale o [Docker Desktop](https://www.docker.com/products/docker-desktop/) e abra-o.
-2. Copie esta pasta para onde quiser (ex.: `D:\hermes-agent`).
-3. No PowerShell, dentro da pasta:
-   ```powershell
-   .\hermes.ps1 setup      # 1ª vez: cria o .env e para
-   notepad .env            # troque a senha do painel e coloque sua chave de API
-   .\hermes.ps1 setup      # agora abre o assistente (escolha modelo, chaves, Telegram etc.)
-   .\hermes.ps1 iniciar
-   ```
-   Se o Windows bloquear o script: `powershell -ExecutionPolicy Bypass -File .\hermes.ps1 iniciar`
-4. Abra o painel em **http://localhost:9119** (usuário/senha do `.env`).
-   Para conversar pelo terminal: `.\hermes.ps1 chat`.
+Nesta pasta há também `hermes.sh` (Linux/macOS/VPS) e `hermes.ps1` (Windows):
 
-No Linux/macOS é igual, trocando por `./hermes.sh`.
+```bash
+./hermes.sh setup      # 1ª vez: cria o .env (edite a senha do painel) e roda o assistente
+./hermes.sh iniciar    # painel em http://localhost:9119
+```
+
+### Compilar o Hermes.exe
+
+Requer Go 1.22+: `go install github.com/tc-hib/go-winres@latest && ./lancador/compilar.sh`
+(gera `lancador/dist/Hermes.exe` e versões para Linux e macOS).
 
 ## 2. Levar com você
 
@@ -72,6 +89,7 @@ cd ~/hermes-agent
 sudo chown -R $USER: dados     # ajusta o dono dos arquivos vindos do Windows
 chmod +x hermes.sh
 ./hermes.sh iniciar
+# pasta criada pelo Hermes.exe (sem hermes.sh)? use: docker compose up -d
 ```
 
 O container reinicia sozinho se a VPS reiniciar (`restart: unless-stopped`).

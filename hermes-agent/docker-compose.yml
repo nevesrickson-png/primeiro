@@ -4,7 +4,7 @@
 # fica em ./dados, ao lado deste arquivo. Para levar o agente para outro PC
 # ou para uma VPS, basta copiar esta pasta inteira (com o container parado).
 #
-# Uso: veja LEIA-ME.md (ou rode ./hermes.sh / .\hermes.ps1).
+# Uso: veja LEIA-ME.md (Hermes.exe no Windows, ./hermes.sh no Linux/VPS).
 
 services:
   hermes:
@@ -25,8 +25,4 @@ services:
     volumes:
       - ./dados:/opt/data
     shm_size: 1g            # necessário para as ferramentas de navegador
-    deploy:
-      resources:
-        limits:
-          memory: ${LIMITE_MEMORIA:-4G}
-          cpus: "${LIMITE_CPUS:-2.0}"
+    mem_limit: ${LIMITE_MEMORIA:-4G}
