@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro'
 import AberturaPagina from '../components/AberturaPagina.astro'
 import Aceite from '../components/Aceite.astro'
-import { SITE } from '../config'
+import { SITE, linkWhatsapp } from '../config'
+const whats = linkWhatsapp()
 
 const publicos = [
   ['Empresários', 'O patrimônio pessoal costuma se misturar ao do negócio, o tempo é curto e as decisões são grandes. O trabalho aqui é dar estrutura, liquidez e pensar na sucessão.'],
@@ -97,6 +98,13 @@ const origens = ['Instagram', 'YouTube', 'LinkedIn', 'Indicação', 'Evento', 'G
         <h2 class="titulo">Vamos conversar</h2>
         <p class="apoio">Preencha abaixo e eu retorno em {SITE.prazoRetorno} para combinar o melhor horário.</p>
         <p class="aviso">A assessoria é indicada para patrimônios a partir de R$ 500 mil.</p>
+        {whats && (
+          <div class="atalho">
+            <p>Prefere começar pelo WhatsApp?</p>
+            <a class="link link--sub" href={whats} target="_blank" rel="noopener">Chamar no WhatsApp <span class="seta">→</span></a>
+            <p class="atalho__nota">O primeiro atendimento é feito pelo meu assistente virtual, que organiza o seu pedido e me passa a conversa.</p>
+          </div>
+        )}
       </div>
       <form class="form agendar__form" data-formulario="agendar" data-sucesso="/obrigado">
         <div class="campo"><label for="ag-nome">Seu nome</label><input id="ag-nome" name="nome" autocomplete="name" required maxlength="120" /></div>
@@ -157,6 +165,9 @@ const origens = ['Instagram', 'YouTube', 'LinkedIn', 'Indicação', 'Evento', 'G
   .agendar__form { background: var(--marfim-2); border: 1px solid var(--pedra); padding: clamp(24px, 4vw, 44px); }
   .agendar__envio { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
   .nota { font-size: 13px; color: var(--grafite); max-width: 300px; }
+  .atalho { display: grid; gap: 8px; justify-items: start; padding-top: 22px; border-top: 1px solid var(--pedra); }
+  .atalho p:first-child { font-family: var(--serif); font-size: 20px; }
+  .atalho__nota { font-size: 13px; color: var(--grafite); max-width: 360px; }
   .reg { padding: 40px 0; }
   .reg p { font-size: 13px; color: var(--grafite); max-width: 900px; }
 

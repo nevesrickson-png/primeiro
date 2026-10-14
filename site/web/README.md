@@ -64,8 +64,9 @@ Se o FTP da Hostinger já abrir dentro de `public_html`, troque `server-dir` em 
 ## Antes de publicar (pendências)
 
 - [ ] Compliance da EQI: rodapé regulatório, página Assessoria, valor mínimo e política de privacidade.
-- [ ] Pergunta "Quanto custa ter um assessor?" (fica fora do site até a redação ser aprovada; ver `src/pages/assessoria.astro`).
-- [ ] WhatsApp (`src/config.ts`) e e-mail da marca.
-- [ ] Fotos do ensaio: `public/imagens/retrato.jpg` e `retrato: '/imagens/retrato.jpg'` em `src/config.ts`.
-- [ ] Capítulos do livro (`src/pages/livro-e-palestras.astro`, lista `capitulos`).
+- [ ] Pergunta "Quanto custa ter um assessor?": entra com a tabela padrão de assessoria que Rickson vai enviar (ver `src/pages/assessoria.astro`).
+- [x] WhatsApp (21) 99205-3248, atendido pelo assistente virtual (o site avisa isso no atendimento e na privacidade).
+- [x] Foto do ensaio (`public/imagens/retrato-*`, `avatar.*` e `og.png`).
+- [ ] E-mail da marca (hoje `contato@ricksonmessias.com`, provisório).
+- [ ] Livro: arquivo ainda não recebido; capítulos entram em `src/pages/livro-e-palestras.astro` (lista `capitulos`).
 - [ ] Revisar e desmarcar "rascunho" dos primeiros artigos.

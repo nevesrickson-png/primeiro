@@ -1,22 +1,32 @@
 ---
-// Retrato do ensaio. Enquanto não houver foto (SITE.retrato), mostra um painel da marca com o selo CEA.
+// Retrato do ensaio. Sem foto (SITE.retrato = null), mostra um painel da marca com o selo CEA.
 import Simbolo from './Simbolo.astro'
 import Selo from './Selo.astro'
 import { SITE } from '../config'
-interface Props { alt?: string; proporcao?: string }
-const { alt = 'Rickson Messias, assessor de investimentos', proporcao = '4 / 5' } = Astro.props
+interface Props { alt?: string; selo?: boolean; prioridade?: boolean }
+const { alt = 'Rickson Messias, assessor de investimentos, de terno azul e braços cruzados', selo = true, prioridade = false } = Astro.props
+const base = SITE.retrato
 ---
-{SITE.retrato ? (
-  <img class="retrato" src={SITE.retrato} alt={alt} style={`aspect-ratio:${proporcao}`} loading="lazy" decoding="async" />
+{base ? (
+  <figure class="retrato">
+    <picture>
+      <source type="image/webp" srcset={`${base}-480.webp 480w, ${base}-800.webp 800w`} sizes="(max-width: 800px) 90vw, 480px" />
+      <img src={`${base}-800.jpg`} srcset={`${base}-480.jpg 480w, ${base}-800.jpg 800w`} sizes="(max-width: 800px) 90vw, 480px" width="800" height="1000" alt={alt} loading={prioridade ? 'eager' : 'lazy'} decoding="async" />
+    </picture>
+    {selo && <Selo />}
+  </figure>
 ) : (
-  <div class="retrato retrato--painel" style={`aspect-ratio:${proporcao}`} aria-hidden="true">
+  <div class="retrato retrato--painel" aria-hidden="true">
     <Simbolo pesos={[1, 0.4, 0.6]} rotulo="" />
     <Selo />
   </div>
 )}
 <style>
-  .retrato { width: 100%; object-fit: cover; border-radius: var(--raio); background: var(--tinta); }
-  .retrato--painel { position: relative; display: grid; place-items: center; background: radial-gradient(120% 90% at 30% 110%, var(--noite) 0%, var(--tinta) 62%); overflow: hidden; }
+  .retrato { position: relative; width: 100%; aspect-ratio: 4 / 5; border-radius: var(--raio); background: var(--tinta); overflow: hidden; margin: 0; }
+  .retrato img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+  /* Moldura da marca: filete champanhe deslocado e leve véu azul-tinta na base. */
+  figure.retrato::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 62%, rgba(11, 26, 44, 0.55)); pointer-events: none; }
+  .retrato :global(.selo) { position: absolute; right: 18px; bottom: 18px; width: 96px; z-index: 1; }
+  .retrato--painel { display: grid; place-items: center; background: radial-gradient(120% 90% at 30% 110%, var(--noite) 0%, var(--tinta) 62%); }
   .retrato--painel > :global(.simbolo) { width: 66%; }
-  .retrato--painel :global(.selo) { position: absolute; right: 22px; bottom: 22px; width: 108px; }
 </style>

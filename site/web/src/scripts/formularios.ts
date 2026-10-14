@@ -50,7 +50,7 @@ async function enviar(form: HTMLFormElement) {
     form.reset()
     status(form, 'ok', form.dataset.mensagemOk ?? 'Pronto. Recebido.')
   } catch {
-    status(form, 'erro', 'Não foi possível enviar agora. Tente de novo em instantes ou escreva para contato@ricksonmessias.com.')
+    status(form, 'erro', 'Não foi possível enviar agora. Tente de novo em instantes, escreva para contato@ricksonmessias.com ou chame no WhatsApp (21) 99205-3248.')
   } finally {
     if (botao && rotulo !== undefined) {
       botao.disabled = false

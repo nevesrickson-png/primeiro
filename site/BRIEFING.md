@@ -79,10 +79,10 @@ Portal de análises de Rickson Messias, assessor de investimentos CEA na EQI. Fu
 8. Compliance da EQI → compra do domínio e da Hostinger → publicação
 
 ## Pendências
-- [ ] Fotos do ensaio (retrato + ambiente)
+- [x] Foto do ensaio (uma foto, usada em Home, Sobre, artigos e compartilhamento)
 - [ ] Comprar domínio ricksonmessias.com + plano Hostinger
 - [ ] Confirmar o vínculo/texto regulatório com o compliance da EQI
-- [ ] Telefone/WhatsApp público para o site
+- [x] WhatsApp (21) 99205-3248 (assistente virtual de IA; avisado no site)
 - [ ] Criar o e-mail da marca (o site usa contato@ricksonmessias.com como provisório)
 - [ ] "[ano]" da visão no brand book
 - [ ] Lista dos conteúdos a reaproveitar (roteiros, cartas) para os primeiros artigos

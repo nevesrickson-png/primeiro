@@ -2,7 +2,7 @@
 import Marca from './Marca.astro'
 import CartaMensal from './CartaMensal.astro'
 import Horizonte from './Horizonte.astro'
-import { SITE, MENU } from '../config'
+import { SITE, MENU, linkWhatsapp } from '../config'
 interface Props { semCarta?: boolean }
 const { semCarta = false } = Astro.props
 const ano = new Date().getFullYear()
@@ -33,7 +33,7 @@ const ano = new Date().getFullYear()
         <p class="chapeu">Contato</p>
         <ul>
           <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
-          {SITE.whatsapp && <li><a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a></li>}
+          {linkWhatsapp() && <li><a href={linkWhatsapp()!} target="_blank" rel="noopener">{SITE.whatsappRotulo}</a></li>}
           <li><a href="/assessoria#agendar">Agendar conversa</a></li>
         </ul>
       </div>

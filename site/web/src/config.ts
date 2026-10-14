@@ -8,8 +8,10 @@ export const SITE = {
   assinatura: 'Patrimônio se constrói em décadas.',
   // Provisório até o e-mail da marca existir.
   email: 'contato@ricksonmessias.com',
-  // Só dígitos com DDI, ex.: '5521999999999'. null = o WhatsApp não aparece no site.
-  whatsapp: null as string | null,
+  // Só dígitos com DDI. Atendido pelo assistente virtual (IA) de Rickson; o site avisa isso.
+  whatsapp: '5521992053248' as string | null,
+  whatsappRotulo: 'WhatsApp · assistente virtual',
+  whatsappMensagem: 'Olá! Vim pelo site ricksonmessias.com e gostaria de falar com o Rickson.',
   redes: [
     { nome: 'Instagram', rotulo: '@ofilhomaisrico', url: 'https://instagram.com/ofilhomaisrico' },
     { nome: 'YouTube', rotulo: '@ofilhomaisrico', url: 'https://youtube.com/@ofilhomaisrico' },
@@ -20,8 +22,14 @@ export const SITE = {
   rodapeRegulatorio:
     'Conteúdo de caráter informativo, que não constitui recomendação de investimento. Rentabilidade passada não é garantia de rentabilidade futura. Rickson Messias é assessor de investimentos vinculado à EQI Investimentos, nos termos da regulamentação da CVM.',
   prazoRetorno: 'até 2 dias úteis',
-  // Fotos do ensaio: coloque em public/imagens/ e informe o caminho (ex.: '/imagens/retrato.jpg').
-  retrato: null as string | null
+  // Foto do ensaio (public/imagens/retrato-{480,800}.{webp,jpg}). null = painel da marca no lugar.
+  retrato: '/imagens/retrato' as string | null,
+  avatar: '/imagens/avatar' as string | null
+}
+
+export function linkWhatsapp(): string | null {
+  if (!SITE.whatsapp) return null
+  return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(SITE.whatsappMensagem)}`
 }
 
 export const FORM_ENDPOINT: string = import.meta.env.PUBLIC_FORM_ENDPOINT ?? ''
