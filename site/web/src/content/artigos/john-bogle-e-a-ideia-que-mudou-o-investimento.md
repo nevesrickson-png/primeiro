@@ -33,7 +33,7 @@ No Brasil, os ETFs chegaram à bolsa nos anos 2000 e hoje cobrem índices de aç
 2. **Simplicidade não é preguiça.** Acompanhar o mercado com disciplina é uma estratégia, não uma desistência.
 3. **Tempo é o aliado.** A lógica do índice só funciona para quem fica.
 
-Essa história, e a dos ETFs no Brasil, é o tema do livro que estou escrevendo, *O Poder dos ETF’s*.
+Essa história, e a dos ETFs no Brasil, é o tema do meu livro, *A Revolução dos ETFs*.
 
 ---
 

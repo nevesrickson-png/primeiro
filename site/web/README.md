@@ -68,5 +68,5 @@ Se o FTP da Hostinger já abrir dentro de `public_html`, troque `server-dir` em 
 - [x] WhatsApp (21) 99205-3248, atendido pelo assistente virtual (o site avisa isso no atendimento e na privacidade).
 - [x] Foto do ensaio (`public/imagens/retrato-*`, `avatar.*` e `og.png`).
 - [ ] E-mail da marca (hoje `contato@ricksonmessias.com`, provisório).
-- [ ] Livro: arquivo ainda não recebido; capítulos entram em `src/pages/livro-e-palestras.astro` (lista `capitulos`).
+- [x] Livro: *A Revolução dos ETFs* (título, subtítulo e sumário do repositório `livros-`). A capa no site é uma composição da marca; quando a capa nova ficar pronta, ela entra no lugar.
 - [ ] Revisar e desmarcar "rascunho" dos primeiros artigos.

@@ -54,7 +54,7 @@ Objetivo: em 10 segundos, quem é, por que confiar e o que ler agora. Artigos em
 | 5 | **Proteção contra fraudes** | "Toda pirâmide promete a mesma coisa. Veja o padrão." 3 sinais de alerta curtos + link para artigos de Proteção e para o @fraudesltda | Fundo azul-tinta; malha facetada discreta ao fundo | Ler sobre proteção |
 | 6 | **Pilares** | Paciência · Profundidade · Proteção, uma frase cada | Três linhas horizontais com filete pedra (como no brand book) | Nenhuma (respiro) |
 | 7 | **Convite para a conversa** | "Quanto tempo você levou para construir o que tem?" + para quem é (empresários, profissionais liberais, aposentados) + o que acontece na primeira conversa | Bloco marfim mais escuro, arco do sol emoldurando a pergunta | **Agendar conversa** |
-| 8 | **Livro** | *O Poder dos ETF's*: 2 linhas + "em breve" | Capa (ou mockup) + texto | Entrar na lista de espera |
+| 8 | **Livro** | *A Revolução dos ETFs*: 2 linhas + "em breve" | Capa (ou mockup) + texto | Entrar na lista de espera |
 | — | Rodapé global | (com carta mensal) | | |
 
 ---
@@ -127,7 +127,7 @@ Cada categoria (`/artigos/protecao` etc.) usa o mesmo modelo, com a frase do "po
 ## 6. Livro e palestras `/livro-e-palestras`
 | # | Bloco | Conteúdo | Visual | Ação |
 |---|---|---|---|---|
-| 1 | **O livro** | *O Poder dos ETF's: a única estratégia de investimento realmente comprovada*. O que é: a história dos fundos de índice, de Markowitz e Bogle ao primeiro ETF da B3 | Capa/mockup + texto | — |
+| 1 | **O livro** | *A Revolução dos ETFs: a história, a ciência e a prática dos fundos de índice, de Wall Street à B3*. O que é: a história dos fundos de índice, de Markowitz e Bogle ao primeiro ETF da B3 | Capa/mockup + texto | — |
 | 2 | **O que você vai encontrar** | Sumário resumido (8 capítulos) | Lista numerada em Playfair | — |
 | 3 | **Lista de espera** | Nome · E-mail · ☐ LGPD | Formulário curto | Entrar na lista |
 | 4 | **Palestras** | Tema central: "Como reconhecer e se proteger de fraudes financeiras", com a apresentação de palestrante (texto da biografia) | Foto em evento quando existir | — |

@@ -4,29 +4,50 @@ import AberturaPagina from '../components/AberturaPagina.astro'
 import Aceite from '../components/Aceite.astro'
 import Simbolo from '../components/Simbolo.astro'
 import Selo from '../components/Selo.astro'
-// Sumário do livro: preencher com os títulos dos capítulos quando estiverem fechados.
-const capitulos: string[] = []
+// Sumário de "A Revolução dos ETFs" (repositório nevesrickson-png/livros-, a-revolucao-dos-etfs/capitulos).
+const partes: [string, string[]][] = [
+  ['A história', ['Os Teóricos', 'Bogle e a Vanguard', 'Nascimento do ETF', 'Buffett vs. Wall Street', 'O Contraponto', 'O Brasil e a B3']],
+  ['A ciência e a mecânica', ['Por que Indexar', 'Anatomia de um ETF', 'Índices', 'Raio-X de um ETF']],
+  ['O ecossistema', ['O Mapa da B3', 'ETFs de Renda Fixa', 'BDRs de ETFs e o Perigo dos Alavancados', 'Investir Direto no Exterior']],
+  ['Impostos', ['Tributação Completa']],
+  ['A estratégia', ['Alocação de Ativos', 'Quatro Arquiteturas de Carteira', 'Rebalanceamento', 'ETFs de Dividendos e Renda', 'Estudos de Caso', 'Aposentadoria e Retirada', 'Sua Carteira, Passo a Passo']],
+  ['Execução', ['Execução, Erros Comuns e Checklist', 'O Futuro dos ETFs']]
+]
+const ROMANOS = ['I', 'II', 'III', 'IV', 'V', 'VI']
+let n = 0
+const numerados = partes.map(([parte, caps]) => [parte, caps.map((c) => [++n, c] as const)] as const)
 ---
-<Base titulo="Livro e palestras" descricao="O Poder dos ETF’s, livro de Rickson Messias sobre a história dos fundos de índice, e a palestra Como reconhecer e se proteger de fraudes financeiras.">
-  <AberturaPagina chapeu="Livro e palestras" titulo="Conhecimento vira <em>patrimônio.</em>" apoio="Um livro sobre a ideia simples que mudou a forma como o mundo investe, e uma palestra sobre como não cair na ideia simples demais." />
+<Base titulo="Livro e palestras" descricao="A Revolução dos ETFs, livro de Rickson Messias: a história, a ciência e a prática dos fundos de índice, de Wall Street à B3. E a palestra Como reconhecer e se proteger de fraudes financeiras.">
+  <AberturaPagina chapeu="Livro e palestras" titulo="Conhecimento vira <em>patrimônio.</em>" apoio="Um livro sobre a ideia simples que mudou a forma como o mundo investe, e uma palestra sobre como não cair nas promessas simples demais." />
 
   <section class="secao">
     <div class="wrap livro">
       <div class="livro__capa rv" aria-hidden="true">
         <span class="chapeu">Rickson Messias</span>
-        <span class="livro__titulo">O Poder dos ETF’s</span>
+        <span class="livro__titulo">A Revolução dos ETFs</span>
         <Simbolo sol={false} pesos={[2.4, 1, 1.4]} rotulo="" />
       </div>
       <div class="livro__texto">
         <p class="chapeu">Livro · Em breve</p>
-        <h2 class="titulo"><em>O Poder dos ETF’s</em></h2>
-        <p class="apoio">Uma história dos fundos de índice contada a partir das grandes mentes do investimento: de Harry Markowitz e John Bogle à chegada do primeiro ETF à B3. Para quem quer entender por que uma ideia simples mudou a forma como o mundo investe.</p>
-        {capitulos.length > 0 && (
-          <div class="sumario">
-            <h3 class="subtitulo">O que você vai encontrar</h3>
-            <ol>{capitulos.map((c) => <li>{c}</li>)}</ol>
-          </div>
-        )}
+        <h2 class="titulo"><em>A Revolução dos ETFs</em></h2>
+        <p class="livro__sub">A história, a ciência e a prática dos fundos de índice, de Wall Street à B3</p>
+        <p class="apoio">Para a grande maioria das pessoas, a melhor forma de investir é possuir os mercados de forma ampla, barata e disciplinada. Os ETFs são a ferramenta mais eficiente já criada para isso. Este livro conta como essa ideia nasceu, por que ela funciona e como aplicá-la no Brasil, com dados de 2000 a 2025.</p>
+        <p class="texto-apoio">Não é um livro de dicas nem de previsões. É um mapa: rigor nos fatos, honestidade sobre o CDI e a bolsa brasileira, e um passo a passo para construir e manter uma carteira de longo prazo.</p>
+        <ul class="livro__numeros">
+          <li><b>24</b> capítulos em seis partes</li>
+          <li><b>32</b> gráficos e diagramas com dados reais</li>
+          <li><b>8</b> apêndices, com glossário e perguntas frequentes</li>
+        </ul>
+        <div class="sumario">
+          <h3 class="subtitulo">O que você vai encontrar</h3>
+          {numerados.map(([parte, caps], i) => (
+            <div class="sumario__parte">
+              <p class="chapeu">Parte {ROMANOS[i]} · {parte}</p>
+              <ol>{caps.map(([num, c]) => <li><span>{String(num).padStart(2, '0')}</span>{c}</li>)}</ol>
+            </div>
+          ))}
+          <p class="sumario__fim">Conclusão: Mantenha o Curso · Apêndices</p>
+        </div>
         <form id="lista" class="form lista" data-formulario="livro" data-mensagem-ok="Anotado. Você vai saber primeiro.">
           <p class="subtitulo">Seja avisado no lançamento</p>
           <div class="linha-2">
@@ -88,7 +109,16 @@ const capitulos: string[] = []
   .livro__titulo { font-family: var(--serif); font-size: 36px; line-height: 1.05; }
   .livro__capa :global(.simbolo) { width: 56%; justify-self: center; }
   .livro__texto { display: grid; gap: 20px; }
-  .sumario ol { margin: 14px 0 0 1.2em; color: var(--grafite); }
+  .livro__sub { font-family: var(--serif); font-style: italic; font-size: 21px; color: var(--grafite); margin-top: -8px; }
+  .livro__numeros { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; border-top: 1px solid var(--pedra); border-bottom: 1px solid var(--pedra); padding: 20px 0; }
+  .livro__numeros li { font-size: 14px; color: var(--grafite); }
+  .livro__numeros b { display: block; font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 1; color: var(--champ-p); margin-bottom: 6px; }
+  .sumario { display: grid; gap: 24px; margin-top: 8px; }
+  .sumario__parte .chapeu { margin-bottom: 8px; }
+  .sumario ol { list-style: none; columns: 2; column-gap: 32px; }
+  .sumario li { break-inside: avoid; padding: 7px 0; border-bottom: 1px solid var(--pedra); font-size: 16px; }
+  .sumario li span { font-family: var(--serif); color: var(--champ-p); margin-right: 12px; }
+  .sumario__fim { font-family: var(--serif); font-style: italic; color: var(--grafite); }
   .lista { margin-top: 24px; padding: 32px; background: var(--marfim-3); }
   .palestra { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
   .palestra .titulo { margin-top: 12px; }
@@ -106,5 +136,7 @@ const capitulos: string[] = []
     .livro, .palestra, .convite { grid-template-columns: 1fr; gap: 32px; }
     .livro__capa { position: static; max-width: 220px; justify-self: start; }
     .lista { padding: 22px; }
+    .sumario ol { columns: 1; }
+    .livro__numeros { grid-template-columns: 1fr; }
   }
 </style>

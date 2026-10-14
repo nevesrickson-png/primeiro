@@ -104,7 +104,7 @@
 
 ### Bloco 8: Livro
 - Chapéu: **EM BREVE**
-- Título: ***O Poder dos ETF's***
+- Título: ***A Revolução dos ETFs***
 - Texto: A história dos fundos de índice contada a partir das grandes mentes do investimento, de Markowitz e Bogle à chegada do primeiro ETF à B3.
 - Botão: **Entrar na lista de espera**
 
@@ -324,9 +324,9 @@ Os primeiros artigos estão sendo escritos. Deixe seu e-mail e receba quando sa�
 
 ### Bloco 1: O livro
 - Chapéu: **LIVRO · EM BREVE**
-- Título: ***O Poder dos ETF's***
-- Subtítulo: *A única estratégia de investimento realmente comprovada* ⚖️ (validar se o subtítulo pode ser usado em material público, porque "comprovada" pode soar como promessa)
-- Texto: Uma história dos fundos de índice contada a partir das grandes mentes do investimento: de Harry Markowitz e John Bogle à chegada do primeiro ETF à B3. Para quem quer entender por que uma ideia simples mudou a forma como o mundo investe.
+- Título: ***A Revolução dos ETFs***
+- Subtítulo: *A história, a ciência e a prática dos fundos de índice, de Wall Street à B3*
+- Texto: Para a grande maioria das pessoas, a melhor forma de investir é possuir os mercados de forma ampla, barata e disciplinada. Os ETFs são a ferramenta mais eficiente já criada para isso. Este livro conta como essa ideia nasceu, por que ela funciona e como aplicá-la no Brasil, com dados de 2000 a 2025.
 
 ### Bloco 2: O que você vai encontrar
 - Título: **O que você vai encontrar**
