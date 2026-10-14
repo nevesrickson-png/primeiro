@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --experimental-strip-types --test testes/"
+    "test": "node --experimental-strip-types --test testes/*.test.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
