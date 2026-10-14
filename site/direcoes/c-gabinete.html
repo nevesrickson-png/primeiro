@@ -1,0 +1,113 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Direção C · Gabinete</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><style>
+:root{--tinta:#0B1A2C;--noite:#1D3350;--marfim:#F5F1E8;--marfim2:#FBF9F4;--pedra:#D9D6D0;--champ:#CBB27A;--champ-p:#7A6438;--grafite:#5E6268;--aco:#8C8F94;
+--serif:'Playfair Display',Georgia,serif;--sans:Manrope,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--marfim);color:var(--tinta);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}
+img,svg{display:block}
+.wrap{width:min(1200px,100% - 48px);margin-inline:auto}
+.chapeu{font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+.serif{font-family:var(--serif);font-weight:400}
+.btn{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:15px;padding:14px 26px;border-radius:2px;transition:background .3s,color .3s,border-color .3s,transform .3s}
+.btn:focus-visible,a:focus-visible{outline:2px solid var(--champ);outline-offset:3px}
+.seta{transition:transform .3s}
+a:hover .seta{transform:translateX(4px)}
+.prev{position:fixed;left:16px;bottom:16px;z-index:50;background:var(--tinta);color:var(--marfim);font-size:12px;letter-spacing:.08em;padding:8px 14px;border-radius:2px;border:1px solid var(--champ);opacity:.92}
+.prev b{color:var(--champ);font-weight:600}
+/* revelação ao rolar */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.on{opacity:1;transform:none}
+/* desenho do símbolo */
+.desenha path[pathLength],.desenha circle[pathLength]{stroke-dasharray:1;stroke-dashoffset:1;animation:traco 2.4s cubic-bezier(.6,.1,.2,1) forwards}
+.desenha .facetas path{animation-duration:1.6s;animation-delay:1.1s}
+.desenha .sol circle{animation-duration:2.2s;animation-delay:.2s}
+.desenha .horizonte path{animation-duration:1.4s;animation-delay:1.6s}
+.desenha .olhos{opacity:0;animation:aparece .8s 2.4s forwards}
+@keyframes traco{to{stroke-dashoffset:0}}
+@keyframes aparece{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.desenha *{animation:none!important;stroke-dashoffset:0!important;opacity:1!important}}
+.rodape-reg{font-size:13px;line-height:1.6}
+
+header{position:sticky;top:0;z-index:20;background:rgba(245,241,232,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--pedra)}
+.topo{display:flex;align-items:center;justify-content:space-between;height:72px}
+.marca{display:flex;align-items:center;gap:12px}
+.marca .simbolo{width:36px;height:36px}
+.marca span{font-family:var(--serif);font-weight:500;letter-spacing:.22em;font-size:13px;line-height:1.15}
+nav ul{display:flex;gap:30px;list-style:none;font-size:14px;color:var(--grafite)}
+nav a:hover{color:var(--tinta)}
+.btn-tinta{background:var(--tinta);color:var(--marfim)}
+.btn-tinta:hover{background:var(--noite)}
+.link-sub{font-weight:600;font-size:15px;border-bottom:1px solid var(--champ-p);padding-bottom:3px;display:inline-flex;gap:8px}
+.hero{display:grid;grid-template-columns:5fr 7fr;min-height:calc(100vh - 72px);min-height:calc(100svh - 72px)}
+.painel{background:var(--tinta);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px;color:var(--marfim)}
+.painel .foto{position:absolute;inset:0;display:grid;place-items:center}
+.painel .foto .simbolo{width:78%;max-width:420px}
+.painel .tag{position:relative;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--aco);border:1px dashed rgba(140,143,148,.5);padding:8px 12px;align-self:start}
+.selo{position:relative;align-self:end;width:132px;height:132px}
+.selo text{font-family:var(--sans);font-size:7.2px;letter-spacing:2.2px;fill:var(--champ);font-weight:600}
+.selo .giro{transform-origin:60px 60px;animation:gira 40s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.texto{display:flex;flex-direction:column;justify-content:center;padding:72px clamp(32px,6vw,96px)}
+.texto .chapeu{color:var(--champ-p);margin-bottom:28px}
+.texto h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,5.6vw,84px);line-height:1.04;letter-spacing:-.01em}
+.texto h1 em{font-style:italic;color:var(--champ-p)}
+.texto .apoio{font-size:18px;color:var(--grafite);max-width:520px;margin-top:28px}
+.acoes{display:flex;gap:28px;align-items:center;margin-top:44px;flex-wrap:wrap}
+.pilares{display:grid;grid-template-columns:repeat(3,1fr);margin-top:64px;border-top:1px solid var(--pedra)}
+.pilares div{padding:18px 18px 0 0}
+.pilares b{font-family:var(--serif);font-weight:400;font-size:20px;display:block}
+.pilares span{font-size:13px;color:var(--grafite)}
+.secao{padding:112px 0}
+.cab{display:grid;grid-template-columns:5fr 7fr;gap:48px;margin-bottom:24px}
+.cab .chapeu{color:var(--champ-p);margin-bottom:14px}
+.cab h2{font-family:var(--serif);font-weight:400;font-size:clamp(34px,3.8vw,50px);line-height:1.1}
+.cab p{color:var(--grafite);align-self:end}
+.indice{border-top:2px solid var(--tinta)}
+.linha{display:grid;grid-template-columns:72px 170px 1fr 150px 32px;gap:24px;align-items:baseline;padding:30px 0;border-bottom:1px solid var(--pedra);transition:background .4s,padding .4s}
+.linha:hover{background:var(--marfim2);padding-left:16px;padding-right:16px}
+.num{font-family:var(--serif);font-size:30px;color:var(--champ-p);line-height:1}
+.linha h3{font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.25}
+.linha .resumo{font-size:15px;color:var(--grafite);margin-top:6px}
+.cat{color:var(--champ-p)}
+.meta{font-size:13px;color:var(--grafite);text-align:right}
+.linha .seta{font-size:20px;color:var(--champ-p)}
+.rodapeidx{display:flex;justify-content:space-between;margin-top:32px}
+footer{background:var(--tinta);color:var(--aco);padding:40px 0}
+footer .wrap{display:flex;gap:32px;align-items:center}
+footer .simbolo{width:36px;flex:none}
+@media (max-width:900px){nav ul{display:none}.topo .btn{padding:10px 16px;font-size:14px}.hero{grid-template-columns:1fr}.painel{min-height:58vh;padding:28px}.selo{width:96px;height:96px}.texto{padding:56px 24px}.pilares{grid-template-columns:1fr}.cab{grid-template-columns:1fr;gap:12px}.linha{grid-template-columns:44px 1fr;gap:6px 16px}.linha .cat{grid-column:2}.linha .corpo{grid-column:2}.linha .meta{grid-column:2;text-align:left}.linha .seta{display:none}.num{grid-row:span 3;font-size:24px}footer .wrap{flex-direction:column;align-items:start}}
+</style></head><body>
+<header><div class="wrap topo"><a class="marca" href="#"><svg class="simbolo " viewBox="0 0 120 120" role="img" aria-label="Lobo-guará diante do sol do cerrado">
+<g fill="none" stroke="#7A6438" stroke-linejoin="round" stroke-linecap="round"><path class="contorno" d="M60 34 L68 36 L92 8 L84 52 L86 62 L76 80 L66 96 L60 102 L54 96 L44 80 L34 62 L36 52 L28 8 L52 36 Z" stroke-width="3" pathLength="1"/><g class="facetas" stroke-width="1.2"><path d="M28 8 L44 46" pathLength="1"/><path d="M44 46 L52 36" pathLength="1"/><path d="M44 46 L36 52" pathLength="1"/><path d="M52 36 L60 48" pathLength="1"/><path d="M60 34 L60 48" pathLength="1"/><path d="M52 36 L47 60" pathLength="1"/><path d="M44 46 L47 60" pathLength="1"/><path d="M36 52 L47 60" pathLength="1"/><path d="M60 48 L47 60" pathLength="1"/><path d="M47 60 L60 72" pathLength="1"/><path d="M60 48 L60 72" pathLength="1"/><path d="M47 60 L34 62" pathLength="1"/><path d="M47 60 L44 80" pathLength="1"/><path d="M44 80 L60 72" pathLength="1"/><path d="M60 72 L54 96" pathLength="1"/><path d="M60 72 L60 102" pathLength="1"/><path d="M92 8 L76 46" pathLength="1"/><path d="M76 46 L68 36" pathLength="1"/><path d="M76 46 L84 52" pathLength="1"/><path d="M68 36 L60 48" pathLength="1"/><path d="M68 36 L73 60" pathLength="1"/><path d="M76 46 L73 60" pathLength="1"/><path d="M84 52 L73 60" pathLength="1"/><path d="M60 48 L73 60" pathLength="1"/><path d="M73 60 L60 72" pathLength="1"/><path d="M73 60 L86 62" pathLength="1"/><path d="M73 60 L76 80" pathLength="1"/><path d="M76 80 L60 72" pathLength="1"/><path d="M60 72 L66 96" pathLength="1"/></g></g>
+<path class="olhos" d="M42 59 L52 61 L44 63 Z M78 59 L68 61 L76 63 Z M56 99 L64 99 L60 104 Z" fill="#7A6438"/></svg><span>RICKSON<br>MESSIAS</span></a>
+<nav><ul><li><a href="#analises">Artigos</a></li><li><a href="#">Sobre</a></li><li><a href="#">Assessoria</a></li><li><a href="#">Livro e palestras</a></li></ul></nav><a class="btn btn-tinta" href="#">Agendar conversa</a></div></header>
+<section class="hero"><div class="painel"><div class="foto"><svg class="simbolo desenha" viewBox="0 0 120 120" role="img" aria-label="Lobo-guará diante do sol do cerrado"><defs><mask id="mc2" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120"><rect width="120" height="120" fill="white"/><path d="M60 34 L68 36 L92 8 L84 52 L86 62 L76 80 L66 96 L60 102 L54 96 L44 80 L34 62 L36 52 L28 8 L52 36 Z" fill="black"/></mask></defs>
+<g fill="none" stroke="#CBB27A" stroke-linecap="round" mask="url(#mc2)" class="sol"><circle cx="60" cy="58" r="40" stroke-width="0.6" pathLength="1"/><circle cx="60" cy="58" r="34" stroke-width="0.27" opacity="0.55" pathLength="1"/></g>
+<g fill="none" stroke="#CBB27A" stroke-linejoin="round" stroke-linecap="round"><g class="horizonte"><path d="M8 108 L112 108" stroke-width="0.8999999999999999" pathLength="1"/><path d="M26 113 L94 113 M42 118 L78 118" stroke-width="0.36000000000000004" pathLength="1"/></g><path class="contorno" d="M60 34 L68 36 L92 8 L84 52 L86 62 L76 80 L66 96 L60 102 L54 96 L44 80 L34 62 L36 52 L28 8 L52 36 Z" stroke-width="1" pathLength="1"/><g class="facetas" stroke-width="0.4"><path d="M28 8 L44 46" pathLength="1"/><path d="M44 46 L52 36" pathLength="1"/><path d="M44 46 L36 52" pathLength="1"/><path d="M52 36 L60 48" pathLength="1"/><path d="M60 34 L60 48" pathLength="1"/><path d="M52 36 L47 60" pathLength="1"/><path d="M44 46 L47 60" pathLength="1"/><path d="M36 52 L47 60" pathLength="1"/><path d="M60 48 L47 60" pathLength="1"/><path d="M47 60 L60 72" pathLength="1"/><path d="M60 48 L60 72" pathLength="1"/><path d="M47 60 L34 62" pathLength="1"/><path d="M47 60 L44 80" pathLength="1"/><path d="M44 80 L60 72" pathLength="1"/><path d="M60 72 L54 96" pathLength="1"/><path d="M60 72 L60 102" pathLength="1"/><path d="M92 8 L76 46" pathLength="1"/><path d="M76 46 L68 36" pathLength="1"/><path d="M76 46 L84 52" pathLength="1"/><path d="M68 36 L60 48" pathLength="1"/><path d="M68 36 L73 60" pathLength="1"/><path d="M76 46 L73 60" pathLength="1"/><path d="M84 52 L73 60" pathLength="1"/><path d="M60 48 L73 60" pathLength="1"/><path d="M73 60 L60 72" pathLength="1"/><path d="M73 60 L86 62" pathLength="1"/><path d="M73 60 L76 80" pathLength="1"/><path d="M76 80 L60 72" pathLength="1"/><path d="M60 72 L66 96" pathLength="1"/></g></g>
+<path class="olhos" d="M42 59 L52 61 L44 63 Z M78 59 L68 61 L76 63 Z M56 99 L64 99 L60 104 Z" fill="#CBB27A"/></svg></div>
+<span class="tag">Espaço da foto do ensaio</span><svg class="selo" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="circ" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
+<circle cx="60" cy="60" r="56" fill="none" stroke="#CBB27A" stroke-width=".8"/><circle cx="60" cy="60" r="36" fill="none" stroke="#CBB27A" stroke-width=".5" opacity=".6"/>
+<g class="giro"><text><textPath href="#circ">PATRIMÔNIO SE CONSTRÓI EM DÉCADAS · CEA · </textPath></text></g>
+<text x="60" y="58" text-anchor="middle" style="font-family:'Playfair Display',serif;font-size:12px;letter-spacing:1px;fill:#F5F1E8;font-weight:400">CEA</text><text x="60" y="71" text-anchor="middle" style="font-size:5.5px;letter-spacing:1.6px">ANBIMA</text></svg></div>
+<div class="texto"><p class="chapeu rv">Assessor de investimentos · CEA</p>
+<h1 class="rv" data-d="120">Patrimônio se constrói em <em>décadas.</em></h1>
+<p class="apoio rv" data-d="240">Análises sobre patrimônio de longo prazo, as lições dos grandes investidores e como se proteger de fraudes. Com fonte, com data e com o risco dito antes do retorno.</p>
+<div class="acoes rv" data-d="360"><a class="btn btn-tinta" href="#analises">Ler as análises <span class="seta">→</span></a><a class="link-sub" href="#">Agendar conversa <span class="seta">→</span></a></div>
+<div class="pilares rv" data-d="480"><div><b>Paciência</b><span>A marca nunca tem pressa.</span></div><div><b>Profundidade</b><span>Estudo de fonte primária.</span></div><div><b>Proteção</b><span>Risco antes do retorno.</span></div></div>
+</div></section>
+<section class="secao" id="analises"><div class="wrap">
+<div class="cab"><div><p class="chapeu">Análises</p><h2>O que estou acompanhando</h2></div><p>Patrimônio, grandes investidores e proteção. Sempre com fonte, data e risco.</p></div>
+<div class="indice"><a class="linha rv" data-d="0" href="#"><span class="num">01</span><span class="chapeu cat">Proteção</span><div class="corpo"><h3>Toda pirâmide promete a mesma coisa: o padrão por trás de 100 anos de golpes</h3><p class="resumo">Os nomes mudam, o padrão não. Como reconhecer o esquema antes de ele te reconhecer.</p></div><span class="meta">14 out 2026<br>9 min de leitura</span><span class="seta">→</span></a><a class="linha rv" data-d="100" href="#"><span class="num">02</span><span class="chapeu cat">Patrimônio</span><div class="corpo"><h3>Por que patrimônio se constrói em décadas, e não em manchetes</h3><p class="resumo">O que os juros compostos pedem de você em troca: tempo e disciplina.</p></div><span class="meta">07 out 2026<br>7 min de leitura</span><span class="seta">→</span></a><a class="linha rv" data-d="200" href="#"><span class="num">03</span><span class="chapeu cat">Grandes mentes</span><div class="corpo"><h3>John Bogle e a ideia que mudou o investimento</h3><p class="resumo">Como um fundo que só copiava o índice virou a regra, e não a exceção.</p></div><span class="meta">30 set 2026<br>8 min de leitura</span><span class="seta">→</span></a><a class="linha rv" data-d="300" href="#"><span class="num">04</span><span class="chapeu cat">Bastidores</span><div class="corpo"><h3>O que ouvi de gestores e estrategistas na Money Week</h3><p class="resumo">Três temas que apareceram em quase todas as conversas.</p></div><span class="meta">23 set 2026<br>6 min de leitura</span><span class="seta">→</span></a></div>
+<div class="rodapeidx"><span class="chapeu cat">Índice · 4 de 4</span><a class="link-sub" href="#">Ver todos os artigos <span class="seta">→</span></a></div>
+</div></section>
+<footer><div class="wrap"><svg class="simbolo " viewBox="0 0 120 120" role="img" aria-label="Lobo-guará diante do sol do cerrado">
+<g fill="none" stroke="#CBB27A" stroke-linejoin="round" stroke-linecap="round"><path class="contorno" d="M60 34 L68 36 L92 8 L84 52 L86 62 L76 80 L66 96 L60 102 L54 96 L44 80 L34 62 L36 52 L28 8 L52 36 Z" stroke-width="2.2" pathLength="1"/><g class="facetas" stroke-width="0.9"><path d="M28 8 L44 46" pathLength="1"/><path d="M44 46 L52 36" pathLength="1"/><path d="M44 46 L36 52" pathLength="1"/><path d="M52 36 L60 48" pathLength="1"/><path d="M60 34 L60 48" pathLength="1"/><path d="M52 36 L47 60" pathLength="1"/><path d="M44 46 L47 60" pathLength="1"/><path d="M36 52 L47 60" pathLength="1"/><path d="M60 48 L47 60" pathLength="1"/><path d="M47 60 L60 72" pathLength="1"/><path d="M60 48 L60 72" pathLength="1"/><path d="M47 60 L34 62" pathLength="1"/><path d="M47 60 L44 80" pathLength="1"/><path d="M44 80 L60 72" pathLength="1"/><path d="M60 72 L54 96" pathLength="1"/><path d="M60 72 L60 102" pathLength="1"/><path d="M92 8 L76 46" pathLength="1"/><path d="M76 46 L68 36" pathLength="1"/><path d="M76 46 L84 52" pathLength="1"/><path d="M68 36 L60 48" pathLength="1"/><path d="M68 36 L73 60" pathLength="1"/><path d="M76 46 L73 60" pathLength="1"/><path d="M84 52 L73 60" pathLength="1"/><path d="M60 48 L73 60" pathLength="1"/><path d="M73 60 L60 72" pathLength="1"/><path d="M73 60 L86 62" pathLength="1"/><path d="M73 60 L76 80" pathLength="1"/><path d="M76 80 L60 72" pathLength="1"/><path d="M60 72 L66 96" pathLength="1"/></g></g>
+<path class="olhos" d="M42 59 L52 61 L44 63 Z M78 59 L68 61 L76 63 Z M56 99 L64 99 L60 104 Z" fill="#CBB27A"/></svg><p class="rodape-reg">Conteúdo de caráter informativo, que não constitui recomendação de investimento. Rentabilidade passada não é garantia de rentabilidade futura. Rickson Messias é assessor de investimentos vinculado à EQI Investimentos, nos termos da regulamentação da CVM.</p></div></footer>
+<div class="prev">Direção <b>C · Gabinete</b> · prévia, conteúdo ilustrativo</div>
+<script>
+(function(){var els=document.querySelectorAll('.rv');if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('on')});return}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.15,rootMargin:'0px 0px -40px 0px'});
+els.forEach(function(e,i){e.style.transitionDelay=(e.dataset.d||0)+'ms';io.observe(e)})})();
+</script></body></html>
