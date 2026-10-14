@@ -1,0 +1,23 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+---
+<LayoutFerramenta slug="custo-das-taxas">
+  <Fragment slot="campos">
+    <Campo nome="inicial" rotulo="Valor investido hoje" valor="100.000" prefixo="R$" />
+    <Campo nome="mensal" rotulo="Aporte mensal" valor="1.000" prefixo="R$" />
+    <Campo nome="retorno" rotulo="Retorno bruto da carteira" valor="10" sufixo="% ao ano" />
+    <Campo nome="taxaA" rotulo="Taxa da opção barata" valor="0,3" sufixo="% ao ano" ajuda="Ex.: ETF de índice." />
+    <Campo nome="taxaB" rotulo="Taxa da opção cara" valor="2" sufixo="% ao ano" ajuda="Ex.: fundo com taxa de administração alta." faixa={[0.5, 4, 0.1]} />
+    <Campo nome="anos" rotulo="Prazo" valor="30" sufixo="anos" faixa={[1, 50, 1]} />
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Custo da diferença de taxa</span><span class="kpi__valor" id="r-dif">—</span><span class="kpi__nota" id="r-pct"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Opção barata</span><span class="kpi__valor" id="r-a">—</span></div>
+      <div class="kpi"><span class="kpi__rotulo">Opção cara</span><span class="kpi__valor" id="r-b">—</span></div>
+    </div>
+    <div class="painel-graf"><div id="grafico"></div></div>
+    <p class="leitura" id="r-leitura"></p>
+  </Fragment>
+</LayoutFerramenta>

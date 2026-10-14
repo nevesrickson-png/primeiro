@@ -1,0 +1,32 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+const perfis = [
+  ['estavel', 'Renda estável (CLT, servidor)', '6 meses de gastos'],
+  ['liberal', 'Profissional liberal ou autônomo', '12 meses de gastos'],
+  ['empresario', 'Empresário', '12 meses de gastos, separados da empresa'],
+  ['aposentado', 'Aposentado', '6 meses de gastos, mais despesas de saúde']
+]
+---
+<LayoutFerramenta slug="reserva-de-emergencia">
+  <Fragment slot="campos">
+    <Campo nome="gastos" rotulo="Gastos mensais da família" valor="8.000" prefixo="R$" faixa={[1000, 60000, 500]} />
+    <div class="cf"><span style="font-size:13px;font-weight:600">Sua renda é</span>
+      <div class="opcoes">
+        {perfis.map(([v, t, d], i) => (<label><input type="radio" name="perfil" value={v} checked={i === 0} /><span>{t}<br /><small style="color:var(--grafite)">{d}</small></span></label>))}
+      </div>
+    </div>
+    <Campo nome="atual" rotulo="Reserva que você já tem" valor="10.000" prefixo="R$" />
+    <Campo nome="aporte" rotulo="Quanto consegue guardar por mês" valor="1.500" prefixo="R$" />
+    <Campo nome="taxa" rotulo="Rendimento da reserva" valor="10" sufixo="% ao ano" ajuda="Reserva fica em aplicação com liquidez diária e baixo risco." />
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Sua reserva ideal</span><span class="kpi__valor" id="r-meta">—</span><span class="kpi__nota" id="r-meta-nota"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Falta juntar</span><span class="kpi__valor" id="r-falta">—</span></div>
+      <div class="kpi"><span class="kpi__rotulo">Tempo para chegar lá</span><span class="kpi__valor" id="r-tempo">—</span></div>
+    </div>
+    <div class="painel-graf"><div id="grafico"></div></div>
+    <p class="leitura" id="r-leitura"></p>
+  </Fragment>
+</LayoutFerramenta>

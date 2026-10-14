@@ -1,0 +1,26 @@
+---
+import Icone from './Icone.astro'
+interface Props { f: { slug: string; nome: string; pergunta: string; texto: string; icone: string }; escuro?: boolean }
+const { f, escuro = false } = Astro.props
+---
+<a class:list={['cfer rv', { 'cfer--escuro': escuro }]} href={`/ferramentas/${f.slug}`}>
+  <span class="cfer__ic"><Icone nome={f.icone} /></span>
+  <span class="chapeu">{f.nome}</span>
+  <span class="cfer__perg">{f.pergunta}</span>
+  <span class="cfer__txt">{f.texto}</span>
+  <span class="cfer__ir">Simular <span class="seta">→</span></span>
+</a>
+<style>
+  .cfer { position: relative; display: grid; gap: 12px; align-content: start; padding: 32px; background: var(--marfim-2); border: 1px solid var(--pedra); border-radius: var(--raio); overflow: hidden; transition: transform 0.45s var(--ease), border-color 0.45s, box-shadow 0.45s; }
+  .cfer::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: var(--champ); transform: scaleX(0); transform-origin: left; transition: transform 0.6s var(--ease); }
+  .cfer:hover { transform: translateY(-4px); border-color: var(--champ); box-shadow: 0 26px 50px -32px rgba(11, 26, 44, 0.45); }
+  .cfer:hover::before { transform: scaleX(1); }
+  .cfer__ic { width: 44px; height: 44px; color: var(--champ-p); }
+  .cfer__perg { font-family: var(--serif); font-size: 24px; line-height: 1.2; }
+  .cfer__txt { font-size: 15px; color: var(--grafite); }
+  .cfer__ir { font-weight: 600; font-size: 14px; margin-top: 6px; }
+  .cfer--escuro { background: rgba(245, 241, 232, 0.04); border-color: rgba(245, 241, 232, 0.12); color: var(--marfim); }
+  .cfer--escuro .cfer__ic { color: var(--champ); }
+  .cfer--escuro .cfer__txt { color: var(--aco-claro); }
+  .cfer--escuro:hover { border-color: var(--champ); box-shadow: none; background: rgba(245, 241, 232, 0.07); }
+</style>

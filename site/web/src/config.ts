@@ -24,7 +24,8 @@ export const SITE = {
   prazoRetorno: 'até 2 dias úteis',
   // Foto do ensaio (public/imagens/retrato-{480,800}.{webp,jpg}). null = painel da marca no lugar.
   retrato: '/imagens/retrato' as string | null,
-  avatar: '/imagens/avatar' as string | null
+  // Foto só na página Sobre mim (decisão de Rickson). Avatar dos artigos usa o símbolo.
+  avatar: null as string | null
 }
 
 export function linkWhatsapp(): string | null {
@@ -36,6 +37,7 @@ export const FORM_ENDPOINT: string = import.meta.env.PUBLIC_FORM_ENDPOINT ?? ''
 
 export const MENU = [
   { rotulo: 'Artigos', href: '/artigos' },
+  { rotulo: 'Ferramentas', href: '/ferramentas' },
   { rotulo: 'Sobre', href: '/sobre' },
   { rotulo: 'Assessoria', href: '/assessoria' },
   { rotulo: 'Livro e palestras', href: '/livro-e-palestras' }
@@ -69,3 +71,13 @@ export const CATEGORIAS = {
 } as const
 
 export type Categoria = keyof typeof CATEGORIAS
+
+/** Ferramentas de planejamento e análise (cálculos no navegador, nada é enviado). */
+export const FERRAMENTAS = [
+  { slug: 'independencia-financeira', nome: 'Independência financeira', pergunta: 'Quanto preciso juntar para viver de renda?', texto: 'Calcula o patrimônio necessário e o aporte mensal para a renda que você quer, em valores de hoje.', icone: 'sol' },
+  { slug: 'juros-compostos', nome: 'Juros compostos', pergunta: 'Quanto meu dinheiro pode virar em décadas?', texto: 'Projeta aportes mensais no tempo e mostra quanto veio do seu bolso e quanto veio dos juros.', icone: 'curva' },
+  { slug: 'custo-das-taxas', nome: 'O custo das taxas', pergunta: 'Quanto uma taxa de 2% ao ano me custa?', texto: 'Compara a mesma carteira com taxas diferentes. A lição de John Bogle, em reais.', icone: 'taxa' },
+  { slug: 'renda-fixa', nome: 'CDB × LCI/LCA', pergunta: 'Qual paga mais depois do imposto?', texto: 'Compara títulos tributados e isentos no mesmo prazo e calcula a taxa equivalente.', icone: 'balanca' },
+  { slug: 'reserva-de-emergencia', nome: 'Reserva de emergência', pergunta: 'De quanto é a minha reserva?', texto: 'Define a meta pelo seu tipo de renda e quanto tempo leva para chegar lá.', icone: 'escudo' },
+  { slug: 'detector-de-golpes', nome: 'Detector de golpes', pergunta: 'Essa proposta é confiável?', texto: 'Dez perguntas que separam investimento de pirâmide. Responda antes de transferir qualquer valor.', icone: 'lupa' }
+] as const

@@ -1,0 +1,35 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+---
+<LayoutFerramenta slug="renda-fixa">
+  <Fragment slot="campos">
+    <Campo nome="valor" rotulo="Valor a investir" valor="50.000" prefixo="R$" />
+    <Campo nome="meses" rotulo="Prazo" valor="24" sufixo="meses" faixa={[1, 60, 1]} />
+    <Campo nome="cdi" rotulo="CDI atual" valor="14" sufixo="% ao ano" ajuda="Confira a taxa do dia e ajuste aqui." />
+    <Campo nome="cdb" rotulo="CDB, LC ou Tesouro pós (tributado)" valor="110" sufixo="% do CDI" />
+    <Campo nome="lci" rotulo="LCI ou LCA (isenta para pessoa física)" valor="92" sufixo="% do CDI" />
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Paga mais no prazo</span><span class="kpi__valor" id="r-venc">—</span><span class="kpi__nota" id="r-venc-nota"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Para empatar com a isenta</span><span class="kpi__valor" id="r-eq">—</span><span class="kpi__nota" id="r-eq-nota"></span></div>
+    </div>
+    <table class="tabela-ferr">
+      <thead><tr><th></th><th>Tributado</th><th>Isento</th></tr></thead>
+      <tbody>
+        <tr><td>Rendimento bruto</td><td id="c-bruto">—</td><td id="l-bruto">—</td></tr>
+        <tr><td>Imposto de renda</td><td id="c-ir">—</td><td>R$ 0</td></tr>
+        <tr><td>Rendimento líquido</td><td id="c-liq">—</td><td id="l-liq">—</td></tr>
+        <tr><td>Valor no vencimento</td><td id="c-fim">—</td><td id="l-fim">—</td></tr>
+        <tr><td>Rentabilidade líquida ao ano</td><td id="c-aa">—</td><td id="l-aa">—</td></tr>
+      </tbody>
+    </table>
+    <p class="leitura" id="r-leitura"></p>
+    <table class="tabela-ferr">
+      <thead><tr><th>Prazo</th><th>Alíquota de IR</th><th>CDB equivalente à isenta</th></tr></thead>
+      <tbody id="faixas"></tbody>
+    </table>
+    <p class="kpi__nota">IR regressivo sobre renda fixa para pessoa física: 22,5% até 180 dias, 20% até 360, 17,5% até 720 e 15% acima. Abaixo de 30 dias também há IOF (não considerado). Regras vigentes em 2026; confirme antes de investir.</p>
+  </Fragment>
+</LayoutFerramenta>

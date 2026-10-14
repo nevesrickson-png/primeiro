@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro'
+import AberturaPagina from '../AberturaPagina.astro'
+import CartaoFerramenta from './CartaoFerramenta.astro'
+import { FERRAMENTAS } from '../../config'
+interface Props { slug: (typeof FERRAMENTAS)[number]['slug']; semFormulario?: boolean }
+const { slug, semFormulario = false } = Astro.props
+const f = FERRAMENTAS.find((x) => x.slug === slug)!
+const outras = FERRAMENTAS.filter((x) => x.slug !== slug).slice(0, 3)
+---
+<Base titulo={`${f.nome} · Ferramentas`} descricao={`${f.pergunta} ${f.texto}`}>
+  <AberturaPagina chapeu={`Ferramentas · ${f.nome}`} titulo={f.pergunta} apoio={f.texto} />
+  <section class="secao ferr-sec">
+    <div class="wrap">
+      {semFormulario ? <slot /> : (
+        <form class="ferr" data-ferramenta={slug} novalidate>
+          <div class="ferr__painel">
+            <p class="chapeu">Seus números</p>
+            <div class="ferr__campos"><slot name="campos" /></div>
+            <button type="button" class="ferr__copiar" data-copiar-simulacao>Copiar link desta simulação</button>
+            <p class="ferr__privado">Os cálculos acontecem no seu navegador. Nenhum dado é enviado.</p>
+          </div>
+          <div class="ferr__resultado" aria-live="polite"><slot name="resultado" /></div>
+        </form>
+      )}
+      <div class="ferr__aviso">
+        <p><b>Simulação educativa.</b> Os resultados são hipotéticos, usam taxas constantes informadas por você e não consideram todos os custos, impostos e riscos. Não constituem recomendação de investimento. Rentabilidade passada não é garantia de rentabilidade futura.</p>
+      </div>
+      <div class="ferr__conversa">
+        <div>
+          <p class="chapeu">Próximo passo</p>
+          <p class="subtitulo">Quer olhar esses números para o seu caso, com calma?</p>
+        </div>
+        <a class="btn btn--tinta" href={`/assessoria?assunto=${encodeURIComponent(f.nome)}#agendar`}>Conversar sobre isso <span class="seta">→</span></a>
+      </div>
+    </div>
+  </section>
+  <section class="secao secao--clara-2">
+    <div class="wrap">
+      <div class="cab-secao cab-secao--simples"><div><p class="chapeu">Ferramentas</p><h2 class="titulo">Continue simulando</h2></div></div>
+      <div class="grade-3">{outras.map((o) => <CartaoFerramenta f={o} />)}</div>
+    </div>
+  </section>
+</Base>
+<script>
+  import '../../scripts/ferramentas-paginas'
+</script>

@@ -1,0 +1,13 @@
+---
+interface Props { nome: string }
+const { nome } = Astro.props
+---
+<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {nome === 'sol' && (<><circle cx="24" cy="26" r="11" /><path d="M4 38h40M12 43h24M24 7v5M9 13l3.5 3.5M39 13l-3.5 3.5" /></>)}
+  {nome === 'curva' && (<><path d="M6 42h36M6 42V6" /><path d="M8 38c10-1 18-6 24-16s8-14 10-16" /><circle cx="42" cy="6" r="1.6" fill="currentColor" /></>)}
+  {nome === 'taxa' && (<><path d="M6 42h36" /><path d="M8 36c12-2 20-8 32-22" /><path d="M8 38c12-1 19-4 32-12" stroke-dasharray="3 3" /><path d="M34 8l6 6M40 8l-6 6" /></>)}
+  {nome === 'balanca' && (<><path d="M24 6v34M14 40h20M10 12h28" /><path d="M10 12l-6 12h12zM38 12l-6 12h12z" /></>)}
+  {nome === 'escudo' && (<><path d="M24 5l15 6v11c0 10-6 17-15 21C15 39 9 32 9 22V11z" /><path d="M18 24l5 5 8-10" /></>)}
+  {nome === 'lupa' && (<><circle cx="21" cy="21" r="12" /><path d="M30 30l12 12M21 15v7M21 26v.5" /></>)}
+</svg>
+<style>.ic { width: 100%; height: 100%; }</style>

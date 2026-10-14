@@ -177,3 +177,9 @@ const origens = ['Instagram', 'YouTube', 'LinkedIn', 'Indicação', 'Evento', 'G
     details p { padding-right: 0; }
   }
 </style>
+
+<script>
+  const assunto = new URLSearchParams(location.search).get('assunto')
+  const msg = document.getElementById('ag-msg') as HTMLTextAreaElement | null
+  if (assunto && msg && !msg.value) msg.value = `Fiz a simulação "${assunto.slice(0, 60)}" no site e gostaria de conversar sobre o meu caso.`
+</script>

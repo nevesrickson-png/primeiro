@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro'
+import AberturaPagina from '../../components/AberturaPagina.astro'
+import CartaoFerramenta from '../../components/ferramentas/CartaoFerramenta.astro'
+import { FERRAMENTAS } from '../../config'
+---
+<Base titulo="Ferramentas de planejamento" descricao="Simuladores gratuitos de independência financeira, juros compostos, custo das taxas, CDB × LCI/LCA, reserva de emergência e detector de golpes.">
+  <AberturaPagina chapeu="Ferramentas" titulo="Faça as contas <em>antes</em> de decidir." apoio="Simuladores de planejamento e análise, com a mesma lógica que eu uso com clientes. Gratuitos, sem cadastro, e os cálculos ficam no seu navegador." />
+  <section class="secao">
+    <div class="wrap">
+      <div class="grade-3 hub">{FERRAMENTAS.map((f) => <CartaoFerramenta f={f} />)}</div>
+      <p class="hub__nota">Simulações educativas, com resultados hipotéticos. Não constituem recomendação de investimento.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .hub { gap: 20px; }
+  .hub__nota { margin-top: 32px; font-size: 13px; color: var(--grafite); }
+  @media (max-width: 960px) { .hub { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) { .hub { grid-template-columns: 1fr; } }
+</style>

@@ -3,9 +3,9 @@
 import Simbolo from './Simbolo.astro'
 import Selo from './Selo.astro'
 import { SITE } from '../config'
-interface Props { alt?: string; selo?: boolean; prioridade?: boolean }
-const { alt = 'Rickson Messias, assessor de investimentos, de terno azul e braços cruzados', selo = true, prioridade = false } = Astro.props
-const base = SITE.retrato
+interface Props { alt?: string; selo?: boolean; prioridade?: boolean; semFoto?: boolean }
+const { alt = 'Rickson Messias, assessor de investimentos, de terno azul e braços cruzados', selo = true, prioridade = false, semFoto = false } = Astro.props
+const base = semFoto ? null : SITE.retrato
 ---
 {base ? (
   <figure class="retrato">

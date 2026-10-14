@@ -1,0 +1,34 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+---
+<LayoutFerramenta slug="independencia-financeira">
+  <Fragment slot="campos">
+    <div class="campos-2">
+      <Campo nome="idade" rotulo="Idade hoje" valor="35" sufixo="anos" />
+      <Campo nome="aposentar" rotulo="Parar aos" valor="60" sufixo="anos" />
+    </div>
+    <Campo nome="renda" rotulo="Renda mensal desejada (valores de hoje)" valor="15.000" prefixo="R$" faixa={[2000, 100000, 500]} />
+    <Campo nome="patrimonio" rotulo="Patrimônio já investido" valor="200.000" prefixo="R$" />
+    <Campo nome="aporte" rotulo="Quanto você investe por mês hoje" valor="3.000" prefixo="R$" />
+    <Campo nome="taxaAcum" rotulo="Rentabilidade real na acumulação" valor="5" sufixo="% a.a. real" faixa={[1, 10, 0.5]} ajuda="Real = acima da inflação. Tudo aqui está em reais de hoje." />
+    <Campo nome="taxaRet" rotulo="Rentabilidade real depois de parar" valor="4" sufixo="% a.a. real" />
+    <Campo nome="final" rotulo="Planejar a renda até os" valor="95" sufixo="anos" ajuda="Usado no cenário em que o patrimônio é consumido aos poucos." />
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Patrimônio para viver de renda</span><span class="kpi__valor" id="r-meta">—</span><span class="kpi__nota">Preserva o patrimônio, em valores de hoje</span></div>
+      <div class="kpi"><span class="kpi__rotulo">Aporte mensal necessário</span><span class="kpi__valor" id="r-aporte">—</span><span class="kpi__nota" id="r-aporte-nota"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Com o seu aporte atual</span><span class="kpi__valor" id="r-chega">—</span><span class="kpi__nota" id="r-chega-nota"></span></div>
+    </div>
+    <div class="painel-graf"><div id="grafico"></div></div>
+    <p class="leitura" id="r-leitura"></p>
+    <table class="tabela-ferr">
+      <thead><tr><th>Cenário</th><th>Patrimônio necessário</th><th>Aporte mensal</th></tr></thead>
+      <tbody>
+        <tr><td>Viver só do rendimento (preserva o patrimônio)</td><td id="t-meta1">—</td><td id="t-ap1">—</td></tr>
+        <tr><td>Consumir o patrimônio até a idade final</td><td id="t-meta2">—</td><td id="t-ap2">—</td></tr>
+      </tbody>
+    </table>
+  </Fragment>
+</LayoutFerramenta>

@@ -1,0 +1,24 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+---
+<LayoutFerramenta slug="juros-compostos">
+  <Fragment slot="campos">
+    <Campo nome="inicial" rotulo="Valor inicial" valor="10.000" prefixo="R$" />
+    <Campo nome="mensal" rotulo="Aporte mensal" valor="1.000" prefixo="R$" faixa={[0, 20000, 100]} />
+    <Campo nome="taxa" rotulo="Rentabilidade esperada" valor="10" sufixo="% ao ano" faixa={[1, 20, 0.5]} />
+    <Campo nome="anos" rotulo="Prazo" valor="30" sufixo="anos" faixa={[1, 50, 1]} />
+    <Campo nome="reajuste" rotulo="Reajuste anual do aporte" valor="0" sufixo="% ao ano" ajuda="Ex.: 4% se você aumentar o aporte com a inflação." />
+    <Campo nome="inflacao" rotulo="Inflação média" valor="4" sufixo="% ao ano" ajuda="Para mostrar o resultado em poder de compra de hoje." />
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Saldo ao final</span><span class="kpi__valor" id="r-final">—</span><span class="kpi__nota" id="r-hoje"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Saiu do seu bolso</span><span class="kpi__valor" id="r-aportado">—</span></div>
+      <div class="kpi"><span class="kpi__rotulo">Veio dos juros</span><span class="kpi__valor" id="r-juros">—</span><span class="kpi__nota" id="r-juros-pct"></span></div>
+    </div>
+    <div class="painel-graf"><div id="grafico"></div></div>
+    <p class="leitura" id="r-leitura"></p>
+    <table class="tabela-ferr"><thead><tr><th>Ano</th><th>Aportado</th><th>Juros</th><th>Saldo</th></tr></thead><tbody id="tabela"></tbody></table>
+  </Fragment>
+</LayoutFerramenta>

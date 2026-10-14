@@ -1,0 +1,66 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import { PERGUNTAS_GOLPE } from '../../lib/golpes'
+---
+<LayoutFerramenta slug="detector-de-golpes" semFormulario>
+  <form class="detector" data-ferramenta="detector-de-golpes" novalidate>
+    <ol class="detector__lista">
+      {PERGUNTAS_GOLPE.map((q, i) => (
+        <li class="detector__item rv">
+          <p class="detector__perg"><span>{String(i + 1).padStart(2, '0')}</span>{q.pergunta}</p>
+          <div class="detector__resp">
+            <label><input type="radio" name={`q${i}`} value="1" /> Sim</label>
+            <label><input type="radio" name={`q${i}`} value="0" /> Não</label>
+            <label><input type="radio" name={`q${i}`} value="" checked /> Não sei</label>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <aside class="detector__res" aria-live="polite">
+      <p class="chapeu">Resultado</p>
+      <p class="detector__nivel" id="r-nivel">Responda às perguntas</p>
+      <div class="detector__barra"><i id="r-barra"></i></div>
+      <p class="detector__texto" id="r-texto">Quanto mais “sim”, mais a proposta se parece com os golpes que se repetem há um século.</p>
+      <ul class="detector__sinais" id="r-sinais"></ul>
+      <div class="detector__antes">
+        <p class="chapeu">Antes de investir</p>
+        <ul>
+          <li>Consulte se a empresa é autorizada na <a href="https://www.gov.br/cvm/pt-br" target="_blank" rel="noopener">CVM</a> e no <a href="https://www.bcb.gov.br" target="_blank" rel="noopener">Banco Central</a>.</li>
+          <li>Nunca transfira para conta de pessoa física.</li>
+          <li>Desconfie de retorno fixo e alto. Risco e retorno andam juntos.</li>
+          <li>Na dúvida, não decida no mesmo dia. Pergunte a alguém de confiança.</li>
+        </ul>
+      </div>
+      <button type="button" class="ferr__copiar" data-copiar-simulacao>Copiar link desta simulação</button>
+    </aside>
+  </form>
+</LayoutFerramenta>
+<style>
+  .detector { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: start; }
+  .detector__lista { list-style: none; border-top: 2px solid var(--tinta); }
+  .detector__item { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--pedra); }
+  .detector__perg { font-size: 17px; display: flex; gap: 14px; }
+  .detector__perg span { font-family: var(--serif); color: var(--champ-p); font-size: 20px; line-height: 1.3; }
+  .detector__resp { display: flex; gap: 6px; }
+  .detector__resp label { font-size: 13px; font-weight: 600; padding: 8px 12px; border: 1px solid var(--pedra); border-radius: 40px; cursor: pointer; display: flex; gap: 6px; align-items: center; transition: all 0.2s; }
+  .detector__resp label:has(input:checked) { background: var(--tinta); color: var(--marfim); border-color: var(--tinta); }
+  .detector__resp input { position: absolute; opacity: 0; pointer-events: none; }
+  .detector__res { position: sticky; top: calc(var(--cab-altura) + 24px); background: var(--tinta); color: var(--marfim); padding: 32px; display: grid; gap: 16px; }
+  .detector__res .chapeu { color: var(--champ); }
+  .detector__nivel { font-family: var(--serif); font-size: 32px; line-height: 1.1; }
+  .detector__barra { height: 6px; background: rgba(245, 241, 232, 0.12); border-radius: 6px; overflow: hidden; }
+  .detector__barra i { display: block; height: 100%; width: 0; background: var(--champ); transition: width 0.6s var(--ease), background 0.4s; }
+  .detector__texto { color: var(--aco-claro); font-size: 15px; }
+  .detector__sinais { list-style: none; display: grid; gap: 8px; font-size: 14px; }
+  .detector__sinais li { padding-left: 18px; position: relative; color: var(--marfim); }
+  .detector__sinais li::before { content: '!'; position: absolute; left: 0; color: #e8a598; font-weight: 700; }
+  .detector__antes { border-top: 1px solid var(--linha-escura); padding-top: 16px; }
+  .detector__antes ul { margin: 8px 0 0 18px; color: var(--aco-claro); font-size: 14px; display: grid; gap: 6px; }
+  .detector__antes a { color: var(--champ); text-decoration: underline; }
+  .detector__res .ferr__copiar { color: var(--marfim); border-color: rgba(245, 241, 232, 0.25); }
+  @media (max-width: 960px) {
+    .detector { grid-template-columns: 1fr; }
+    .detector__res { position: static; }
+    .detector__item { grid-template-columns: 1fr; }
+  }
+</style>

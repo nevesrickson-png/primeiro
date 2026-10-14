@@ -1,0 +1,35 @@
+---
+interface Props {
+  nome: string
+  rotulo: string
+  valor: string
+  prefixo?: string
+  sufixo?: string
+  ajuda?: string
+  /** Controle deslizante: [mín, máx, passo]. */
+  faixa?: [number, number, number]
+}
+const { nome, rotulo, valor, prefixo, sufixo, ajuda, faixa } = Astro.props
+const id = `f-${nome}`
+---
+<div class="cf">
+  <label for={id}>{rotulo}</label>
+  <div class="cf__caixa">
+    {prefixo && <span class="cf__pre">{prefixo}</span>}
+    <input id={id} name={nome} value={valor} inputmode="decimal" autocomplete="off" size="6" />
+    {sufixo && <span class="cf__suf">{sufixo}</span>}
+  </div>
+  {faixa && <input class="cf__faixa" type="range" min={faixa[0]} max={faixa[1]} step={faixa[2]} data-espelho={nome} aria-label={rotulo} tabindex="-1" />}
+  {ajuda && <p class="cf__ajuda">{ajuda}</p>}
+</div>
+<style>
+  .cf { display: grid; gap: 6px; min-width: 0; }
+  .cf label { font-size: 13px; font-weight: 600; letter-spacing: 0.02em; }
+  .cf__caixa { display: flex; align-items: center; background: var(--marfim-2); border: 1px solid var(--pedra); border-radius: var(--raio); transition: border-color 0.2s, box-shadow 0.2s; }
+  .cf__caixa:focus-within { border-color: var(--champ-p); box-shadow: 0 0 0 3px rgba(203, 178, 122, 0.25); }
+  .cf__caixa input { flex: 1; min-width: 0; width: 100%; border: 0; background: none; padding: 12px 14px; font-size: 17px; font-variant-numeric: tabular-nums; outline: none; }
+  .cf__pre, .cf__suf { color: var(--grafite); font-size: 14px; padding: 0 12px; white-space: nowrap; }
+  .cf__pre { padding-right: 0; }
+  .cf__faixa { width: 100%; accent-color: var(--champ-p); height: 18px; }
+  .cf__ajuda { font-size: 12px; color: var(--grafite); }
+</style>

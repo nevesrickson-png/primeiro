@@ -31,6 +31,16 @@ PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8765/exec npm run dev
 
 Campos `null` em `src/config.ts` (WhatsApp, retrato) simplesmente não aparecem no site até serem preenchidos.
 
+## Ferramentas (simuladores)
+
+Seis simuladores em `/ferramentas`: independência financeira, juros compostos, custo das taxas, CDB × LCI/LCA, reserva de emergência e detector de golpes. Os cálculos rodam no navegador do visitante (nada é enviado), a simulação fica na URL para compartilhar e o botão "Conversar sobre isso" leva ao agendamento com o assunto preenchido.
+
+- Cálculos: `src/lib/financas.ts` (testes em `testes/`, rode `npm test`).
+- Telas: `src/pages/ferramentas/*.astro`; lógica de cada uma: `src/scripts/ferramentas-paginas.ts`.
+- Perguntas do detector de golpes: `src/lib/golpes.ts`.
+- Lista e textos dos cartões: `FERRAMENTAS` em `src/config.ts`.
+- Regras de IR da renda fixa (tabela regressiva) estão em `aliquotaIR`; revise se a lei mudar.
+
 ## Publicar artigos (painel)
 
 1. Entre em **https://app.pagescms.org** com a conta do GitHub e abra o repositório `primeiro`.

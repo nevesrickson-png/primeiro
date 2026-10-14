@@ -4,7 +4,17 @@ import Simbolo from '../components/Simbolo.astro'
 import ListaEditorial from '../components/ListaEditorial.astro'
 import SemArtigos from '../components/SemArtigos.astro'
 import Retrato from '../components/Retrato.astro'
-import { CATEGORIAS, SITE } from '../config'
+import { CATEGORIAS, FERRAMENTAS } from '../config'
+import CartaoFerramenta from '../components/ferramentas/CartaoFerramenta.astro'
+import { simularAcumulacao } from '../lib/financas'
+
+// Curva da seção Ferramentas: R$ 1.000/mês a 0,5% a.m. (mesmo exemplo ilustrativo do artigo).
+const curva = simularAcumulacao({ inicial: 0, mensal: 1000, taxaAnual: Math.pow(1.005, 12) - 1, anos: 30 })
+const cx = (a: number) => 40 + (a / 30) * 600
+const cy = (v: number) => 300 - (v / 1100000) * 270
+const pontosSaldo = curva.map((p) => `${cx(p.ano).toFixed(1)},${cy(p.saldo).toFixed(1)}`).join(' ')
+const pontosAporte = curva.map((p) => `${cx(p.ano).toFixed(1)},${cy(p.aportado).toFixed(1)}`).join(' ')
+const marcos = [10, 20, 30].map((a) => ({ a, x: cx(a), y: cy(curva[a].saldo), v: curva[a].saldo }))
 import { artigosPublicados } from '../lib/artigos'
 
 const artigos = await artigosPublicados()
@@ -14,6 +24,7 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
 <Base cabecalhoEscuro>
   <!-- 1. Abertura -->
   <section class="abertura escuro" data-abertura>
+    <div class="abertura__brilho" aria-hidden="true"></div>
     <div class="wrap abertura__grade">
       <div>
         <p class="chapeu chapeu--filete rv">Assessor de investimentos · CEA</p>
@@ -27,18 +38,15 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
           <a class="btn btn--linha-clara" href="/assessoria#agendar">Agendar conversa</a>
         </div>
       </div>
-      {SITE.retrato ? (
-        <div class="abertura__retrato">
-          <div class="abertura__lobo" aria-hidden="true"><Simbolo desenha pesos={[0.9, 0.38, 0.6]} rotulo="" /></div>
-          <picture class="arco">
-            <source type="image/webp" srcset={`${SITE.retrato}-480.webp 480w, ${SITE.retrato}-800.webp 800w`} sizes="(max-width: 900px) 70vw, 420px" />
-            <img src={`${SITE.retrato}-800.jpg`} srcset={`${SITE.retrato}-480.jpg 480w, ${SITE.retrato}-800.jpg 800w`} sizes="(max-width: 900px) 70vw, 420px" width="800" height="1000" alt="Rickson Messias, assessor de investimentos" fetchpriority="high" />
-          </picture>
-          <p class="placa"><b>Rickson Messias</b><span>Autor de A Revolução dos ETFs</span></p>
-        </div>
-      ) : (
-        <div class="abertura__arte"><Simbolo desenha pesos={[1.3, 0.5, 0.75]} /></div>
-      )}
+      <div class="abertura__arte" aria-hidden="false">
+        <svg class="mostrador" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="98" />
+          {Array.from({ length: 60 }, (_, k) => (
+            <line x1="100" y1={k % 5 === 0 ? 4 : 7} x2="100" y2="12" transform={`rotate(${k * 6} 100 100)`} class={k % 5 === 0 ? 'forte' : ''} />
+          ))}
+        </svg>
+        <Simbolo desenha pesos={[1.3, 0.5, 0.75]} />
+      </div>
       <div class="pilares rv" data-d="200">
         <div><b>Paciência</b><span>Patrimônio se constrói em décadas. A pressa costuma sair caro.</span></div>
         <div><b>Profundidade</b><span>Estudo de fonte primária, aplicado com critério.</span></div>
@@ -93,10 +101,41 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
     </div>
   </section>
 
+  <!-- Ferramentas -->
+  <section class="secao secao--escura ferramentas-home">
+    <div class="wrap">
+      <div class="fh__topo">
+        <div class="fh__texto">
+          <p class="chapeu rv">Ferramentas</p>
+          <h2 class="titulo rv" data-d="100">Faça as contas <em>antes</em> de decidir.</h2>
+          <p class="apoio rv" data-d="200">Simuladores de planejamento e análise, com a mesma lógica que eu uso com clientes. Gratuitos, sem cadastro, e os cálculos ficam no seu navegador.</p>
+          <a class="link link--sub rv" data-d="300" href="/ferramentas">Ver todas as ferramentas <span class="seta">→</span></a>
+        </div>
+        <figure class="fh__curva" data-curva>
+          <svg viewBox="0 0 680 330" role="img" aria-label="Exemplo ilustrativo: R$ 1.000 por mês a 0,5% ao mês. Em 30 anos, R$ 360 mil aportados viram cerca de R$ 1 milhão.">
+            <line x1="40" y1="300" x2="640" y2="300" class="fh__eixo" />
+            <polygon points={`40,300 ${pontosSaldo} 640,300`} class="fh__area" />
+            <polyline points={pontosAporte} class="fh__aporte" pathLength="1" />
+            <polyline points={pontosSaldo} class="fh__saldo" pathLength="1" />
+            {marcos.map((m, i) => (
+              <g class="fh__marco" style={`--i:${i}`}>
+                <line x1={m.x} x2={m.x} y1={m.y} y2="300" />
+                <circle cx={m.x} cy={m.y} r="5" />
+                <text x={m.x - 8} y={m.y - 14} text-anchor="end">{m.a} anos · {m.v >= 1e6 ? `R$ ${(m.v / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} milhão` : `R$ ${Math.round(m.v / 1000)} mil`}</text>
+              </g>
+            ))}
+          </svg>
+          <figcaption>Exemplo ilustrativo: R$ 1.000 por mês a 0,5% ao mês, sem impostos nem inflação. A linha tracejada é o que saiu do bolso.</figcaption>
+        </figure>
+      </div>
+      <div class="grade-3 fh__cards">{FERRAMENTAS.map((f) => <CartaoFerramenta f={f} escuro />)}</div>
+    </div>
+  </section>
+
   <!-- 4. Quem escreve -->
   <section class="secao">
     <div class="wrap quem">
-      <div class="quem__foto rv"><Retrato /></div>
+      <div class="quem__foto rv"><Retrato semFoto /></div>
       <div class="quem__texto">
         <p class="chapeu rv">Quem escreve</p>
         <p class="citacao rv" data-d="100">Entrei no mercado pelo brilho. Fiquei pela proteção.</p>
@@ -175,16 +214,15 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
   .abertura__grade { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 56px; align-items: center; padding-top: clamp(64px, 9vw, 112px); }
   .abertura .display { margin: 28px 0; }
   .abertura__arte { justify-self: center; width: 100%; max-width: 440px; }
-  .abertura__retrato { position: relative; justify-self: end; width: 100%; max-width: 420px; margin-top: 8px; }
-  .abertura__lobo { position: absolute; inset: -14% -22% auto -22%; aspect-ratio: 1; opacity: 0.55; pointer-events: none; }
-  .arco { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 210px 210px 4px 4px; overflow: hidden; border: 1px solid rgba(203, 178, 122, 0.45); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.7); }
-  .arco img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; animation: surge 1.4s var(--ease) 0.3s both; }
-  .arco::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(11, 26, 44, 0.75)); }
-  .placa { position: absolute; left: 24px; bottom: 22px; z-index: 1; display: grid; gap: 2px; }
-  .placa b { font-family: var(--serif); font-weight: 400; font-size: 22px; }
-  .placa span { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--champ); }
-  @media (prefers-reduced-motion: reduce) { .arco img { animation: none; } }
-  @keyframes surge { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: none; } }
+  .abertura { position: relative; }
+  .abertura__brilho { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(420px circle at var(--mx, 70%) var(--my, 40%), rgba(203, 178, 122, 0.12), transparent 70%); transition: background 0.2s; }
+  .abertura__arte { position: relative; }
+  .mostrador { position: absolute; inset: -9%; width: 118%; height: 118%; fill: none; stroke: var(--champ); opacity: 0.35; animation: gira-lento 120s linear infinite; }
+  .mostrador circle { stroke-width: 0.4; }
+  .mostrador line { stroke-width: 0.4; }
+  .mostrador line.forte { stroke-width: 0.9; }
+  @keyframes gira-lento { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .mostrador { animation: none; } }
 
   .credenciais { background: var(--marfim-3); border-bottom: 1px solid var(--pedra); }
   .credenciais ul { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); }
@@ -198,6 +236,24 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
   .pilares b { font-family: var(--serif); font-weight: 400; font-size: 24px; display: block; }
   .pilares span { font-size: 14px; color: var(--aco); }
 
+  .ferramentas-home { overflow: hidden; }
+  .fh__topo { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; margin-bottom: 56px; }
+  .fh__texto { display: grid; gap: 20px; justify-items: start; }
+  .fh__curva { margin: 0; }
+  .fh__curva svg { width: 100%; height: auto; overflow: visible; }
+  .fh__eixo { stroke: rgba(245, 241, 232, 0.2); }
+  .fh__area { fill: url(#none); fill: rgba(203, 178, 122, 0.08); opacity: 0; transition: opacity 1.2s 1.2s; }
+  .fh__saldo { fill: none; stroke: var(--champ); stroke-width: 2.6; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .fh__aporte { fill: none; stroke: var(--aco); stroke-width: 1.4; stroke-dasharray: 0.012 0.01; opacity: 0; transition: opacity 1s 0.6s; }
+  .fh__marco { opacity: 0; transition: opacity 0.6s; transition-delay: calc(1.4s + var(--i) * 0.35s); }
+  .fh__marco line { stroke: rgba(203, 178, 122, 0.35); stroke-dasharray: 3 4; }
+  .fh__marco circle { fill: var(--tinta); stroke: var(--champ); stroke-width: 2; }
+  .fh__marco text { fill: var(--marfim); font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  [data-curva].on .fh__saldo { animation: traco 2.2s cubic-bezier(0.6, 0.1, 0.2, 1) forwards; }
+  [data-curva].on .fh__area, [data-curva].on .fh__aporte, [data-curva].on .fh__marco { opacity: 1; }
+  .fh__curva figcaption { font-size: 12px; color: var(--aco); margin-top: 10px; }
+  .fh__cards { gap: 16px; }
+  @media (prefers-reduced-motion: reduce) { .fh__saldo { stroke-dashoffset: 0; } .fh__area, .fh__aporte, .fh__marco { opacity: 1; } }
   .territorio { display: block; transition: transform 0.4s var(--ease); }
   .territorio:hover { transform: translateY(-3px); }
   .territorio:hover h3 { color: var(--champ-p); }
@@ -234,16 +290,35 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
   @media (max-width: 900px) {
     .abertura__grade { grid-template-columns: 1fr; gap: 28px; padding-top: 48px; }
     .abertura__arte { max-width: 200px; order: -1; justify-self: start; }
-    .abertura__retrato { order: -1; justify-self: center; max-width: 300px; margin: 8px auto 12px; }
     .credenciais ul { grid-template-columns: 1fr 1fr; }
     .credenciais li { padding: 18px 16px; border-left: 0; border-top: 1px solid var(--pedra); }
     .credenciais li:nth-child(-n+2) { border-top: 0; }
     .credenciais li:nth-child(odd) { padding-left: 0; }
     .pilares { grid-template-columns: 1fr; margin-top: 40px; }
     .pilares div, .pilares div + div { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--linha-escura); }
-    .quem, .livro, .protecao__in { grid-template-columns: 1fr; }
+    .quem, .livro, .protecao__in, .fh__topo { grid-template-columns: 1fr; }
+    .fh__cards { grid-template-columns: 1fr; }
+    .fh__marco text { font-size: 18px; }
     .quem__foto { max-width: 360px; }
     .livro__capa { max-width: 220px; justify-self: start; }
     .protecao__malha { width: 120vw; right: -50%; opacity: 0.1; }
   }
 </style>
+
+<script>
+  // Brilho suave que acompanha o cursor na abertura (só com mouse).
+  const ab = document.querySelector<HTMLElement>('.abertura')
+  if (ab && matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    ab.addEventListener('pointermove', (e) => {
+      const r = ab.getBoundingClientRect()
+      ab.style.setProperty('--mx', `${e.clientX - r.left}px`)
+      ab.style.setProperty('--my', `${e.clientY - r.top}px`)
+    })
+  }
+  // A curva dos juros compostos se desenha quando entra na tela.
+  const curva = document.querySelector('[data-curva]')
+  if (curva) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { curva.classList.add('on'); io.disconnect() } }), { threshold: 0.35 })
+    io.observe(curva)
+  }
+</script>
