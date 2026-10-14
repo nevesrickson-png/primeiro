@@ -27,6 +27,7 @@ const atual = Astro.url.pathname.replace(/\/$/, '') || '/'
 
 <style>
   .cab { position: sticky; top: 0; z-index: 30; background: rgba(245, 241, 232, 0.96); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--pedra); color: var(--tinta); transition: background 0.4s, color 0.4s, border-color 0.4s; }
+  .cab.rolou { box-shadow: 0 10px 30px -18px rgba(11, 26, 44, 0.45); }
   .cab--escuro { background: var(--tinta); color: var(--marfim); border-bottom-color: rgba(245, 241, 232, 0.08); }
   .cab__in { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--cab-altura); }
   .menu { display: flex; gap: 34px; list-style: none; font-size: 15px; color: var(--grafite); }
@@ -68,6 +69,9 @@ const atual = Astro.url.pathname.replace(/\/$/, '') || '/'
   const cab = document.querySelector<HTMLElement>('.cab')
   const botao = document.querySelector<HTMLButtonElement>('.cab__abrir')
   const menu = document.getElementById('menu')
+  const marcarRolagem = () => cab?.classList.toggle('rolou', scrollY > 8)
+  addEventListener('scroll', marcarRolagem, { passive: true })
+  marcarRolagem()
   botao?.addEventListener('click', () => {
     const aberto = botao.getAttribute('aria-expanded') === 'true'
     botao.setAttribute('aria-expanded', String(!aberto))

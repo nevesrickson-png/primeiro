@@ -49,17 +49,36 @@ Os quatro formulários (agendar conversa, carta mensal, lista do livro, convite 
 - Depois de atualizar o `Code.gs` no Apps Script, publique uma **nova versão** do App da Web (Implantar → Gerenciar implantações → Editar → Nova versão). A URL continua a mesma.
 - A URL do App da Web vai na variável `PUBLIC_FORM_ENDPOINT`. Sem ela, os formulários avisam "ainda não conectado" em vez de perder o contato.
 
-## Colocar no ar (Hostinger)
+## Colocar no ar
 
-1. Compre o plano (Premium já basta) e o domínio **ricksonmessias.com**.
-2. No hPanel: **Arquivos → Contas FTP**, anote servidor, usuário e senha.
-3. No GitHub do repositório: **Settings → Secrets and variables → Actions**
-   - *Secrets*: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`
-   - *Variables*: `PUBLIC_FORM_ENDPOINT` (URL do App da Web)
-4. Rode o workflow **Site** (aba Actions → Site → Run workflow) ou faça qualquer mudança em `site/web` na `main`.
-5. No hPanel, ative o **SSL** do domínio. O `.htaccess` já força HTTPS, tira o `www` e usa a página 404 da marca.
+O site é **estático**: depois do `npm run build`, são só arquivos HTML, CSS e imagens. Não precisa de servidor Node.js, e por isso pode ficar em hospedagem gratuita.
 
-Se o FTP da Hostinger já abrir dentro de `public_html`, troque `server-dir` em `.github/workflows/site.yml` para `./`.
+### Recomendado: Cloudflare Pages (grátis)
+
+Plano gratuito com builds automáticos a partir do GitHub (inclusive repositório privado), HTTPS e domínio próprio.
+
+1. Crie a conta em **dash.cloudflare.com** e vá em **Workers e Pages → Criar → Pages → Conectar ao Git**.
+2. Autorize o GitHub e escolha o repositório `primeiro` e o branch do site.
+3. Configurações de build:
+   - Framework: **Astro**
+   - Diretório raiz: `site/web`
+   - Comando de build: `npm run build`
+   - Diretório de saída: `dist`
+   - Variáveis de ambiente: `NODE_VERSION` = `22` e, quando a ponte estiver publicada, `PUBLIC_FORM_ENDPOINT` = URL do App da Web do Apps Script
+4. Salvar e implantar. Em ~2 minutos o site fica no ar em `https://<nome-do-projeto>.pages.dev` para testar.
+5. Domínio: em **Domínios personalizados**, adicione `ricksonmessias.com`. Se comprar o domínio na própria Cloudflare (Registrar, preço de custo), a ligação é automática; se comprar em outro lugar, aponte os DNS para a Cloudflare.
+
+Cada mudança enviada ao branch (inclusive pelo painel de artigos) publica o site sozinha. Cabeçalhos de segurança e cache: `public/_headers`.
+
+### Alternativa: Hostinger (pago)
+
+Se preferir a Hostinger, o plano mais simples basta (não precisa do plano com Node.js). O workflow `.github/workflows/site.yml` publica por FTP a cada mudança na `main`:
+
+1. No hPanel: **Arquivos → Contas FTP**, anote servidor, usuário e senha.
+2. No GitHub: **Settings → Secrets and variables → Actions** → *Secrets* `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` e *Variables* `PUBLIC_FORM_ENDPOINT`.
+3. Rode o workflow **Site** (aba Actions). Ative o SSL no hPanel; o `.htaccess` força HTTPS e usa a página 404 da marca.
+
+Se o FTP já abrir dentro de `public_html`, troque `server-dir` no workflow para `./`.
 
 ## Antes de publicar (pendências)
 

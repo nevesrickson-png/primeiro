@@ -4,7 +4,7 @@ import Simbolo from '../components/Simbolo.astro'
 import ListaEditorial from '../components/ListaEditorial.astro'
 import SemArtigos from '../components/SemArtigos.astro'
 import Retrato from '../components/Retrato.astro'
-import { CATEGORIAS } from '../config'
+import { CATEGORIAS, SITE } from '../config'
 import { artigosPublicados } from '../lib/artigos'
 
 const artigos = await artigosPublicados()
@@ -27,15 +27,34 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
           <a class="btn btn--linha-clara" href="/assessoria#agendar">Agendar conversa</a>
         </div>
       </div>
-      <div class="abertura__arte">
-        <Simbolo desenha pesos={[1.3, 0.5, 0.75]} />
-      </div>
+      {SITE.retrato ? (
+        <div class="abertura__retrato">
+          <div class="abertura__lobo" aria-hidden="true"><Simbolo desenha pesos={[0.9, 0.38, 0.6]} rotulo="" /></div>
+          <picture class="arco">
+            <source type="image/webp" srcset={`${SITE.retrato}-480.webp 480w, ${SITE.retrato}-800.webp 800w`} sizes="(max-width: 900px) 70vw, 420px" />
+            <img src={`${SITE.retrato}-800.jpg`} srcset={`${SITE.retrato}-480.jpg 480w, ${SITE.retrato}-800.jpg 800w`} sizes="(max-width: 900px) 70vw, 420px" width="800" height="1000" alt="Rickson Messias, assessor de investimentos" fetchpriority="high" />
+          </picture>
+          <p class="placa"><b>Rickson Messias</b><span>Autor de A Revolução dos ETFs</span></p>
+        </div>
+      ) : (
+        <div class="abertura__arte"><Simbolo desenha pesos={[1.3, 0.5, 0.75]} /></div>
+      )}
       <div class="pilares rv" data-d="200">
         <div><b>Paciência</b><span>Patrimônio se constrói em décadas. A pressa costuma sair caro.</span></div>
         <div><b>Profundidade</b><span>Estudo de fonte primária, aplicado com critério.</span></div>
         <div><b>Proteção</b><span>Risco dito antes do retorno. Ilusão desmascarada.</span></div>
       </div>
     </div>
+  </section>
+
+  <!-- Credenciais -->
+  <section class="credenciais" aria-label="Credenciais">
+    <ul class="wrap">
+      <li><b>CEA</b><span>Certificação Anbima</span></li>
+      <li><b>Bradesco · Rico · EQI</b><span>Do balcão à assessoria</span></li>
+      <li><b>Expert XP</b><span>2023 e 2024</span></li>
+      <li><b>A Revolução dos ETFs</b><span>Autor</span></li>
+    </ul>
   </section>
 
   <!-- 2. Análises recentes -->
@@ -156,7 +175,24 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
   .abertura__grade { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 56px; align-items: center; padding-top: clamp(64px, 9vw, 112px); }
   .abertura .display { margin: 28px 0; }
   .abertura__arte { justify-self: center; width: 100%; max-width: 440px; }
-  .pilares { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(56px, 8vw, 96px); border-top: 1px solid var(--linha-escura); }
+  .abertura__retrato { position: relative; justify-self: end; width: 100%; max-width: 420px; margin-top: 8px; }
+  .abertura__lobo { position: absolute; inset: -14% -22% auto -22%; aspect-ratio: 1; opacity: 0.55; pointer-events: none; }
+  .arco { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 210px 210px 4px 4px; overflow: hidden; border: 1px solid rgba(203, 178, 122, 0.45); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.7); }
+  .arco img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; animation: surge 1.4s var(--ease) 0.3s both; }
+  .arco::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(11, 26, 44, 0.75)); }
+  .placa { position: absolute; left: 24px; bottom: 22px; z-index: 1; display: grid; gap: 2px; }
+  .placa b { font-family: var(--serif); font-weight: 400; font-size: 22px; }
+  .placa span { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--champ); }
+  @media (prefers-reduced-motion: reduce) { .arco img { animation: none; } }
+  @keyframes surge { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: none; } }
+
+  .credenciais { background: var(--marfim-3); border-bottom: 1px solid var(--pedra); }
+  .credenciais ul { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .credenciais li { padding: 26px 24px; display: grid; gap: 2px; border-left: 1px solid var(--pedra); }
+  .credenciais li:first-child { border-left: 0; padding-left: 0; }
+  .credenciais b { font-family: var(--serif); font-weight: 400; font-size: 20px; }
+  .credenciais span { font-size: 13px; color: var(--grafite); }
+  .pilares { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--linha-escura); }
   .pilares div { padding: 28px 32px 36px 0; }
   .pilares div + div { padding-left: 32px; border-left: 1px solid var(--linha-escura); }
   .pilares b { font-family: var(--serif); font-weight: 400; font-size: 24px; display: block; }
@@ -198,6 +234,11 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
   @media (max-width: 900px) {
     .abertura__grade { grid-template-columns: 1fr; gap: 28px; padding-top: 48px; }
     .abertura__arte { max-width: 200px; order: -1; justify-self: start; }
+    .abertura__retrato { order: -1; justify-self: center; max-width: 300px; margin: 8px auto 12px; }
+    .credenciais ul { grid-template-columns: 1fr 1fr; }
+    .credenciais li { padding: 18px 16px; border-left: 0; border-top: 1px solid var(--pedra); }
+    .credenciais li:nth-child(-n+2) { border-top: 0; }
+    .credenciais li:nth-child(odd) { padding-left: 0; }
     .pilares { grid-template-columns: 1fr; margin-top: 40px; }
     .pilares div, .pilares div + div { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--linha-escura); }
     .quem, .livro, .protecao__in { grid-template-columns: 1fr; }

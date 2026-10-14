@@ -30,6 +30,14 @@
   --cab-altura: 76px;
 }
 
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+}
+
 *,
 *::before,
 *::after {
@@ -229,6 +237,24 @@ textarea {
 .btn--champ:hover {
   background: var(--champ-claro);
 }
+.btn--tinta,
+.btn--champ {
+  position: relative;
+  overflow: hidden;
+}
+.btn--tinta::after,
+.btn--champ::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.22) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.8s var(--ease);
+}
+.btn--tinta:hover::after,
+.btn--champ:hover::after {
+  transform: translateX(120%);
+}
 .btn--linha {
   border-color: var(--tinta);
   color: var(--tinta);
@@ -264,11 +290,16 @@ textarea {
   white-space: nowrap;
 }
 .link--sub {
-  border-bottom: 1px solid var(--champ-p);
   padding-bottom: 3px;
+  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat,
+    linear-gradient(var(--champ-p), var(--champ-p)) left bottom / 100% 1px no-repeat;
+  transition: background-size 0.45s var(--ease);
+}
+.link--sub:hover {
+  background-size: 100% 1px, 100% 1px;
 }
 .secao--escura .link--sub {
-  border-color: var(--champ);
+  background-image: linear-gradient(var(--marfim), var(--marfim)), linear-gradient(var(--champ), var(--champ));
 }
 .seta {
   transition: transform 0.3s var(--ease);
@@ -355,7 +386,13 @@ button:hover .seta {
   color: var(--tinta);
   margin-top: 14px;
 }
+.cartao:hover {
+  transform: translateY(-3px);
+  border-color: var(--champ);
+  box-shadow: 0 22px 44px -30px rgba(11, 26, 44, 0.35);
+}
 .cartao {
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.45s;
   background: var(--marfim-2);
   border: 1px solid var(--pedra);
   padding: 36px;
