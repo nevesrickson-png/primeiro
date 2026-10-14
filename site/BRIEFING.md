@@ -83,6 +83,16 @@ Portal de análises de Rickson Messias, assessor de investimentos CEA na EQI. Fu
 - [ ] Comprar domínio ricksonmessias.com + plano Hostinger
 - [ ] Confirmar o vínculo/texto regulatório com o compliance da EQI
 - [ ] Telefone/WhatsApp público para o site
+- [ ] Criar o e-mail da marca (o site usa contato@ricksonmessias.com como provisório)
 - [ ] "[ano]" da visão no brand book
 - [ ] Lista dos conteúdos a reaproveitar (roteiros, cartas) para os primeiros artigos
-- [ ] Lacunas da biografia (anos de cada etapa, situação do curso na UFRJ)
+- [ ] Remuneração do assessor (FAQ "Quanto custa"), compartilhamento de dados com a EQI e uso de cookies/analytics
+
+## Fatos confirmados (14/10/2026)
+- Custódia: BTG Pactual (conta em nome do cliente).
+- Valor mínimo: a partir de R$ 500 mil para investir. Aparece como aviso no formulário, sem perguntar o patrimônio. ⚖️
+- Primeira conversa: cerca de 1 hora. Retorno em até 2 dias úteis.
+- Eventos: Expert XP 2023 e 2024; Money Week 2026 (Santa Catarina).
+- YouTube: @ofilhomaisrico.
+- Anos de cada etapa: não entram no site (decisão de Rickson).
+- Curso na UFRJ: citar só "Contabilidade na UFRJ", **nunca a situação do curso** (concluído ou não). Não usar "formado" nem "graduado".

@@ -30,7 +30,7 @@
 **Colunas**
 - **Navegar:** Artigos · Sobre · Assessoria · Livro e palestras
 - **Acompanhar:** Instagram @ofilhomaisrico · YouTube · LinkedIn · @fraudesltda, por Rickson Messias
-- **Contato:** [e-mail] · WhatsApp [número]
+- **Contato:** contato@ricksonmessias.com · WhatsApp [número]
 
 **Rodapé regulatório** ⚖️
 > Conteúdo de caráter informativo, que não constitui recomendação de investimento. Rentabilidade passada não é garantia de rentabilidade futura. Rickson Messias é assessor de investimentos [vinculado à EQI Investimentos], nos termos da regulamentação da CVM.
@@ -147,12 +147,12 @@ Na EQI, já atendi pessoas que tinham caído em golpes antes de chegar até mim.
 | **Curicica** | Nasci e cresci em Jacarepaguá, na Zona Oeste do Rio, com dois irmãos. |
 | **Escola pública** | Uma professora me indica ao Colégio Roberto Burle Marx. |
 | **Colégio QI** | Dou aulas aos colegas: meu primeiro negócio. |
-| **UFRJ** | Contabilidade, campus Praia Vermelha. Começo a estudar fraudes. [ano] |
+| **UFRJ** | Contabilidade, campus Praia Vermelha. Começo a estudar fraudes. |
 | **Primeiros empregos** | Jovem aprendiz e estágios em financeiro e contabilidade. |
-| **Bradesco** | CEA em nove meses. De escriturário a gerente. [ano] |
-| **PAAP · B7** | Formação como advisor: alocação, comercial e leitura de gestores. [ano] |
-| **Rico · XP** | Dois anos e meio como assessor. [ano] |
-| **EQI Investimentos** | Assessor de investimentos. [ano] até hoje. |
+| **Bradesco** | CEA em nove meses. De escriturário a gerente. |
+| **PAAP · B7** | Formação como advisor: alocação, comercial e leitura de gestores. |
+| **Rico · XP** | Dois anos e meio como assessor. Expert XP 2023 e 2024. |
+| **EQI Investimentos** | Assessor de investimentos até hoje. Money Week 2026. |
 
 ### Bloco 4: O que me move
 - Citação: *Sou pai. Tudo o que construo é pensando no futuro do meu filho.*
@@ -172,16 +172,16 @@ Na EQI, já atendi pessoas que tinham caído em golpes antes de chegar até mim.
 - Chapéu: **FORMAÇÃO**
 - Título: **Estudo que não para**
 - **CEA, Anbima:** certificação conquistada em nove meses de banco
-- **Contabilidade, UFRJ:** [concluído em ano / em andamento]
+- **UFRJ:** Contabilidade, escolhida pela grade voltada a investimentos
 - **Programa Advisor de Alta Performance:** Yumi Banco, atual B7
 - **CFP:** próxima certificação, em preparação
-- **Eventos:** Expert XP ([nº] edições) e Money Week ([ano]), onde conversei com gestores e estrategistas do mercado
+- **Eventos:** Expert XP 2023 e 2024, e Money Week 2026, em Santa Catarina, onde conversei com gestores e estrategistas do mercado
 - **Rotina:** de três a sete horas de estudo por semana
 
 ### Bloco 7: Onde me acompanhar
 - Título: **Onde me acompanhar**
 - **@ofilhomaisrico** · Patrimônio de longo prazo, grandes investidores e bastidores do mercado.
-- **YouTube** · [nome do canal]
+- **YouTube** · @ofilhomaisrico
 - **LinkedIn** · Análises e cenário.
 - **@fraudesltda** · Pirâmides e fraudes da história, por Rickson Messias.
 
@@ -242,20 +242,21 @@ Na EQI, já atendi pessoas que tinham caído em golpes antes de chegar até mim.
 [Redação a definir com o compliance: explicar de forma transparente como o assessor é remunerado (por exemplo, pela instituição, conforme os produtos), como exige a regulamentação da CVM.]
 
 **Como funciona o vínculo com a EQI?** ⚖️
-Sou assessor de investimentos vinculado à EQI Investimentos. Seus investimentos ficam em uma conta em seu nome, em [instituição custodiante], e eu acompanho a sua carteira e te oriento nas decisões.
+Sou assessor de investimentos vinculado à EQI Investimentos. Seus investimentos ficam em uma conta em seu nome no BTG Pactual, a instituição custodiante, e eu acompanho a sua carteira e te oriento nas decisões.
 
 **Existe valor mínimo para começar?**
-[Definir: valor mínimo ou "não há valor mínimo para a primeira conversa".]
+Sim. A assessoria é indicada para quem tem a partir de R$ 500 mil para investir. É o patamar em que consigo dedicar a atenção que cada patrimônio merece. ⚖️
 
 **O meu dinheiro fica com você?**
-Não. O dinheiro fica sempre em conta em seu nome, na instituição. Eu nunca recebo recursos de clientes em conta própria. Se alguém pedir isso, desconfie: é um dos sinais clássicos de golpe.
+Não. O dinheiro fica sempre em conta em seu nome, no BTG Pactual. Eu nunca recebo recursos de clientes em conta própria. Se alguém pedir isso, desconfie: é um dos sinais clássicos de golpe.
 
 **Como é a primeira conversa?**
-Uma conversa de [30 a 45] minutos, por vídeo ou pessoalmente [no Rio de Janeiro]. Eu escuto mais do que falo. Não há compromisso: se fizer sentido, seguimos. Se não, você sai com mais clareza do que entrou.
+Uma conversa de cerca de uma hora, por vídeo ou pessoalmente [no Rio de Janeiro]. Eu escuto mais do que falo. Não há compromisso: se fizer sentido, seguimos. Se não, você sai com mais clareza do que entrou.
 
 ### Bloco 7: Formulário de agendamento `#agendar`
 - Título: **Vamos conversar**
-- Apoio: Preencha abaixo e eu retorno em até [2] dias úteis para combinar o melhor horário.
+- Apoio: Preencha abaixo e eu retorno em até 2 dias úteis para combinar o melhor horário.
+- Aviso acima do formulário: A assessoria é indicada para patrimônios a partir de R$ 500 mil.
 
 | Campo | Rótulo | Obrigatório |
 |---|---|---|
@@ -344,8 +345,8 @@ Os primeiros artigos estão sendo escritos. Deixe seu e-mail e receba quando sa�
 - Formatos: presencial ou online · [duração]
 
 ### Bloco 5: Eventos e participações
-- Expert XP · [nº] edições
-- Money Week, Santa Catarina · [ano]
+- Expert XP · 2023 e 2024
+- Money Week, Santa Catarina · 2026
 
 ### Bloco 6: Convidar para palestrar
 - Título: **Leve essa conversa para o seu evento**
@@ -358,7 +359,7 @@ Os primeiros artigos estão sendo escritos. Deixe seu e-mail e receba quando sa�
 
 ### /obrigado
 - Título: **Recebido. Obrigado pela confiança.**
-- Texto: Eu retorno em até [2] dias úteis pelo WhatsApp ou e-mail que você informou. Enquanto isso, três leituras para começar:
+- Texto: Eu retorno em até 2 dias úteis pelo WhatsApp ou e-mail que você informou. Enquanto isso, três leituras para começar:
 - [3 artigos]
 - Link: Voltar para o início
 
@@ -368,14 +369,14 @@ Os primeiros artigos estão sendo escritos. Deixe seu e-mail e receba quando sa�
 - Botões: **Início** · **Artigos**
 
 ### /privacidade ⚖️ (rascunho de estrutura; o texto final deve ser revisado juridicamente)
-1. **Quem é o responsável:** Rickson Messias, [e-mail de contato].
+1. **Quem é o responsável:** Rickson Messias, contato@ricksonmessias.com.
 2. **Quais dados coletamos:** os que você informa nos formulários (nome, e-mail, WhatsApp, cidade, profissão, perfil, mensagem e como conheceu).
 3. **Para quê:** responder ao seu contato, enviar a carta mensal (se você pedir), avisar sobre o livro e responder a convites de palestra.
 4. **Base legal:** o seu consentimento, registrado no envio do formulário.
 5. **Onde ficam:** em planilha protegida no Google e no sistema de relacionamento do assessor, com banco de dados criptografado.
 6. **Com quem compartilhamos:** com ninguém para fins comerciais. [Informar se há compartilhamento com a EQI.]
 7. **Por quanto tempo:** enquanto houver relacionamento ou até você pedir a exclusão.
-8. **Seus direitos:** acessar, corrigir ou excluir seus dados e cancelar a carta a qualquer momento, pelo link no próprio e-mail ou por [e-mail].
+8. **Seus direitos:** acessar, corrigir ou excluir seus dados e cancelar a carta a qualquer momento, pelo link no próprio e-mail ou por contato@ricksonmessias.com.
 9. **Cookies:** [informar se houver ferramenta de estatística].
 
 ---

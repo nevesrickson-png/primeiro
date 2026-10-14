@@ -69,7 +69,7 @@ Objetivo: confiança pela história, sem tom de pena (raiz, não bandeira). Base
 | 3 | **Linha do tempo** | Origem → Burle Marx → Colégio QI → UFRJ → jovem aprendiz → estágios → Bradesco (CEA em 9 meses) → PAAP/B7 → Rico → EQI | Linha vertical com marcos; cada marco revela ao rolar | — |
 | 4 | **O que me move** | Pai; o filho e o legado; "como se fosse o único que eu tenho" | Citação grande, arco do sol | — |
 | 5 | **Valores** | Os cinco: Integridade, Cuidado, Estudo contínuo, Longo prazo, Legado | 5 cartões numerados | — |
-| 6 | **Formação e certificações** | CEA (Anbima), Contabilidade UFRJ [situação a confirmar], PAAP, CFP em preparação, 3–7 h de estudo por semana, eventos (Expert XP, Money Week) | Lista limpa com o mostrador (selo) | — |
+| 6 | **Formação e certificações** | CEA (Anbima), UFRJ (Contabilidade, sem citar situação do curso), PAAP, CFP em preparação, 3–7 h de estudo por semana, eventos (Expert XP 2023 e 2024, Money Week 2026) | Lista limpa com o mostrador (selo) | — |
 | 7 | **Onde me acompanhar** | @ofilhomaisrico, YouTube, LinkedIn, @fraudesltda | Linha de links com ícones simples | Seguir |
 | 8 | **Convite** | "Se fizer sentido para você, vamos conversar." | Faixa simples | Agendar conversa |
 
