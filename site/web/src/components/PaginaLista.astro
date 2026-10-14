@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro'
+import AberturaPagina from './AberturaPagina.astro'
+import Filtro from './Filtro.astro'
+import ListaEditorial from './ListaEditorial.astro'
+import GradeArtigos from './GradeArtigos.astro'
+import SemArtigos from './SemArtigos.astro'
+import CartaMensal from './CartaMensal.astro'
+import type { Artigo } from '../lib/artigos'
+interface Props { titulo: string; chapeu: string; apoio: string; artigos: Artigo[]; atual: string; descricao: string; tituloPagina: string }
+const { titulo, chapeu, apoio, artigos, atual, descricao, tituloPagina } = Astro.props
+const topo = artigos.slice(0, 4)
+const demais = artigos.slice(4)
+---
+<Base titulo={tituloPagina} descricao={descricao}>
+  <AberturaPagina chapeu={chapeu} titulo={titulo} apoio={apoio} clara />
+  <section class="secao lista">
+    <div class="wrap">
+      <Filtro atual={atual} />
+      {artigos.length === 0 ? <SemArtigos /> : <ListaEditorial artigos={topo} />}
+      {demais.length > 0 && <div class="lista__demais"><GradeArtigos artigos={demais} /></div>}
+    </div>
+  </section>
+  <section class="secao secao--escura"><div class="wrap"><CartaMensal escuro titulo="Receba a carta do mês" texto="Uma vez por mês, no seu e-mail. Sem pressa e sem jargão." /></div></section>
+</Base>
+<style>
+  .lista { padding-top: 0; }
+  .lista__demais { margin-top: 72px; padding-top: 56px; border-top: 2px solid var(--tinta); }
+</style>

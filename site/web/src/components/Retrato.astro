@@ -1,0 +1,22 @@
+---
+// Retrato do ensaio. Enquanto não houver foto (SITE.retrato), mostra um painel da marca com o selo CEA.
+import Simbolo from './Simbolo.astro'
+import Selo from './Selo.astro'
+import { SITE } from '../config'
+interface Props { alt?: string; proporcao?: string }
+const { alt = 'Rickson Messias, assessor de investimentos', proporcao = '4 / 5' } = Astro.props
+---
+{SITE.retrato ? (
+  <img class="retrato" src={SITE.retrato} alt={alt} style={`aspect-ratio:${proporcao}`} loading="lazy" decoding="async" />
+) : (
+  <div class="retrato retrato--painel" style={`aspect-ratio:${proporcao}`} aria-hidden="true">
+    <Simbolo pesos={[1, 0.4, 0.6]} rotulo="" />
+    <Selo />
+  </div>
+)}
+<style>
+  .retrato { width: 100%; object-fit: cover; border-radius: var(--raio); background: var(--tinta); }
+  .retrato--painel { position: relative; display: grid; place-items: center; background: radial-gradient(120% 90% at 30% 110%, var(--noite) 0%, var(--tinta) 62%); overflow: hidden; }
+  .retrato--painel > :global(.simbolo) { width: 66%; }
+  .retrato--painel :global(.selo) { position: absolute; right: 22px; bottom: 22px; width: 108px; }
+</style>

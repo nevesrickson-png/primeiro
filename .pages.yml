@@ -1,0 +1,64 @@
+# Painel de publicação do site ricksonmessias.com (Pages CMS: https://app.pagescms.org).
+# Entre com a conta do GitHub, abra este repositório e use "Artigos". Cada "Salvar" vira um commit;
+# na branch main, o GitHub Actions publica o site sozinho (.github/workflows/site.yml).
+media:
+  input: site/web/public/imagens/artigos
+  output: /imagens/artigos
+content:
+  - name: artigos
+    label: Artigos
+    type: collection
+    path: site/web/src/content/artigos
+    view:
+      fields: [titulo, categoria, data, rascunho]
+      sort: [data]
+      default:
+        sort: data
+        order: desc
+    fields:
+      - name: titulo
+        label: Título
+        type: string
+        required: true
+      - name: resumo
+        label: Resumo (uma linha, aparece nas listas e no Google)
+        type: text
+        required: true
+      - name: categoria
+        label: Categoria
+        type: select
+        required: true
+        options:
+          values:
+            - { value: protecao, label: Proteção }
+            - { value: patrimonio, label: Patrimônio de longo prazo }
+            - { value: grandes-mentes, label: Grandes mentes e legados }
+            - { value: bastidores, label: Bastidores do mercado }
+      - name: data
+        label: Data de publicação
+        type: date
+        required: true
+      - name: em_resumo
+        label: Em resumo (2 a 3 linhas com a conclusão, aparece no topo do artigo)
+        type: text
+      - name: capa
+        label: Imagem de capa (opcional; sem imagem, o site gera uma capa da marca)
+        type: image
+      - name: capa_alt
+        label: Descrição da imagem (acessibilidade)
+        type: string
+      - name: sinais
+        label: Sinais de alerta (só para artigos de Proteção)
+        type: string
+        list: true
+      - name: destaque
+        label: Fixar como destaque na página inicial
+        type: boolean
+        default: false
+      - name: rascunho
+        label: Rascunho (não aparece no site publicado)
+        type: boolean
+        default: true
+      - name: body
+        label: Texto
+        type: rich-text

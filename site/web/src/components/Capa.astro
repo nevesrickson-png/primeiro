@@ -1,0 +1,24 @@
+---
+import Simbolo from './Simbolo.astro'
+import { CATEGORIAS, type Categoria } from '../config'
+interface Props { capa?: string | null; alt?: string | null; categoria: Categoria; grande?: boolean }
+const { capa, alt, categoria, grande = false } = Astro.props
+---
+{capa ? (
+  <img class="capa" src={capa} alt={alt ?? ''} loading={grande ? 'eager' : 'lazy'} decoding="async" />
+) : (
+  <div class:list={['capa capa--gerada', `capa--${categoria}`]} aria-hidden="true">
+    <Simbolo cor="#CBB27A" pesos={[1.6, 0.6, 0.9]} rotulo="" />
+    <span class="chapeu">{CATEGORIAS[categoria].nome}</span>
+  </div>
+)}
+<style>
+  .capa { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--tinta); border-radius: var(--raio); }
+  .capa--gerada { position: relative; display: grid; place-items: center; overflow: hidden; background: radial-gradient(120% 100% at 70% 110%, var(--noite) 0%, var(--tinta) 60%); }
+  .capa--gerada :global(.simbolo) { width: 36%; max-width: 220px; transition: transform 1.2s var(--ease); }
+  .capa--gerada .chapeu { position: absolute; left: 20px; bottom: 16px; color: var(--champ); font-size: 11px; }
+  :global(a:hover) .capa--gerada :global(.simbolo) { transform: scale(1.04); }
+  .capa--patrimonio { background: radial-gradient(120% 100% at 30% 110%, #22395a 0%, var(--tinta) 62%); }
+  .capa--grandes-mentes { background: radial-gradient(120% 100% at 50% -10%, #22395a 0%, var(--tinta) 62%); }
+  .capa--bastidores { background: radial-gradient(120% 100% at 100% 0%, #22395a 0%, var(--tinta) 62%); }
+</style>

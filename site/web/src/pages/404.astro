@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro'
+import Simbolo from '../components/Simbolo.astro'
+---
+<Base titulo="Página não encontrada" semIndice>
+  <section class="secao escuro nf">
+    <div class="wrap nf__in">
+      <div class="nf__lobo"><Simbolo desenha pesos={[1.2, 0.5, 0.7]} rotulo="" /></div>
+      <p class="chapeu">Erro 404</p>
+      <h1 class="titulo">Este caminho não existe.</h1>
+      <p class="apoio">Mas o horizonte continua lá. Que tal voltar ao início ou ler uma das análises?</p>
+      <div class="acoes"><a class="btn btn--champ" href="/">Início</a><a class="btn btn--linha-clara" href="/artigos">Artigos</a></div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { background: radial-gradient(110% 120% at 50% 120%, var(--noite) 0%, var(--tinta) 62%); color: var(--marfim); min-height: 70vh; display: grid; align-items: center; }
+  .nf__in { display: grid; gap: 20px; justify-items: center; text-align: center; }
+  .nf__lobo { width: 180px; }
+  .nf .acoes { justify-content: center; margin-top: 8px; }
+</style>

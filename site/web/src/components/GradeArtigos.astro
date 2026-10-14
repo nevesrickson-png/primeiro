@@ -1,0 +1,30 @@
+---
+import Capa from './Capa.astro'
+import Meta from './Meta.astro'
+import { CATEGORIAS } from '../config'
+import type { Artigo } from '../lib/artigos'
+interface Props { artigos: Artigo[] }
+const { artigos } = Astro.props
+---
+<div class="grade-artigos">
+  {artigos.map((a, i) => (
+    <article class="rv" data-d={String((i % 3) * 100)}>
+      <a href={`/artigos/${a.id}`}>
+        <Capa capa={a.data.capa} alt={a.data.capa_alt} categoria={a.data.categoria} />
+        <p class="chapeu">{CATEGORIAS[a.data.categoria].nome}</p>
+        <h3>{a.data.titulo}</h3>
+        <p class="resumo">{a.data.resumo}</p>
+        <Meta artigo={a} />
+      </a>
+    </article>
+  ))}
+</div>
+<style>
+  .grade-artigos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 32px; }
+  .chapeu { margin-top: 22px; }
+  h3 { font-family: var(--serif); font-weight: 400; font-size: 23px; line-height: 1.25; margin: 10px 0 8px; transition: color 0.3s; }
+  a:hover h3 { color: var(--champ-p); }
+  .resumo { color: var(--grafite); font-size: 15px; }
+  @media (max-width: 960px) { .grade-artigos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .grade-artigos { grid-template-columns: 1fr; } }
+</style>

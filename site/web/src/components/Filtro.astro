@@ -1,0 +1,15 @@
+---
+import { CATEGORIAS } from '../config'
+interface Props { atual?: string }
+const { atual = 'todas' } = Astro.props
+const itens = [['todas', 'Todas', '/artigos'], ...Object.entries(CATEGORIAS).map(([k, c]) => [k, c.nome, `/artigos/${k}`])]
+---
+<nav class="filtro" aria-label="Categorias">
+  {itens.map(([k, n, h]) => <a href={h} aria-current={k === atual ? 'page' : undefined}>{n}</a>)}
+</nav>
+<style>
+  .filtro { display: flex; gap: 10px; flex-wrap: wrap; margin: 40px 0 56px; }
+  .filtro a { font-size: 14px; font-weight: 600; padding: 9px 18px; border: 1px solid var(--pedra); border-radius: 40px; color: var(--grafite); transition: all 0.25s; }
+  .filtro a:hover { border-color: var(--tinta); color: var(--tinta); }
+  .filtro a[aria-current='page'] { background: var(--tinta); border-color: var(--tinta); color: var(--marfim); }
+</style>

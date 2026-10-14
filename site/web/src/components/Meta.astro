@@ -1,0 +1,14 @@
+---
+import { dataCurta, dataISO, tempoLeitura, type Artigo } from '../lib/artigos'
+interface Props { artigo: Artigo }
+const { artigo } = Astro.props
+---
+<p class="meta">
+  <time datetime={dataISO(artigo.data.data)}>{dataCurta(artigo.data.data)}</time> · {tempoLeitura(artigo.body)} min de leitura
+  {artigo.data.rascunho && <span class="rascunho">Rascunho</span>}
+</p>
+<style>
+  .meta { font-size: 13px; color: var(--grafite); margin-top: 14px; }
+  :global(.escuro) .meta { color: var(--aco-claro); }
+  .rascunho { margin-left: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #9a3b2e; border: 1px solid currentColor; padding: 1px 6px; border-radius: 2px; }
+</style>

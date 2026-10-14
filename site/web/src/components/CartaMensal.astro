@@ -1,0 +1,42 @@
+---
+import Aceite from './Aceite.astro'
+interface Props { titulo?: string; texto?: string; escuro?: boolean; compacto?: boolean }
+const {
+  titulo = 'A carta do mês',
+  texto = 'Uma vez por mês, o que eu acompanho no mercado, explicado sem pressa e sem jargão.',
+  escuro = false,
+  compacto = false
+} = Astro.props
+const id = 'carta-' + Math.random().toString(36).slice(2, 7)
+---
+<div class:list={['carta', { escuro, compacto }]}>
+  <div class="carta__texto">
+    <p class="chapeu">Carta mensal</p>
+    <h2 class="subtitulo">{titulo}</h2>
+    <p class="texto-apoio">{texto}</p>
+  </div>
+  <form class="form carta__form" data-formulario="carta" data-mensagem-ok="Pronto. A próxima carta chega no seu e-mail.">
+    <div class="carta__linha">
+      <div class="campo">
+        <label for={`${id}-email`} class="sr">Seu e-mail</label>
+        <input id={`${id}-email`} type="email" name="email" placeholder="Seu e-mail" autocomplete="email" required />
+      </div>
+      <button class:list={['btn', escuro ? 'btn--champ' : 'btn--tinta']} type="submit">Receber a carta</button>
+    </div>
+    <Aceite id={`${id}-lgpd`} texto="Quero receber a carta mensal e li a" />
+    <p class="form-status" data-status role="status" aria-live="polite"></p>
+  </form>
+</div>
+<style>
+  .carta { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+  .carta.compacto { grid-template-columns: 1fr; gap: 20px; }
+  .carta__texto .chapeu { margin-bottom: 10px; }
+  .carta__texto .subtitulo { margin-bottom: 8px; }
+  .escuro .subtitulo { color: var(--marfim); }
+  .carta__linha { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+  .carta__form { gap: 14px; }
+  @media (max-width: 760px) {
+    .carta { grid-template-columns: 1fr; gap: 24px; }
+    .carta__linha { grid-template-columns: 1fr; }
+  }
+</style>

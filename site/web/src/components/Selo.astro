@@ -1,0 +1,22 @@
+---
+// Grafismo "mostrador": selo circular com a certificação.
+const id = 'circ' + Math.random().toString(36).slice(2, 7)
+---
+<svg class="selo" viewBox="0 0 120 120" aria-hidden="true">
+  <defs><path id={id} d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0" /></defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#CBB27A" stroke-width=".8" />
+  <circle cx="60" cy="60" r="36" fill="none" stroke="#CBB27A" stroke-width=".5" opacity=".6" />
+  <g class="selo__giro">
+    <text><textPath href={`#${id}`}>PATRIMÔNIO SE CONSTRÓI EM DÉCADAS · CEA · </textPath></text>
+  </g>
+  <text x="60" y="58" text-anchor="middle" class="selo__cea">CEA</text>
+  <text x="60" y="71" text-anchor="middle" class="selo__sub">ANBIMA</text>
+</svg>
+<style>
+  .selo text { font-family: var(--sans); font-size: 7.2px; letter-spacing: 2.2px; fill: #cbb27a; font-weight: 600; }
+  .selo .selo__cea { font-family: var(--serif); font-size: 12px; letter-spacing: 1px; fill: #f5f1e8; font-weight: 400; }
+  .selo .selo__sub { font-size: 5.5px; letter-spacing: 1.6px; }
+  .selo__giro { transform-origin: 60px 60px; animation: gira 40s linear infinite; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .selo__giro { animation: none; } }
+</style>

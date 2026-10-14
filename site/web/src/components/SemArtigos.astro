@@ -1,0 +1,14 @@
+---
+import CartaMensal from './CartaMensal.astro'
+---
+<div class="vazio">
+  <p class="subtitulo">Os primeiros artigos estão sendo escritos.</p>
+  <p class="texto-apoio">Deixe seu e-mail e receba quando saírem.</p>
+  <div class="vazio__form"><CartaMensal compacto titulo="Avise-me" texto="" /></div>
+</div>
+<style>
+  .vazio { padding: 48px 0 8px; max-width: 640px; }
+  .vazio .texto-apoio { margin-top: 8px; }
+  .vazio__form { margin-top: 28px; }
+  .vazio__form :global(.carta__texto) { display: none; }
+</style>

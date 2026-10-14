@@ -1,0 +1,209 @@
+---
+import Base from '../layouts/Base.astro'
+import Simbolo from '../components/Simbolo.astro'
+import ListaEditorial from '../components/ListaEditorial.astro'
+import SemArtigos from '../components/SemArtigos.astro'
+import Retrato from '../components/Retrato.astro'
+import { CATEGORIAS } from '../config'
+import { artigosPublicados } from '../lib/artigos'
+
+const artigos = await artigosPublicados()
+const fixado = artigos.find((a) => a.data.destaque)
+const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : artigos).slice(0, 4)
+---
+<Base cabecalhoEscuro>
+  <!-- 1. Abertura -->
+  <section class="abertura escuro" data-abertura>
+    <div class="wrap abertura__grade">
+      <div>
+        <p class="chapeu chapeu--filete rv">Assessor de investimentos · CEA</p>
+        <h1 class="display rv" data-d="120">Patrimônio se constrói em <em>décadas.</em></h1>
+        <p class="apoio rv" data-d="240">
+          Análises sobre patrimônio de longo prazo, as lições dos grandes investidores e como se proteger de fraudes.
+          Com fonte, com data e com o risco dito antes do retorno.
+        </p>
+        <div class="acoes rv" data-d="360">
+          <a class="btn btn--champ" href="#analises">Ler as análises <span class="seta">→</span></a>
+          <a class="btn btn--linha-clara" href="/assessoria#agendar">Agendar conversa</a>
+        </div>
+      </div>
+      <div class="abertura__arte">
+        <Simbolo desenha pesos={[1.3, 0.5, 0.75]} />
+      </div>
+      <div class="pilares rv" data-d="200">
+        <div><b>Paciência</b><span>Patrimônio se constrói em décadas. A pressa costuma sair caro.</span></div>
+        <div><b>Profundidade</b><span>Estudo de fonte primária, aplicado com critério.</span></div>
+        <div><b>Proteção</b><span>Risco dito antes do retorno. Ilusão desmascarada.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Análises recentes -->
+  <section class="secao" id="analises">
+    <div class="wrap">
+      <div class="cab-secao">
+        <div>
+          <p class="chapeu">Análises</p>
+          <h2 class="titulo">O que estou acompanhando</h2>
+        </div>
+        {artigos.length > 0 && <a class="link" href="/artigos">Ver todos os artigos <span class="seta">→</span></a>}
+      </div>
+      {recentes.length > 0 ? <ListaEditorial artigos={recentes} /> : <SemArtigos />}
+    </div>
+  </section>
+
+  <!-- 3. Quatro territórios -->
+  <section class="secao secao--clara-2">
+    <div class="wrap">
+      <div class="cab-secao cab-secao--simples">
+        <div>
+          <p class="chapeu">Do que eu falo</p>
+          <h2 class="titulo">Quatro assuntos, um mesmo cuidado</h2>
+        </div>
+      </div>
+      <div class="grade-4">
+        {Object.entries(CATEGORIAS).map(([slug, c], i) => (
+          <a class="numerado territorio rv" data-d={String(i * 100)} href={`/artigos/${slug}`}>
+            <p class="numero">{String(i + 1).padStart(2, '0')}</p>
+            <h3>{c.titulo}</h3>
+            <p>{c.texto}</p>
+            <p class="porque">{c.porque}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Quem escreve -->
+  <section class="secao">
+    <div class="wrap quem">
+      <div class="quem__foto rv"><Retrato /></div>
+      <div class="quem__texto">
+        <p class="chapeu rv">Quem escreve</p>
+        <p class="citacao rv" data-d="100">Entrei no mercado pelo brilho. Fiquei pela proteção.</p>
+        <p class="rv" data-d="200">
+          Sou Rickson Messias, assessor de investimentos certificado CEA. Comecei no balcão de uma agência do Bradesco, onde
+          tirei a certificação em nove meses e cheguei a gerente. Passei dois anos e meio como assessor na Rico e hoje estou na
+          EQI Investimentos. Escrevo aqui o que eu estudo para cuidar do patrimônio dos meus clientes.
+        </p>
+        <a class="link link--sub rv" data-d="300" href="/sobre">Conhecer minha história <span class="seta">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Proteção contra fraudes -->
+  <section class="secao secao--escura protecao">
+    <div class="protecao__malha" aria-hidden="true"><Simbolo pesos={[0.6, 0.3, 0.45]} rotulo="" /></div>
+    <div class="wrap protecao__in">
+      <div>
+        <p class="chapeu rv">Proteção</p>
+        <h2 class="titulo rv" data-d="100">Toda pirâmide promete a mesma coisa.</h2>
+        <p class="apoio rv" data-d="200">Os nomes mudam, o padrão não. Três sinais aparecem em quase todo esquema:</p>
+      </div>
+      <ol class="sinais">
+        <li class="rv" data-d="100"><b>Retorno alto, fixo e sem risco.</b> No mercado de verdade, retorno maior sempre vem com risco maior.</li>
+        <li class="rv" data-d="200"><b>Pressa.</b> “Só até hoje”, “vagas limitadas”. Quem precisa que você decida rápido não quer que você pense.</li>
+        <li class="rv" data-d="300"><b>Ganho por indicação.</b> Quando o dinheiro de quem entra paga quem já está, a conta não fecha.</li>
+      </ol>
+      <div class="protecao__fecho rv">
+        <p>Antes de investir, pergunte: quem custodia o meu dinheiro, e essa empresa é autorizada pela CVM ou pelo Banco Central?</p>
+        <div class="protecao__links">
+          <a class="link link--sub" href="/artigos/protecao">Ler sobre proteção <span class="seta">→</span></a>
+          <a class="link link--sub" href="https://instagram.com/fraudesltda" target="_blank" rel="noopener">Conhecer o @fraudesltda <span class="seta">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Convite para a conversa -->
+  <section class="secao secao--clara-2 convite">
+    <div class="wrap convite__in">
+      <div class="convite__arco" aria-hidden="true"></div>
+      <h2 class="titulo rv">Quanto tempo você levou para construir o que tem?</h2>
+      <p class="apoio rv" data-d="100">
+        Se a resposta é “anos”, ele merece ser cuidado com a mesma paciência. Atendo empresários, profissionais liberais e
+        aposentados que pensam no longo prazo.
+      </p>
+      <p class="texto-apoio rv" data-d="200">
+        Na primeira conversa, eu escuto. Entendo seus objetivos, seu momento e o que já foi feito. Sem compromisso e sem pressa.
+      </p>
+      <div class="acoes rv" data-d="300"><a class="btn btn--tinta" href="/assessoria#agendar">Agendar conversa <span class="seta">→</span></a></div>
+    </div>
+  </section>
+
+  <!-- 8. Livro -->
+  <section class="secao">
+    <div class="wrap livro">
+      <div class="livro__capa rv" aria-hidden="true">
+        <span class="chapeu">Rickson Messias</span>
+        <span class="livro__titulo">O Poder dos ETF’s</span>
+        <Simbolo sol={false} pesos={[2.4, 1, 1.4]} rotulo="" />
+      </div>
+      <div>
+        <p class="chapeu rv">Em breve</p>
+        <h2 class="titulo rv" data-d="100"><em>O Poder dos ETF’s</em></h2>
+        <p class="apoio rv" data-d="200">
+          A história dos fundos de índice contada a partir das grandes mentes do investimento, de Markowitz e Bogle à chegada do
+          primeiro ETF à B3.
+        </p>
+        <div class="acoes rv" data-d="300"><a class="btn btn--linha" href="/livro-e-palestras#lista">Entrar na lista de espera</a></div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .abertura { background: radial-gradient(110% 90% at 78% 100%, var(--noite) 0%, var(--tinta) 60%); color: var(--marfim); overflow: hidden; }
+  .abertura__grade { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 56px; align-items: center; padding-top: clamp(64px, 9vw, 112px); }
+  .abertura .display { margin: 28px 0; }
+  .abertura__arte { justify-self: center; width: 100%; max-width: 440px; }
+  .pilares { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(56px, 8vw, 96px); border-top: 1px solid var(--linha-escura); }
+  .pilares div { padding: 28px 32px 36px 0; }
+  .pilares div + div { padding-left: 32px; border-left: 1px solid var(--linha-escura); }
+  .pilares b { font-family: var(--serif); font-weight: 400; font-size: 24px; display: block; }
+  .pilares span { font-size: 14px; color: var(--aco); }
+
+  .territorio { display: block; transition: transform 0.4s var(--ease); }
+  .territorio:hover { transform: translateY(-3px); }
+  .territorio:hover h3 { color: var(--champ-p); }
+  .territorio h3 { transition: color 0.3s; }
+
+  .quem { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(40px, 7vw, 96px); align-items: center; }
+  .quem__texto { display: grid; gap: 22px; justify-items: start; }
+  .quem__texto p:not(.chapeu):not(.citacao) { color: var(--grafite); max-width: 560px; }
+
+  .protecao { position: relative; overflow: hidden; }
+  .protecao__malha { position: absolute; right: -8%; top: 50%; transform: translateY(-50%); width: min(720px, 70vw); opacity: 0.1; pointer-events: none; }
+  .protecao__in { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 32px 72px; }
+  .protecao .titulo { margin: 14px 0 20px; }
+  .sinais { list-style: none; counter-reset: s; display: grid; gap: 0; align-self: center; }
+  .sinais li { counter-increment: s; position: relative; padding: 22px 0 22px 64px; border-top: 1px solid var(--linha-escura); color: var(--aco-claro); }
+  .sinais li::before { content: counter(s, decimal-leading-zero); position: absolute; left: 0; top: 18px; font-family: var(--serif); font-size: 30px; color: var(--champ); }
+  .sinais b { color: var(--marfim); font-weight: 600; }
+  .protecao__fecho { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 32px; padding-top: 36px; border-top: 1px solid var(--champ); flex-wrap: wrap; }
+  .protecao__fecho p { font-family: var(--serif); font-style: italic; font-size: 22px; max-width: 640px; }
+  .protecao__links { display: flex; gap: 28px; flex-wrap: wrap; }
+
+  .convite__in { position: relative; text-align: center; display: grid; justify-items: center; gap: 22px; max-width: 820px; }
+  .convite__arco { width: 220px; height: 110px; border: 1px solid var(--champ-p); border-bottom: 0; border-radius: 220px 220px 0 0; margin-bottom: -28px; opacity: 0.5; }
+  .convite .apoio { max-width: 640px; }
+  .convite .texto-apoio { max-width: 600px; }
+  .convite .acoes { justify-content: center; margin-top: 8px; }
+
+  .livro { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: clamp(40px, 7vw, 96px); align-items: center; }
+  .livro__capa { aspect-ratio: 2 / 3; max-width: 300px; width: 100%; justify-self: center; background: var(--tinta); color: var(--marfim); padding: 32px 26px; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; box-shadow: 18px 22px 0 -6px var(--marfim-3), 18px 22px 0 -5px var(--pedra); border-radius: 2px 6px 6px 2px; }
+  .livro__capa .chapeu { color: var(--champ); font-size: 10px; }
+  .livro__titulo { font-family: var(--serif); font-size: 34px; line-height: 1.05; }
+  .livro__capa :global(.simbolo) { width: 56%; justify-self: center; }
+
+  @media (max-width: 900px) {
+    .abertura__grade { grid-template-columns: 1fr; gap: 28px; padding-top: 48px; }
+    .abertura__arte { max-width: 200px; order: -1; justify-self: start; }
+    .pilares { grid-template-columns: 1fr; margin-top: 40px; }
+    .pilares div, .pilares div + div { padding: 20px 0; border-left: 0; border-bottom: 1px solid var(--linha-escura); }
+    .quem, .livro, .protecao__in { grid-template-columns: 1fr; }
+    .quem__foto { max-width: 360px; }
+    .livro__capa { max-width: 220px; justify-self: start; }
+    .protecao__malha { width: 120vw; right: -50%; opacity: 0.1; }
+  }
+</style>

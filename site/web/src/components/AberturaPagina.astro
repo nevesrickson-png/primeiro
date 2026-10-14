@@ -1,0 +1,22 @@
+---
+import Simbolo from './Simbolo.astro'
+interface Props { chapeu: string; titulo: string; apoio?: string; clara?: boolean }
+const { chapeu, titulo, apoio, clara = false } = Astro.props
+---
+<section class:list={['ab', clara ? 'ab--clara' : 'escuro']}>
+  {!clara && <div class="ab__lobo" aria-hidden="true"><Simbolo desenha pesos={[0.8, 0.35, 0.5]} rotulo="" /></div>}
+  <div class="wrap ab__in">
+    <p class="chapeu chapeu--filete rv">{chapeu}</p>
+    <h1 class="titulo ab__titulo rv" data-d="100" set:html={titulo} />
+    {apoio && <p class="apoio rv" data-d="200">{apoio}</p>}
+    <slot />
+  </div>
+</section>
+<style>
+  .ab { position: relative; overflow: hidden; background: radial-gradient(110% 120% at 85% 120%, var(--noite) 0%, var(--tinta) 62%); color: var(--marfim); padding: clamp(72px, 10vw, 128px) 0 clamp(64px, 8vw, 104px); }
+  .ab--clara { background: var(--marfim); color: var(--tinta); border-bottom: 1px solid var(--pedra); }
+  .ab__in { position: relative; display: grid; gap: 24px; justify-items: start; }
+  .ab__titulo { font-size: clamp(38px, 5.4vw, 76px); max-width: 980px; line-height: 1.05; }
+  .ab__lobo { position: absolute; right: max(-60px, calc((100vw - var(--largura)) / 2 - 80px)); bottom: -18%; width: min(480px, 46vw); opacity: 0.45; pointer-events: none; }
+  @media (max-width: 760px) { .ab__lobo { width: 70vw; right: -24vw; bottom: -10%; opacity: 0.16; } }
+</style>

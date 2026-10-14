@@ -34,6 +34,9 @@ function doPost(e) {
   try {
     lock.waitLock(30000);
     var req = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    // Formulários públicos do site (ricksonmessias.com): não usam o token secreto,
+    // só acrescentam uma linha na aba "Entradas", que o CRM importa na sincronização.
+    if (req.acao === 'formularioSite') return json_(formularioSite_(req));
     var token = PropertiesService.getScriptProperties().getProperty('TOKEN');
     if (!token) return json_({ ok: false, erro: 'Token não configurado. Rode a função instalar() no editor do Apps Script.' });
     if (req.token !== token) return json_({ ok: false, erro: 'Token inválido.' });
@@ -260,6 +263,58 @@ function marcarImportadas_(itens) {
     marcadas++;
   }
   return { marcadas: marcadas };
+}
+
+// ---------------------------------------------------------------------------
+// Formulários do site → aba "Entradas"
+// ---------------------------------------------------------------------------
+
+var FORMULARIOS_SITE = { agendar: 'Agendar conversa', carta: 'Carta mensal', livro: 'Lista do livro', palestra: 'Convite de palestra' };
+// Títulos de coluna que o importador do CRM reconhece (src/main/sync/forms.ts).
+var CAMPOS_SITE = [
+  ['nome', 'Nome', 120], ['email', 'E-mail', 160], ['whatsapp', 'WhatsApp', 30], ['cidade', 'Cidade', 80],
+  ['profissao', 'Profissão', 80], ['empresa', 'Empresa ou evento', 120], ['perfil', 'Perfil', 40],
+  ['mensagem', 'Mensagem', 2000], ['como_conheceu', 'Como nos conheceu', 60]
+];
+
+function formularioSite_(req) {
+  var d = req.dados || {};
+  // Armadilha para robôs: campo invisível que pessoas não preenchem. Responde "ok" sem gravar.
+  if (d.site_web) return { ok: true };
+  var tipo = FORMULARIOS_SITE[req.formulario] ? req.formulario : null;
+  if (!tipo) return { ok: false, erro: 'Formulário desconhecido.' };
+  var v = {};
+  for (var i = 0; i < CAMPOS_SITE.length; i++) {
+    var c = CAMPOS_SITE[i];
+    v[c[1]] = String(d[c[0]] == null ? '' : d[c[0]]).replace(/^[=+\-@]+/, '').trim().slice(0, c[2]);
+  }
+  var email = v['E-mail'];
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, erro: 'E-mail inválido.' };
+  if (!email && v['WhatsApp'].replace(/\D/g, '').length < 10) return { ok: false, erro: 'Informe um e-mail ou WhatsApp.' };
+  if (d.lgpd !== true) return { ok: false, erro: 'É preciso aceitar a Política de privacidade.' };
+  if (!v['Nome']) v['Nome'] = email ? email.split('@')[0] : 'Contato do site';
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var aba = ss.getSheetByName(ABA_ENTRADAS) || ss.insertSheet(ABA_ENTRADAS);
+  var colunas = ['Carimbo de data/hora'];
+  for (var j = 0; j < CAMPOS_SITE.length; j++) colunas.push(CAMPOS_SITE[j][1]);
+  colunas.push('Aceite LGPD', 'Formulário do site');
+  var ultimaCol = aba.getLastColumn();
+  var cab = ultimaCol > 0 ? aba.getRange(1, 1, 1, ultimaCol).getDisplayValues()[0] : [];
+  for (var k = 0; k < colunas.length; k++) {
+    if (cab.indexOf(colunas[k]) < 0) {
+      cab.push(colunas[k]);
+      aba.getRange(1, cab.length, 1, 1).setValues([[colunas[k]]]);
+    }
+  }
+  var agora = new Date();
+  v['Carimbo de data/hora'] = formatarDataHora_(agora) + ':' + (agora.getSeconds() < 10 ? '0' : '') + agora.getSeconds();
+  v['Aceite LGPD'] = 'Sim, aceito a Política de privacidade';
+  v['Formulário do site'] = FORMULARIOS_SITE[tipo];
+  var linha = [];
+  for (var m = 0; m < cab.length; m++) linha.push(v[cab[m]] === undefined ? '' : v[cab[m]]);
+  aba.getRange(Math.max(aba.getLastRow(), 1) + 1, 1, 1, linha.length).setValues([linha]);
+  return { ok: true };
 }
 
 function formatarDataHora_(d) {

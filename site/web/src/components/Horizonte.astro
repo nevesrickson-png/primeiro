@@ -1,0 +1,13 @@
+---
+// Grafismo "horizonte": três linhas que encerram peças e seções.
+interface Props { cor?: string }
+const { cor = 'var(--champ)' } = Astro.props
+---
+<div class="horizonte-gr" aria-hidden="true" style={`--c:${cor}`}><i></i><i></i><i></i></div>
+<style>
+  .horizonte-gr { display: grid; justify-items: center; gap: 6px; padding: 8px 0; }
+  .horizonte-gr i { display: block; height: 1px; background: var(--c); }
+  .horizonte-gr i:nth-child(1) { width: 100%; opacity: 0.5; }
+  .horizonte-gr i:nth-child(2) { width: 60%; opacity: 0.35; }
+  .horizonte-gr i:nth-child(3) { width: 30%; opacity: 0.25; }
+</style>

@@ -1,0 +1,91 @@
+---
+import Marca from './Marca.astro'
+import { MENU } from '../config'
+interface Props { escuro?: boolean }
+const { escuro = false } = Astro.props
+const atual = Astro.url.pathname.replace(/\/$/, '') || '/'
+---
+<header class:list={['cab', { 'cab--escuro': escuro }]} data-escuro={escuro ? '' : undefined}>
+  <div class="wrap cab__in">
+    <Marca cor={escuro ? '#CBB27A' : '#7A6438'} />
+    <nav aria-label="Principal">
+      <ul class="menu" id="menu">
+        {MENU.map((m) => (
+          <li><a href={m.href} aria-current={atual.startsWith(m.href) ? 'page' : undefined}>{m.rotulo}</a></li>
+        ))}
+        <li class="menu__agendar"><a href="/assessoria#agendar">Agendar conversa</a></li>
+      </ul>
+    </nav>
+    <div class="cab__acoes">
+      <a class="btn cab__btn" href="/assessoria#agendar">Agendar conversa</a>
+      <button class="cab__abrir" type="button" aria-controls="menu" aria-expanded="false">
+        <span class="sr">Abrir menu</span><i></i><i></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .cab { position: sticky; top: 0; z-index: 30; background: rgba(245, 241, 232, 0.96); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--pedra); color: var(--tinta); transition: background 0.4s, color 0.4s, border-color 0.4s; }
+  .cab--escuro { background: var(--tinta); color: var(--marfim); border-bottom-color: rgba(245, 241, 232, 0.08); }
+  .cab__in { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--cab-altura); }
+  .menu { display: flex; gap: 34px; list-style: none; font-size: 15px; color: var(--grafite); }
+  .cab--escuro .menu { color: var(--aco); }
+  .menu a { transition: color 0.2s; position: relative; }
+  .menu a:hover, .menu a[aria-current='page'] { color: var(--tinta); }
+  .cab--escuro .menu a:hover, .cab--escuro .menu a[aria-current='page'] { color: var(--marfim); }
+  .menu a[aria-current='page']::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: var(--champ); }
+  .menu__agendar { display: none; }
+  .cab__acoes { display: flex; align-items: center; gap: 12px; }
+  .cab__btn { background: var(--tinta); color: var(--marfim); }
+  .cab__btn:hover { background: var(--noite); }
+  .cab--escuro .cab__btn { background: var(--champ); color: var(--tinta); }
+  .cab--escuro .cab__btn:hover { background: var(--champ-claro); }
+  .cab__abrir { display: none; width: 44px; height: 44px; background: none; border: 0; cursor: pointer; position: relative; }
+  .cab__abrir i { position: absolute; left: 11px; right: 11px; height: 1.5px; background: currentColor; transition: transform 0.3s; }
+  .cab__abrir i:first-of-type { top: 18px; }
+  .cab__abrir i:last-of-type { top: 25px; }
+  .cab__abrir[aria-expanded='true'] i:first-of-type { transform: translateY(3.5px) rotate(45deg); }
+  .cab__abrir[aria-expanded='true'] i:last-of-type { transform: translateY(-3.5px) rotate(-45deg); }
+
+  @media (max-width: 900px) {
+    .cab__abrir { display: block; }
+    .cab__btn { display: none; }
+    nav { position: absolute; top: 100%; left: 0; right: 0; }
+    .menu { display: none; flex-direction: column; gap: 0; background: var(--marfim); border-bottom: 1px solid var(--pedra); padding: 8px var(--gutter) 24px; font-size: 18px; color: var(--tinta); }
+    .cab--escuro .menu { background: var(--tinta); color: var(--marfim); border-color: rgba(245, 241, 232, 0.12); }
+    .menu.aberto { display: flex; }
+    .menu li a { display: block; padding: 14px 0; border-bottom: 1px solid var(--pedra); }
+    .cab--escuro .menu li a { border-color: rgba(245, 241, 232, 0.12); }
+    .menu a[aria-current='page']::after { display: none; }
+    .menu__agendar { display: block; }
+    .menu__agendar a { color: var(--champ-p); font-weight: 600; border-bottom: 0 !important; }
+    .cab--escuro .menu__agendar a { color: var(--champ); }
+  }
+</style>
+
+<script>
+  const cab = document.querySelector<HTMLElement>('.cab')
+  const botao = document.querySelector<HTMLButtonElement>('.cab__abrir')
+  const menu = document.getElementById('menu')
+  botao?.addEventListener('click', () => {
+    const aberto = botao.getAttribute('aria-expanded') === 'true'
+    botao.setAttribute('aria-expanded', String(!aberto))
+    menu?.classList.toggle('aberto', !aberto)
+  })
+  // Na Home o cabeçalho começa escuro (sobre a abertura) e fica claro ao chegar no conteúdo.
+  const abertura = document.querySelector<HTMLElement>('[data-abertura]')
+  if (cab && abertura && cab.hasAttribute('data-escuro')) {
+    const tracos = cab.querySelectorAll<SVGElement>('.marca [stroke]')
+    const preenchidos = cab.querySelectorAll<SVGElement>('.marca [fill]:not([fill="none"])')
+    const atualizar = () => {
+      const escuro = abertura.getBoundingClientRect().bottom > 80
+      cab.classList.toggle('cab--escuro', escuro)
+      const cor = escuro ? '#CBB27A' : '#7A6438'
+      tracos.forEach((e) => e.setAttribute('stroke', cor))
+      preenchidos.forEach((e) => e.setAttribute('fill', cor))
+    }
+    addEventListener('scroll', atualizar, { passive: true })
+    atualizar()
+  }
+</script>

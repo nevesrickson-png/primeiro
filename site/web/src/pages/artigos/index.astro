@@ -1,0 +1,14 @@
+---
+import PaginaLista from '../../components/PaginaLista.astro'
+import { artigosPublicados } from '../../lib/artigos'
+const artigos = await artigosPublicados()
+---
+<PaginaLista
+  tituloPagina="Análises"
+  titulo="Análises"
+  chapeu="Artigos"
+  apoio="Patrimônio, grandes investidores e proteção. Sempre com fonte, data e risco."
+  descricao="Análises de Rickson Messias sobre patrimônio de longo prazo, grandes investidores, bastidores do mercado e proteção contra fraudes."
+  artigos={artigos}
+  atual="todas"
+/>

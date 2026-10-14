@@ -16,6 +16,8 @@ const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCa
 /** Descobre o campo do lead a partir do título da pergunta do formulário. */
 function campoDaPergunta(titulo: string): string | null {
   const t = norm(titulo)
+  if (t.includes('formulario do site')) return 'formulario_site'
+  if (t === 'perfil' || t.startsWith('voce e')) return 'perfil'
   if (t.includes('carimbo') || t.includes('timestamp') || t === 'data/hora') return 'carimbo'
   if (t.includes('lgpd') || t.includes('aceite') || t.includes('consent') || t.includes('concordo') || t.includes('privacidade')) return 'lgpd'
   if (t.includes('mail')) return 'email'
@@ -78,6 +80,10 @@ export function importarEntradas(linhas: EntradaForms[]): {
       if (fone.length > 11 && fone.startsWith('55')) fone = fone.slice(2)
       const email = d.email ? d.email.toLowerCase() : null
       const consentiu = aceitou(d.lgpd ?? '')
+      // Formulários do site ricksonmessias.com trazem o nome do formulário e o perfil.
+      const doSite = d.formulario_site?.trim() || null
+      const canal = doSite ? `formulário do site (${doSite})` : 'formulário de captura (Google Forms)'
+      const mensagem = [d.perfil ? `Perfil: ${d.perfil}` : '', d.mensagem ?? ''].filter(Boolean).join(' · ')
       const dataResposta = parseData(d.carimbo ?? '') ?? new Date().toISOString().slice(0, 10)
       const uf = (d.estado ?? '').toUpperCase().trim()
 
@@ -88,7 +94,7 @@ export function importarEntradas(linhas: EntradaForms[]): {
           lead_id: dup.id,
           tipo: 'outro',
           data: new Date().toISOString(),
-          resumo: `Preencheu novamente o formulário de captura (Google Forms)${d.mensagem ? `: "${d.mensagem}"` : '.'}`,
+          resumo: `Preencheu novamente o ${canal}${mensagem ? `: "${mensagem}"` : '.'}`,
           proximo_passo: 'Retornar o contato'
         })
         if (consentiu && !dup.consentimento_lgpd) {
@@ -108,12 +114,14 @@ export function importarEntradas(linhas: EntradaForms[]): {
         estado_civil: null, conjuge: null, filhos: null, instagram: null, linkedin: null, outras_redes: null,
         faixa_patrimonio: null, faixa_renda: null, suitability: 'nao_avaliado', data_suitability: null,
         objetivos: [], horizonte: null, sucessao_notas: null, produtos_interesse: [], hobbies_rapport: null,
-        origem: 'google_forms',
-        origem_detalhe: d.como_conheceu ? `Formulário de captura · conheceu por: ${d.como_conheceu}` : 'Formulário de captura',
+        origem: doSite ? 'site' : 'google_forms',
+        origem_detalhe: [doSite ? `Site · ${doSite}` : 'Formulário de captura', d.como_conheceu ? `conheceu por: ${d.como_conheceu}` : '']
+          .filter(Boolean)
+          .join(' · '),
         indicado_por: null, etapa: 'novo', motivo_perda: null, valor_potencial: null,
         consentimento_lgpd: consentiu, data_consentimento: consentiu ? dataResposta : null,
         base_legal: consentiu ? 'consentimento' : null,
-        observacoes: d.mensagem ? `Mensagem no formulário: ${d.mensagem}` : null,
+        observacoes: mensagem ? `Mensagem no formulário: ${mensagem}` : null,
         tag_ids: []
       }
       const lead = criarLead(input)

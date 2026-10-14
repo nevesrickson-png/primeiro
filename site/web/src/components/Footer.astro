@@ -1,0 +1,63 @@
+---
+import Marca from './Marca.astro'
+import CartaMensal from './CartaMensal.astro'
+import Horizonte from './Horizonte.astro'
+import { SITE, MENU } from '../config'
+interface Props { semCarta?: boolean }
+const { semCarta = false } = Astro.props
+const ano = new Date().getFullYear()
+---
+<footer class="rodape escuro">
+  <div class="wrap">
+    <div class="rodape__topo">
+      <div>
+        <Marca cor="#CBB27A" />
+        <p class="citacao rodape__assinatura">{SITE.assinatura}</p>
+      </div>
+      {!semCarta && <CartaMensal escuro compacto />}
+    </div>
+    <div class="rodape__colunas">
+      <div>
+        <p class="chapeu">Navegar</p>
+        <ul>{MENU.map((m) => <li><a href={m.href}>{m.rotulo}</a></li>)}</ul>
+      </div>
+      <div>
+        <p class="chapeu">Acompanhar</p>
+        <ul>
+          {SITE.redes.map((r) => (
+            <li><a href={r.url} target="_blank" rel="noopener">{r.nome} <span>{r.rotulo}</span></a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <p class="chapeu">Contato</p>
+        <ul>
+          <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          {SITE.whatsapp && <li><a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a></li>}
+          <li><a href="/assessoria#agendar">Agendar conversa</a></li>
+        </ul>
+      </div>
+    </div>
+    <Horizonte />
+    <div class="rodape__legal">
+      <p>{SITE.rodapeRegulatorio}</p>
+      <p class="rodape__links"><a href="/privacidade">Política de privacidade</a> · © {ano} Rickson Messias</p>
+    </div>
+  </div>
+</footer>
+<style>
+  .rodape { background: var(--tinta); color: var(--marfim); padding: 88px 0 40px; }
+  .rodape__topo { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; padding-bottom: 64px; border-bottom: 1px solid var(--linha-escura); }
+  .rodape__assinatura { color: var(--champ); margin-top: 28px; font-size: clamp(24px, 2.6vw, 34px); max-width: 420px; }
+  .rodape__colunas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding: 48px 0; }
+  .rodape__colunas .chapeu { margin-bottom: 16px; }
+  .rodape__colunas ul { list-style: none; display: grid; gap: 10px; font-size: 15px; color: var(--aco-claro); }
+  .rodape__colunas a:hover { color: var(--marfim); }
+  .rodape__colunas span { color: var(--aco); }
+  .rodape__legal { display: grid; gap: 14px; font-size: 13px; line-height: 1.6; color: var(--aco); margin-top: 28px; }
+  .rodape__links a { text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 860px) {
+    .rodape__topo { grid-template-columns: 1fr; gap: 40px; }
+    .rodape__colunas { grid-template-columns: 1fr; gap: 28px; }
+  }
+</style>

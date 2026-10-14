@@ -98,3 +98,9 @@ mensagem e aceite/LGPD. **Mantenha a pergunta de aceite LGPD** — leads sem ace
 
 `node scripts/simulador-planilha.cjs` roda este mesmo `Code.gs` localmente com uma planilha em memória.
 Em modo de desenvolvimento, use a URL `http://127.0.0.1:8765/exec` e o token exibido no terminal.
+
+## Formulários do site ricksonmessias.com
+
+O `Code.gs` também recebe os formulários do site (ação pública `formularioSite`, sem token). Cada envio vira uma linha na aba **Entradas** com as colunas que o CRM já importa, mais "Perfil" e "Formulário do site". No CRM, esses leads entram com origem **Site**.
+
+Depois de colar a nova versão do `Code.gs`, vá em **Implantar → Gerenciar implantações → Editar (lápis) → Versão: Nova versão → Implantar**. A URL do App da Web não muda; é ela que vai em `PUBLIC_FORM_ENDPOINT` no site (`site/web/README.md`).

@@ -72,9 +72,9 @@ Portal de análises de Rickson Messias, assessor de investimentos CEA na EQI. Fu
 1. ✅ Referências e marca definidas (brand book + biografia)
 2. ✅ Briefing (este arquivo)
 3. ✅ Estrutura em blocos de cada página: `site/ESTRUTURA.md` (aprovada)
-4. ⏳ Textos finais por bloco: `site/TEXTOS.md` (revisar + compliance)
-5. Três direções visuais (só topo da Home + um bloco), escolher uma
-6. Construção completa
+4. ✅ Textos finais por bloco: `site/TEXTOS.md`
+5. ✅ Direção visual: `site/direcoes/recomendada.html` (abertura noturna + corpo editorial)
+6. ✅ Construção completa: `site/web` (ver `site/web/README.md`)
 7. Acabamento: versão dedicada ao celular, detalhes discretos de movimento, desempenho (PageSpeed), checklist do brand book
 8. Compliance da EQI → compra do domínio e da Hostinger → publicação
 

@@ -1,0 +1,55 @@
+---
+// Grade de revista: um artigo em destaque e os demais em lista ao lado.
+import Capa from './Capa.astro'
+import Meta from './Meta.astro'
+import { CATEGORIAS } from '../config'
+import type { Artigo } from '../lib/artigos'
+interface Props { artigos: Artigo[] }
+const { artigos } = Astro.props
+const [destaque, ...resto] = artigos
+---
+{destaque && (
+  <div class:list={['editorial', { 'editorial--so': resto.length === 0 }]}>
+    <article class="editorial__destaque rv">
+      <a href={`/artigos/${destaque.id}`}>
+        <Capa capa={destaque.data.capa} alt={destaque.data.capa_alt} categoria={destaque.data.categoria} grande />
+        <p class="chapeu">{CATEGORIAS[destaque.data.categoria].nome}</p>
+        <h3>{destaque.data.titulo}</h3>
+        <p class="resumo">{destaque.data.resumo}</p>
+        <Meta artigo={destaque} />
+      </a>
+    </article>
+    {resto.length > 0 && (
+      <div class="editorial__lista">
+        {resto.map((a, i) => (
+          <article class="rv" data-d={String(i * 110)}>
+            <a href={`/artigos/${a.id}`}>
+              <p class="chapeu">{CATEGORIAS[a.data.categoria].nome}</p>
+              <h3>{a.data.titulo}</h3>
+              <Meta artigo={a} />
+            </a>
+          </article>
+        ))}
+      </div>
+    )}
+  </div>
+)}
+<style>
+  .editorial { display: grid; grid-template-columns: 1.4fr 1fr; }
+  .editorial--so { grid-template-columns: 1fr; }
+  .editorial__destaque { padding: 40px 48px 0 0; border-right: 1px solid var(--pedra); }
+  .editorial--so .editorial__destaque { border-right: 0; padding-right: 0; max-width: 760px; }
+  .editorial__destaque .chapeu { margin-top: 28px; }
+  .editorial__destaque h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; margin: 12px 0; transition: color 0.3s; }
+  .resumo { color: var(--grafite); }
+  .editorial__lista { padding-left: 40px; }
+  .editorial__lista article { padding: 30px 0; border-bottom: 1px solid var(--pedra); }
+  .editorial__lista article:last-child { border-bottom: 0; }
+  .editorial__lista h3 { font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.25; margin-top: 8px; transition: color 0.3s; }
+  a:hover h3 { color: var(--champ-p); }
+  @media (max-width: 900px) {
+    .editorial { grid-template-columns: 1fr; }
+    .editorial__destaque { padding: 32px 0; border-right: 0; border-bottom: 1px solid var(--pedra); }
+    .editorial__lista { padding-left: 0; }
+  }
+</style>

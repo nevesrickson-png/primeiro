@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro'
+import AberturaPagina from '../components/AberturaPagina.astro'
+import Aceite from '../components/Aceite.astro'
+import Simbolo from '../components/Simbolo.astro'
+import Selo from '../components/Selo.astro'
+// Sumário do livro: preencher com os títulos dos capítulos quando estiverem fechados.
+const capitulos: string[] = []
+---
+<Base titulo="Livro e palestras" descricao="O Poder dos ETF’s, livro de Rickson Messias sobre a história dos fundos de índice, e a palestra Como reconhecer e se proteger de fraudes financeiras.">
+  <AberturaPagina chapeu="Livro e palestras" titulo="Conhecimento vira <em>patrimônio.</em>" apoio="Um livro sobre a ideia simples que mudou a forma como o mundo investe, e uma palestra sobre como não cair na ideia simples demais." />
+
+  <section class="secao">
+    <div class="wrap livro">
+      <div class="livro__capa rv" aria-hidden="true">
+        <span class="chapeu">Rickson Messias</span>
+        <span class="livro__titulo">O Poder dos ETF’s</span>
+        <Simbolo sol={false} pesos={[2.4, 1, 1.4]} rotulo="" />
+      </div>
+      <div class="livro__texto">
+        <p class="chapeu">Livro · Em breve</p>
+        <h2 class="titulo"><em>O Poder dos ETF’s</em></h2>
+        <p class="apoio">Uma história dos fundos de índice contada a partir das grandes mentes do investimento: de Harry Markowitz e John Bogle à chegada do primeiro ETF à B3. Para quem quer entender por que uma ideia simples mudou a forma como o mundo investe.</p>
+        {capitulos.length > 0 && (
+          <div class="sumario">
+            <h3 class="subtitulo">O que você vai encontrar</h3>
+            <ol>{capitulos.map((c) => <li>{c}</li>)}</ol>
+          </div>
+        )}
+        <form id="lista" class="form lista" data-formulario="livro" data-mensagem-ok="Anotado. Você vai saber primeiro.">
+          <p class="subtitulo">Seja avisado no lançamento</p>
+          <div class="linha-2">
+            <div class="campo"><label for="lv-nome">Seu nome</label><input id="lv-nome" name="nome" autocomplete="name" required /></div>
+            <div class="campo"><label for="lv-email">Seu e-mail</label><input id="lv-email" type="email" name="email" autocomplete="email" required /></div>
+          </div>
+          <Aceite id="lv-lgpd" texto="Quero ser avisado sobre o lançamento do livro e li a" />
+          <div><button class="btn btn--tinta" type="submit">Entrar na lista</button></div>
+          <p class="form-status" data-status role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao secao--escura">
+    <div class="wrap palestra">
+      <div>
+        <p class="chapeu">Palestras</p>
+        <h2 class="titulo">Como reconhecer e se proteger de fraudes financeiras</h2>
+      </div>
+      <div class="palestra__texto">
+        <p class="apoio">As fraudes mudam de nome, mas repetem o mesmo padrão há séculos, das pirâmides do século passado às promessas em criptomoedas. Nesta palestra, mostro como esses esquemas funcionam, por que parecem críveis e quais sinais aparecem antes do prejuízo.</p>
+        <p class="texto-apoio">Para empresas, escolas, eventos e associações. Presencial ou online.</p>
+        <div class="eventos">
+          <div class="eventos__selo"><Selo /></div>
+          <dl>
+            <div><dt>Expert XP</dt><dd>2023 e 2024</dd></div>
+            <div><dt>Money Week, Santa Catarina</dt><dd>2026</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao secao--clara-2" id="convite">
+    <div class="wrap convite">
+      <div><p class="chapeu">Convite</p><h2 class="titulo">Leve essa conversa para o seu evento</h2></div>
+      <form class="form convite__form" data-formulario="palestra" data-sucesso="/obrigado">
+        <div class="linha-2">
+          <div class="campo"><label for="pl-nome">Seu nome</label><input id="pl-nome" name="nome" autocomplete="name" required /></div>
+          <div class="campo"><label for="pl-email">E-mail</label><input id="pl-email" type="email" name="email" autocomplete="email" required /></div>
+        </div>
+        <div class="linha-2">
+          <div class="campo"><label for="pl-whats">WhatsApp <span class="opc">(opcional)</span></label><input id="pl-whats" type="tel" name="whatsapp" autocomplete="tel" /></div>
+          <div class="campo"><label for="pl-emp">Empresa ou evento</label><input id="pl-emp" name="empresa" autocomplete="organization" required /></div>
+        </div>
+        <div class="campo"><label for="pl-msg">Conte um pouco sobre o evento (data, público, formato)</label><textarea id="pl-msg" name="mensagem" maxlength="2000"></textarea></div>
+        <Aceite id="pl-lgpd" />
+        <div><button class="btn btn--tinta" type="submit">Enviar convite <span class="seta">→</span></button></div>
+        <p class="form-status" data-status role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</Base>
+<style>
+  .livro { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: clamp(40px, 7vw, 96px); align-items: start; }
+  .livro__capa { position: sticky; top: calc(var(--cab-altura) + 32px); aspect-ratio: 2 / 3; max-width: 320px; width: 100%; justify-self: center; background: var(--tinta); color: var(--marfim); padding: 34px 28px; display: grid; grid-template-rows: auto 1fr auto; gap: 12px; box-shadow: 18px 22px 0 -6px var(--marfim-3), 18px 22px 0 -5px var(--pedra); border-radius: 2px 6px 6px 2px; }
+  .livro__capa .chapeu { color: var(--champ); font-size: 10px; }
+  .livro__titulo { font-family: var(--serif); font-size: 36px; line-height: 1.05; }
+  .livro__capa :global(.simbolo) { width: 56%; justify-self: center; }
+  .livro__texto { display: grid; gap: 20px; }
+  .sumario ol { margin: 14px 0 0 1.2em; color: var(--grafite); }
+  .lista { margin-top: 24px; padding: 32px; background: var(--marfim-3); }
+  .palestra { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+  .palestra .titulo { margin-top: 12px; }
+  .palestra__texto { display: grid; gap: 20px; }
+  .eventos { display: flex; align-items: center; gap: 28px; margin-top: 16px; }
+  .eventos__selo { width: 110px; flex: none; }
+  .eventos dl { flex: 1; }
+  .eventos dl div { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid var(--linha-escura); }
+  .eventos dt { font-family: var(--serif); font-size: 19px; }
+  .eventos dd { color: var(--champ); }
+  .convite { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 64px; }
+  .convite .titulo { margin-top: 12px; }
+  .convite__form { background: var(--marfim-2); border: 1px solid var(--pedra); padding: clamp(24px, 4vw, 40px); }
+  @media (max-width: 860px) {
+    .livro, .palestra, .convite { grid-template-columns: 1fr; gap: 32px; }
+    .livro__capa { position: static; max-width: 220px; justify-self: start; }
+    .lista { padding: 22px; }
+  }
+</style>

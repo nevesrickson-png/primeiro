@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro'
+import Simbolo from '../components/Simbolo.astro'
+import ListaEditorial from '../components/ListaEditorial.astro'
+import { SITE } from '../config'
+import { artigosPublicados } from '../lib/artigos'
+const leituras = (await artigosPublicados()).slice(0, 3)
+---
+<Base titulo="Recebido" semIndice>
+  <section class="secao escuro ok">
+    <div class="wrap ok__in">
+      <div class="ok__lobo"><Simbolo desenha pesos={[1.2, 0.5, 0.7]} rotulo="" /></div>
+      <h1 class="titulo">Recebido. <em>Obrigado pela confiança.</em></h1>
+      <p class="apoio">Eu retorno em {SITE.prazoRetorno} pelo WhatsApp ou e-mail que você informou.{leituras.length > 0 && ' Enquanto isso, três leituras para começar:'}</p>
+      <a class="link link--sub" href="/">Voltar para o início <span class="seta">→</span></a>
+    </div>
+  </section>
+  {leituras.length > 0 && <section class="secao"><div class="wrap"><ListaEditorial artigos={leituras} /></div></section>}
+</Base>
+<style>
+  .ok { background: radial-gradient(110% 120% at 50% 120%, var(--noite) 0%, var(--tinta) 62%); color: var(--marfim); }
+  .ok__in { display: grid; gap: 24px; justify-items: center; text-align: center; max-width: 760px; }
+  .ok__lobo { width: 140px; }
+  .ok .apoio { margin-inline: auto; }
+</style>

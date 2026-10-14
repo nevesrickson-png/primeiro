@@ -1,0 +1,14 @@
+---
+import Simbolo from './Simbolo.astro'
+interface Props { cor?: string; class?: string }
+const { cor = '#7A6438', class: classe = '' } = Astro.props
+---
+<a href="/" class:list={['marca', classe]} aria-label="Rickson Messias, página inicial">
+  <Simbolo cor={cor} sol={false} horizonte={false} pesos={[3, 1.2, 1.2]} rotulo="" />
+  <span>RICKSON<br />MESSIAS</span>
+</a>
+<style>
+  .marca { display: inline-flex; align-items: center; gap: 12px; }
+  .marca :global(.simbolo) { width: 40px; height: 40px; flex: none; }
+  .marca span { font-family: var(--serif); font-weight: 500; letter-spacing: 0.22em; font-size: 14px; line-height: 1.15; }
+</style>

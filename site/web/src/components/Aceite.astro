@@ -1,0 +1,11 @@
+---
+interface Props { texto?: string; id: string }
+const { texto = 'Autorizo o uso destes dados para que Rickson Messias entre em contato comigo, conforme a', id } = Astro.props
+---
+<label class="aceite" for={id}>
+  <input type="checkbox" id={id} name="lgpd" required />
+  <span>{texto} <a href="/privacidade" target="_blank">Política de privacidade</a>.</span>
+</label>
+<div class="armadilha" aria-hidden="true">
+  <label>Não preencha este campo <input type="text" name="site_web" tabindex="-1" autocomplete="off" /></label>
+</div>

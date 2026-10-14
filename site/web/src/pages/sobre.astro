@@ -1,0 +1,183 @@
+---
+import Base from '../layouts/Base.astro'
+import AberturaPagina from '../components/AberturaPagina.astro'
+import Retrato from '../components/Retrato.astro'
+import Selo from '../components/Selo.astro'
+import { SITE } from '../config'
+
+const marcos = [
+  ['Curicica', 'Nasci e cresci em Jacarepaguá, na Zona Oeste do Rio, com dois irmãos.'],
+  ['Escola pública', 'Uma professora me indica ao Colégio Roberto Burle Marx.'],
+  ['Colégio QI', 'Dou aulas aos colegas: meu primeiro negócio.'],
+  ['UFRJ', 'Contabilidade, no campus da Praia Vermelha. Começo a estudar fraudes.'],
+  ['Primeiros empregos', 'Jovem aprendiz e estágios em financeiro e contabilidade.'],
+  ['Bradesco', 'CEA em nove meses. De escriturário a gerente.'],
+  ['PAAP · B7', 'Formação como advisor: alocação, comercial e leitura de gestores.'],
+  ['Rico · XP', 'Dois anos e meio como assessor. Expert XP 2023 e 2024.'],
+  ['EQI Investimentos', 'Assessor de investimentos até hoje. Money Week 2026.']
+]
+const valores = [
+  ['Integridade', 'Nunca prometo o que o mercado não pode entregar. O risco é dito antes do retorno.'],
+  ['Cuidado', 'Trato cada patrimônio como se fosse o único que eu tenho.'],
+  ['Estudo contínuo', 'Quem cuida do que é dos outros não tem o direito de parar de aprender.'],
+  ['Longo prazo', 'Decisões medidas em décadas, não em manchetes.'],
+  ['Legado', 'Patrimônio é história de família. Cuidar dele é cuidar de quem vem depois.']
+]
+const formacao = [
+  ['CEA, Anbima', 'Certificação conquistada em nove meses de banco.'],
+  ['UFRJ', 'Contabilidade, escolhida pela grade voltada a investimentos.'],
+  ['Programa Advisor de Alta Performance', 'Yumi Banco, atual B7.'],
+  ['CFP', 'Próxima certificação, em preparação.'],
+  ['Eventos', 'Expert XP 2023 e 2024, e Money Week 2026, em Santa Catarina, onde conversei com gestores e estrategistas do mercado.'],
+  ['Rotina', 'De três a sete horas de estudo por semana.']
+]
+---
+<Base titulo="Sobre mim" descricao="A história de Rickson Messias, assessor de investimentos CEA: de Curicica ao mercado financeiro. Entrei pelo brilho, fiquei pela proteção.">
+  <AberturaPagina chapeu="Sobre mim" titulo="Entrei no mercado financeiro pelo brilho. <em>Fiquei pela proteção.</em>" />
+
+  <!-- 2. A história -->
+  <section class="secao">
+    <div class="wrap historia">
+      <aside class="historia__foto"><div class="fixo"><Retrato /></div></aside>
+      <div class="historia__texto">
+        <h2 class="subtitulo rv">Uma professora e um empurrão</h2>
+        <p class="rv">Cresci em Curicica, em Jacarepaguá, e estudei a vida toda em escola pública. No ensino fundamental, uma professora viu em mim um potencial que eu ainda não enxergava e me indicou para outra escola. Esse empurrão mudou a minha rota.</p>
+
+        <h2 class="subtitulo rv">Meu primeiro negócio</h2>
+        <p class="rv">No ensino médio, eu dava aulas particulares de química, matemática e, às vezes, história para os meus colegas. Comprei meu primeiro celular com esse dinheiro. Ali aprendi o que guia o meu trabalho até hoje: conhecimento vira patrimônio.</p>
+
+        <h2 class="subtitulo rv">O brilho e a descoberta</h2>
+        <p class="rv">Confesso que o que me trouxe para este mercado foi <em>O Lobo de Wall Street</em>. Escolhi Contabilidade na UFRJ porque a grade tinha muitas disciplinas de investimentos. Estudando, descobri que o mercado de verdade é outra coisa: método, paciência e responsabilidade com o dinheiro dos outros.</p>
+        <p class="rv">Na mesma época, vi amigos sendo abordados por pirâmides financeiras, opções binárias e falsos investimentos em bitcoin. Comecei a estudar fraudes para entender como elas funcionam e por que se repetem. Foi aí que decidi de que lado eu queria estar.</p>
+
+        <h2 class="subtitulo rv">Degrau por degrau</h2>
+        <p class="rv">Fiz o processo seletivo de todas as ligas acadêmicas do campus e não entrei em nenhuma. Não parei: fui a eventos, assisti a palestras, trabalhei como jovem aprendiz e estagiei em financeiro e contabilidade.</p>
+        <p class="rv">O mercado chegou pelo Bradesco. Em nove meses de banco, conquistei a certificação CEA, da Anbima. Subi de escriturário a caixa e a gerente. Mas eu não queria administrar contas. Queria cuidar de patrimônio. Então saí.</p>
+
+        <h2 class="subtitulo rv">O ofício</h2>
+        <p class="rv">Para aprender o ofício de assessor, fiz o Programa Advisor de Alta Performance, do Yumi Banco, hoje B7. Depois passei dois anos e meio como assessor na Rico, da XP, cuidando de clientes que construíram seu patrimônio com esforço. Hoje sou assessor de investimentos na EQI Investimentos.</p>
+        <p class="rv">Na EQI, já atendi pessoas que tinham caído em golpes antes de chegar até mim. Foi a confirmação de que o tema da faculdade não era curiosidade. Era parte do trabalho.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Linha do tempo -->
+  <section class="secao secao--clara-2">
+    <div class="wrap">
+      <div class="cab-secao cab-secao--simples">
+        <div><p class="chapeu">Trajetória</p><h2 class="titulo">Cada degrau tem valor</h2></div>
+      </div>
+      <ol class="tempo">
+        {marcos.map(([t, d], i) => (
+          <li class="rv" data-d={String((i % 3) * 80)}><span class="tempo__ponto" aria-hidden="true"></span><h3>{t}</h3><p>{d}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. O que me move -->
+  <section class="secao secao--escura">
+    <div class="wrap move">
+      <p class="chapeu rv">O que me move</p>
+      <p class="citacao rv" data-d="100">Sou pai. Tudo o que construo é pensando no futuro do meu filho.</p>
+      <p class="apoio rv" data-d="200">É com esse mesmo cuidado que olho para o patrimônio de cada cliente: como algo que precisa atravessar o tempo e chegar inteiro a quem vem depois. Trato cada patrimônio como se fosse o único que eu tenho.</p>
+    </div>
+  </section>
+
+  <!-- 5. Valores -->
+  <section class="secao">
+    <div class="wrap">
+      <div class="cab-secao cab-secao--simples"><div><p class="chapeu">Valores</p><h2 class="titulo">Cinco valores inegociáveis</h2></div></div>
+      <div class="valores">
+        {valores.map(([t, d], i) => (
+          <div class="cartao rv" data-d={String(i * 80)}><p class="numero">{String(i + 1).padStart(2, '0')}</p><h3>{t}</h3><p>{d}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Formação -->
+  <section class="secao secao--clara-2">
+    <div class="wrap formacao">
+      <div>
+        <p class="chapeu">Formação</p>
+        <h2 class="titulo">Estudo que não para</h2>
+        <div class="formacao__selo"><Selo /></div>
+      </div>
+      <dl>
+        {formacao.map(([t, d]) => (<div class="rv"><dt>{t}</dt><dd>{d}</dd></div>))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- 7. Onde me acompanhar + 8. Convite -->
+  <section class="secao">
+    <div class="wrap redes">
+      <div>
+        <p class="chapeu">Onde me acompanhar</p>
+        <ul>
+          {SITE.redes.map((r) => (
+            <li><a href={r.url} target="_blank" rel="noopener"><b>{r.nome}</b><span>{r.rotulo}</span><span class="seta">→</span></a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="redes__convite">
+        <p class="citacao">Se fizer sentido para você, vamos conversar.</p>
+        <a class="btn btn--tinta" href="/assessoria#agendar">Agendar conversa <span class="seta">→</span></a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .historia { display: grid; grid-template-columns: 0.75fr 1.25fr; gap: clamp(40px, 7vw, 96px); align-items: start; }
+  .historia__foto .fixo { position: sticky; top: calc(var(--cab-altura) + 32px); }
+  .historia__texto { max-width: var(--leitura); }
+  .historia__texto .subtitulo { margin: 48px 0 16px; }
+  .historia__texto .subtitulo:first-child { margin-top: 0; }
+  .historia__texto p { font-size: 18px; color: #2c3440; margin-bottom: 18px; }
+
+  .tempo { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 32px; position: relative; }
+  .tempo li { position: relative; padding: 28px 0 28px 0; border-top: 1px solid var(--pedra); }
+  .tempo__ponto { position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--champ-p); }
+  .tempo h3 { font-family: var(--serif); font-weight: 400; font-size: 24px; margin-bottom: 6px; }
+  .tempo p { color: var(--grafite); font-size: 16px; }
+
+  .move { display: grid; gap: 24px; max-width: 900px; }
+  .move .citacao { color: var(--champ); font-size: clamp(30px, 4vw, 52px); }
+
+  .valores { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .valores .numero { font-size: 28px; margin-bottom: 14px; }
+  .valores h3 { font-size: 24px; }
+
+  .formacao { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 64px; }
+  .formacao .titulo { margin-top: 12px; }
+  .formacao__selo { width: 140px; margin-top: 40px; background: var(--tinta); border-radius: 50%; padding: 8px; }
+  .formacao dl div { display: grid; grid-template-columns: 220px 1fr; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--pedra); }
+  .formacao dl div:first-child { border-top: 2px solid var(--tinta); }
+  .formacao dt { font-family: var(--serif); font-size: 20px; }
+  .formacao dd { color: var(--grafite); }
+
+  .redes { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .redes ul { list-style: none; margin-top: 18px; }
+  .redes li a { display: grid; grid-template-columns: 160px 1fr auto; gap: 16px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--pedra); }
+  .redes li b { font-family: var(--serif); font-weight: 400; font-size: 21px; }
+  .redes li span { color: var(--grafite); }
+  .redes li .seta { color: var(--champ-p); }
+  .redes__convite { display: grid; gap: 28px; justify-items: start; background: var(--marfim-3); padding: 48px; }
+
+  @media (max-width: 960px) {
+    .valores { grid-template-columns: 1fr 1fr; }
+    .tempo { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 800px) {
+    .historia, .formacao, .redes { grid-template-columns: 1fr; }
+    .historia__foto { max-width: 340px; }
+    .historia__foto .fixo { position: static; }
+    .tempo, .valores { grid-template-columns: 1fr; }
+    .formacao dl div { grid-template-columns: 1fr; gap: 4px; }
+    .redes li a { grid-template-columns: 1fr auto; }
+    .redes li span:not(.seta) { grid-column: 1; }
+    .redes__convite { padding: 32px; }
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+/** Lobo-guará facetado diante do sol do cerrado (assinatura do brand book). */
+interface Props {
+  cor?: string
+  class?: string
+  sol?: boolean
+  horizonte?: boolean
+  desenha?: boolean
+  rotulo?: string
+  /** Espessuras: contorno, facetas, sol/horizonte. */
+  pesos?: [number, number, number]
+}
+const {
+  cor = '#CBB27A',
+  class: classe = '',
+  sol = true,
+  horizonte = true,
+  desenha = false,
+  rotulo = 'Lobo-guará diante do sol do cerrado',
+  pesos = [2.2, 0.9, 1.2]
+} = Astro.props
+const id = 'lg' + Math.random().toString(36).slice(2, 8)
+const CONTORNO = 'M60 34 L68 36 L92 8 L84 52 L86 62 L76 80 L66 96 L60 102 L54 96 L44 80 L34 62 L36 52 L28 8 L52 36 Z'
+const FACETAS = ['M28 8 L44 46','M44 46 L52 36','M44 46 L36 52','M52 36 L60 48','M60 34 L60 48','M52 36 L47 60','M44 46 L47 60','M36 52 L47 60','M60 48 L47 60','M47 60 L60 72','M60 48 L60 72','M47 60 L34 62','M47 60 L44 80','M44 80 L60 72','M60 72 L54 96','M60 72 L60 102','M92 8 L76 46','M76 46 L68 36','M76 46 L84 52','M68 36 L60 48','M68 36 L73 60','M76 46 L73 60','M84 52 L73 60','M60 48 L73 60','M73 60 L60 72','M73 60 L86 62','M73 60 L76 80','M76 80 L60 72','M60 72 L66 96']
+const OLHOS = 'M42 59 L52 61 L44 63 Z M78 59 L68 61 L76 63 Z M56 99 L64 99 L60 104 Z'
+const decorativo = rotulo === ''
+---
+<svg
+  class:list={['simbolo', classe, { desenha }]}
+  viewBox="0 0 120 120"
+  role={decorativo ? undefined : 'img'}
+  aria-label={decorativo ? undefined : rotulo}
+  aria-hidden={decorativo ? 'true' : undefined}
+>
+  {sol && (
+    <>
+      <defs>
+        <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+          <rect width="120" height="120" fill="white" />
+          <path d={CONTORNO} fill="black" />
+        </mask>
+      </defs>
+      <g class="sol" mask={`url(#${id})`} fill="none" stroke={cor} stroke-linecap="round">
+        <circle cx="60" cy="58" r="40" stroke-width={pesos[2]} pathLength="1" />
+        <circle cx="60" cy="58" r="34" stroke-width={pesos[2] * 0.45} opacity="0.55" pathLength="1" />
+      </g>
+    </>
+  )}
+  <g fill="none" stroke={cor} stroke-linejoin="round" stroke-linecap="round">
+    {horizonte && (
+      <g class="horizonte">
+        <path d="M8 108 L112 108" stroke-width={pesos[2] * 1.5} pathLength="1" />
+        <path d="M26 113 L94 113 M42 118 L78 118" stroke-width={pesos[1] * 0.9} pathLength="1" />
+      </g>
+    )}
+    <path class="contorno" d={CONTORNO} stroke-width={pesos[0]} pathLength="1" />
+    <g class="facetas" stroke-width={pesos[1]}>
+      {FACETAS.map((d) => <path d={d} pathLength="1" />)}
+    </g>
+  </g>
+  <path class="olhos" d={OLHOS} fill={cor} />
+</svg>

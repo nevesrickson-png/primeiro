@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro'
+import AberturaPagina from '../components/AberturaPagina.astro'
+import { SITE } from '../config'
+// Rascunho de estrutura: revisar com o jurídico e o compliance da EQI antes de publicar.
+---
+<Base titulo="Política de privacidade" descricao="Como os dados informados nos formulários do site ricksonmessias.com são usados e protegidos.">
+  <AberturaPagina chapeu="LGPD" titulo="Política de privacidade" apoio="Quais dados este site coleta, para quê, onde ficam e como você pede a exclusão." clara />
+  <section class="secao">
+    <div class="wrap prosa-pag">
+      <h2>1. Quem é o responsável</h2>
+      <p>Rickson Messias, assessor de investimentos. Contato: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+      <h2>2. Quais dados coletamos</h2>
+      <p>Somente os que você informa nos formulários: nome, e-mail, WhatsApp, cidade, profissão, perfil, mensagem e como conheceu o site. Não pedimos dados financeiros pelo site.</p>
+      <h2>3. Para quê</h2>
+      <p>Responder ao seu contato, enviar a carta mensal (se você pedir), avisar sobre o lançamento do livro e responder a convites de palestra.</p>
+      <h2>4. Base legal</h2>
+      <p>O seu consentimento, registrado quando você marca a autorização e envia o formulário.</p>
+      <h2>5. Onde ficam</h2>
+      <p>Em uma planilha protegida no Google e no sistema de relacionamento do assessor, com banco de dados criptografado.</p>
+      <h2>6. Com quem compartilhamos</h2>
+      <p>Não vendemos nem cedemos seus dados para fins comerciais.</p>
+      <h2>7. Por quanto tempo</h2>
+      <p>Enquanto houver relacionamento ou até você pedir a exclusão.</p>
+      <h2>8. Seus direitos</h2>
+      <p>Você pode acessar, corrigir ou excluir seus dados e cancelar a carta a qualquer momento, pelo link no próprio e-mail ou escrevendo para <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+      <h2>9. Cookies</h2>
+      <p>Este site não usa cookies de publicidade nem ferramentas de rastreamento.</p>
+      <p class="atualizado">Última atualização: outubro de 2026.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .prosa-pag { max-width: var(--leitura); }
+  .prosa-pag h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 40px 0 10px; }
+  .prosa-pag h2:first-child { margin-top: 0; }
+  .prosa-pag p { color: #2c3440; }
+  .prosa-pag a { color: var(--champ-p); text-decoration: underline; text-underline-offset: 3px; }
+  .atualizado { margin-top: 48px; font-size: 14px; color: var(--grafite) !important; }
+</style>

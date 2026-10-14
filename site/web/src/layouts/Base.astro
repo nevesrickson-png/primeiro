@@ -1,0 +1,76 @@
+---
+import '../styles/global.css'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import { SITE } from '../config'
+
+interface Props {
+  titulo?: string
+  descricao?: string
+  cabecalhoEscuro?: boolean
+  semCartaRodape?: boolean
+  imagem?: string
+  tipo?: 'website' | 'article'
+  publicado?: Date
+  semIndice?: boolean
+}
+const {
+  titulo,
+  descricao = SITE.descricao,
+  cabecalhoEscuro = false,
+  semCartaRodape = false,
+  imagem = '/og.png',
+  tipo = 'website',
+  publicado,
+  semIndice = false
+} = Astro.props
+const tituloCompleto = titulo ? `${titulo} · Rickson Messias` : SITE.titulo
+const canonica = new URL(Astro.url.pathname, Astro.site)
+const imagemAbs = new URL(imagem, Astro.site)
+const pessoa = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Rickson Messias',
+  jobTitle: 'Assessor de investimentos',
+  url: SITE.url,
+  hasCredential: 'CEA (Anbima)',
+  sameAs: SITE.redes.map((r) => r.url)
+}
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonica} />
+    {semIndice && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#0B1A2C" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Rickson Messias" />
+    <meta property="og:type" content={tipo} />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagemAbs} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {publicado && <meta property="article:published_time" content={publicado.toISOString()} />}
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    <script type="application/ld+json" set:html={JSON.stringify(pessoa)} />
+  </head>
+  <body>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+    <Header escuro={cabecalhoEscuro} />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <Footer semCarta={semCartaRodape} />
+    <script>
+      import '../scripts/revelar'
+      import '../scripts/formularios'
+    </script>
+  </body>
+</html>
