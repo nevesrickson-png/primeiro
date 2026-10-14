@@ -71,8 +71,8 @@ Portal de análises de Rickson Messias, assessor de investimentos CEA na EQI. Fu
 ## Processo (método dos vídeos)
 1. ✅ Referências e marca definidas (brand book + biografia)
 2. ✅ Briefing (este arquivo)
-3. ⏳ Estrutura em blocos de cada página: `site/ESTRUTURA.md`, aprovar antes do visual
-4. Textos finais por bloco, no tom da marca
+3. ✅ Estrutura em blocos de cada página: `site/ESTRUTURA.md` (aprovada)
+4. ⏳ Textos finais por bloco: `site/TEXTOS.md` (revisar + compliance)
 5. Três direções visuais (só topo da Home + um bloco), escolher uma
 6. Construção completa
 7. Acabamento: versão dedicada ao celular, detalhes discretos de movimento, desempenho (PageSpeed), checklist do brand book
