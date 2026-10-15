@@ -15,7 +15,7 @@ const leituras = (await artigosPublicados()).slice(0, 3)
       <a class="link link--sub" href="/">Voltar para o início <span class="seta">→</span></a>
     </div>
   </section>
-  {leituras.length > 0 && <section class="secao"><div class="wrap"><ListaEditorial artigos={leituras} /></div></section>}
+  {leituras.length > 0 && <section class="secao"><div class="wrap"><ListaEditorial artigos={leituras} nivel={2} /></div></section>}
 </Base>
 <style>
   .ok { background: radial-gradient(110% 120% at 50% 120%, var(--noite) 0%, var(--tinta) 62%); color: var(--marfim); }

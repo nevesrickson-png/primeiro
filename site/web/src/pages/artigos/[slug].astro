@@ -146,6 +146,8 @@ const cat = artigo ? CATEGORIAS[artigo.data.categoria] : null
   .prosa :global(a) { color: var(--champ-p); text-decoration: underline; text-underline-offset: 3px; }
   .prosa :global(blockquote) { font-family: var(--serif); font-style: italic; font-size: 26px; line-height: 1.35; border-left: 2px solid var(--champ); padding-left: 24px; color: var(--tinta); margin: 1.6em 0; }
   .prosa :global(ul), .prosa :global(ol) { padding-left: 1.3em; }
+  /* Tabelas largas rolam de lado no celular em vez de estourar a página. */
+  .prosa :global(table) { display: block; max-width: 100%; overflow-x: auto; }
   .prosa :global(li + li) { margin-top: 0.4em; }
   .prosa :global(strong) { color: var(--tinta); }
   .prosa :global(img) { margin: 1.6em 0; border-radius: var(--raio); }

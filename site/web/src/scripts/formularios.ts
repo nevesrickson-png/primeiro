@@ -3,7 +3,11 @@
  * O Apps Script não devolve CORS, então o envio é "no-cors": se a requisição sai, consideramos
  * enviado. Validação básica é feita aqui e repetida no Apps Script.
  */
+import { SITE } from '../config'
+
 const ENDPOINT: string = import.meta.env.PUBLIC_FORM_ENDPOINT ?? ''
+// (21) 99205-3248 a partir de '5521992053248'.
+const whats = SITE.whatsapp ? SITE.whatsapp.replace(/^55(\d{2})(\d{4,5})(\d{4})$/, '($1) $2-$3') : ''
 const CAMPOS = ['nome', 'email', 'whatsapp', 'cidade', 'profissao', 'empresa', 'perfil', 'mensagem', 'como_conheceu', 'site_web']
 
 function status(form: HTMLFormElement, tipo: 'ok' | 'erro' | '', texto: string) {
@@ -25,7 +29,7 @@ async function enviar(form: HTMLFormElement) {
 
   if (!ENDPOINT) {
     console.warn('PUBLIC_FORM_ENDPOINT não configurado; dados não enviados.')
-    return status(form, 'erro', 'Formulário ainda não conectado. Escreva para contato@ricksonmessias.com.')
+    return status(form, 'erro', `Formulário ainda não conectado. Escreva para ${SITE.email}.`)
   }
 
   const botao = form.querySelector<HTMLButtonElement>('button[type="submit"]')
@@ -50,7 +54,7 @@ async function enviar(form: HTMLFormElement) {
     form.reset()
     status(form, 'ok', form.dataset.mensagemOk ?? 'Pronto. Recebido.')
   } catch {
-    status(form, 'erro', 'Não foi possível enviar agora. Tente de novo em instantes, escreva para contato@ricksonmessias.com ou chame no WhatsApp (21) 99205-3248.')
+    status(form, 'erro', `Não foi possível enviar agora. Tente de novo em instantes ou escreva para ${SITE.email}${whats ? ` ou chame no WhatsApp ${whats}` : ''}.`)
   } finally {
     if (botao && rotulo !== undefined) {
       botao.disabled = false

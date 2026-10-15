@@ -4,8 +4,9 @@ import Capa from './Capa.astro'
 import Meta from './Meta.astro'
 import { CATEGORIAS } from '../config'
 import type { Artigo } from '../lib/artigos'
-interface Props { artigos: Artigo[] }
-const { artigos } = Astro.props
+interface Props { artigos: Artigo[]; /** Nível dos títulos: 2 quando a lista vem logo abaixo do h1 da página. */ nivel?: 2 | 3 }
+const { artigos, nivel = 3 } = Astro.props
+const H = nivel === 2 ? 'h2' : 'h3'
 const [destaque, ...resto] = artigos
 ---
 {destaque && (
@@ -14,7 +15,7 @@ const [destaque, ...resto] = artigos
       <a href={`/artigos/${destaque.id}`}>
         <Capa capa={destaque.data.capa} alt={destaque.data.capa_alt} categoria={destaque.data.categoria} grande />
         <p class="chapeu">{CATEGORIAS[destaque.data.categoria].nome}</p>
-        <h3>{destaque.data.titulo}</h3>
+        <H class="editorial__titulo">{destaque.data.titulo}</H>
         <p class="resumo">{destaque.data.resumo}</p>
         <Meta artigo={destaque} />
       </a>
@@ -25,7 +26,7 @@ const [destaque, ...resto] = artigos
           <article class="rv" data-d={String(i * 110)}>
             <a href={`/artigos/${a.id}`}>
               <p class="chapeu">{CATEGORIAS[a.data.categoria].nome}</p>
-              <h3>{a.data.titulo}</h3>
+              <H class="editorial__titulo">{a.data.titulo}</H>
               <Meta artigo={a} />
             </a>
           </article>
@@ -40,13 +41,13 @@ const [destaque, ...resto] = artigos
   .editorial__destaque { padding: 40px 48px 0 0; border-right: 1px solid var(--pedra); }
   .editorial--so .editorial__destaque { border-right: 0; padding-right: 0; max-width: 760px; }
   .editorial__destaque .chapeu { margin-top: 28px; }
-  .editorial__destaque h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; margin: 12px 0; transition: color 0.3s; }
+  .editorial__destaque .editorial__titulo { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; margin: 12px 0; transition: color 0.3s; }
   .resumo { color: var(--grafite); }
   .editorial__lista { padding-left: 40px; }
   .editorial__lista article { padding: 30px 0; border-bottom: 1px solid var(--pedra); }
   .editorial__lista article:last-child { border-bottom: 0; }
-  .editorial__lista h3 { font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.25; margin-top: 8px; transition: color 0.3s; }
-  a:hover h3 { color: var(--champ-p); }
+  .editorial__lista .editorial__titulo { font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.25; margin-top: 8px; transition: color 0.3s; }
+  a:hover .editorial__titulo { color: var(--champ-p); }
   @media (max-width: 900px) {
     .editorial { grid-template-columns: 1fr; }
     .editorial__destaque { padding: 32px 0; border-right: 0; border-bottom: 1px solid var(--pedra); }

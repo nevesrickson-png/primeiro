@@ -17,7 +17,7 @@ const demais = artigos.slice(4)
   <section class="secao lista">
     <div class="wrap">
       <Filtro atual={atual} />
-      {artigos.length === 0 ? <SemArtigos /> : <ListaEditorial artigos={topo} />}
+      {artigos.length === 0 ? <SemArtigos /> : <ListaEditorial artigos={topo} nivel={2} />}
       {demais.length > 0 && <div class="lista__demais"><GradeArtigos artigos={demais} /></div>}
     </div>
   </section>
