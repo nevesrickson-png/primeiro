@@ -97,14 +97,16 @@ const calculos: Record<string, (form: HTMLFormElement) => void> = {
   },
 
   'custo-das-taxas'(form) {
-    const r = f.compararTaxas({ inicial: num(form, 'inicial'), mensal: num(form, 'mensal'), retornoBruto: taxa(form, 'retorno'), taxaA: taxa(form, 'taxaA'), taxaB: taxa(form, 'taxaB'), anos: Math.max(1, Math.round(num(form, 'anos'))) })
+    // Se a pessoa inverter os campos, a "barata" continua sendo a de menor taxa.
+    const tA = Math.min(taxa(form, 'taxaA'), taxa(form, 'taxaB')), tB = Math.max(taxa(form, 'taxaA'), taxa(form, 'taxaB'))
+    const r = f.compararTaxas({ inicial: num(form, 'inicial'), mensal: num(form, 'mensal'), retornoBruto: taxa(form, 'retorno'), taxaA: tA, taxaB: tB, anos: Math.max(1, Math.round(num(form, 'anos'))) })
     texto('r-dif', f.reais(r.diferenca)); texto('r-pct', `${f.pct(r.perdaPct, 0)} do patrimônio fica pelo caminho`)
     texto('r-a', f.reais(r.a[r.a.length - 1].saldo)); texto('r-b', f.reais(r.b[r.b.length - 1].saldo))
     grafico(document.getElementById('grafico')!, [
-      { nome: `Taxa de ${f.pct(taxa(form, 'taxaA'))}`, valores: r.a.map((x) => x.saldo), cor: AZUL, area: true },
-      { nome: `Taxa de ${f.pct(taxa(form, 'taxaB'))}`, valores: r.b.map((x) => x.saldo), cor: OURO }
+      { nome: `Taxa de ${f.pct(tA)}`, valores: r.a.map((x) => x.saldo), cor: AZUL, area: true },
+      { nome: `Taxa de ${f.pct(tB)}`, valores: r.b.map((x) => x.saldo), cor: OURO }
     ], r.a.map((x) => `Ano ${x.ano}`))
-    html('r-leitura', `Uma diferença de <b>${f.pct(taxa(form, 'taxaB') - taxa(form, 'taxaA'))}</b> ao ano parece pequena. Em ${r.a.length - 1} anos, ela leva <b>${f.pct(r.perdaPct, 0)}</b> do resultado. Como dizia John Bogle, no investimento você recebe aquilo pelo que não paga.`)
+    html('r-leitura', `Uma diferença de <b>${f.pct(tB - tA)}</b> ao ano parece pequena. Em ${r.a.length - 1} anos, ela leva <b>${f.pct(r.perdaPct, 0)}</b> do resultado. Como dizia John Bogle, no investimento você recebe aquilo pelo que não paga.`)
   },
 
   'renda-fixa'(form) {

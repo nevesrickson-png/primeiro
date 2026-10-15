@@ -46,8 +46,18 @@ export function ligarFerramenta(form: HTMLFormElement, calcular: () => void) {
   calcular()
 }
 
-export const num = (form: HTMLFormElement, nome: string): number => numeroBR((form.elements.namedItem(nome) as HTMLInputElement)?.value ?? '0')
-export const taxa = (form: HTMLFormElement, nome: string): number => num(form, nome) / 100
+// Limites de idades e prazos: valores absurdos (ex.: 999999999999 anos) travariam os laços de cálculo.
+const LIMITES: Record<string, [number, number]> = {
+  idade: [0, 110], aposentar: [0, 120], final: [0, 130], anos: [0, 100], meses: [0, 600], prazo: [0, 600], parcelas: [0, 240]
+}
+const ler = (form: HTMLFormElement, nome: string): number => numeroBR((form.elements.namedItem(nome) as HTMLInputElement)?.value ?? '0')
+const limitar = (v: number, [min, max]: [number, number]) => Math.min(max, Math.max(min, v))
+/** Valor numérico do campo; valores em reais não podem ser negativos nem astronômicos. */
+export const num = (form: HTMLFormElement, nome: string): number => limitar(ler(form, nome), LIMITES[nome] ?? [0, 1e11])
+/** Taxas que podem ser negativas (juro real abaixo da inflação). As demais vão de 0% a 1.000%. */
+const PODE_NEGATIVA = new Set(['taxaAcum', 'taxaRet'])
+/** Taxa em fração (10 → 0,1). */
+export const taxa = (form: HTMLFormElement, nome: string): number => limitar(ler(form, nome), [PODE_NEGATIVA.has(nome) ? -99 : 0, 1000]) / 100
 export function texto(id: string, valor: string) {
   const el = document.getElementById(id)
   if (el && el.textContent !== valor) {

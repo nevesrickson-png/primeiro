@@ -44,7 +44,7 @@ function linkSimulador(m: Meta): string {
   if (m.categoria === 'aposentadoria') return '/ferramentas/independencia-financeira'
   const p = new URLSearchParams({
     objetivo: OPCAO_OBJETIVO[m.categoria] ?? 'Outro', meta: br(m.valor_hoje), prazo: String(m.prazo_meses),
-    guardado: br(m.ja_tem), aporte: br(aporteDe(m)), taxa: String(taxaReal(m.prazo_meses) * 100 + 4)
+    guardado: br(m.ja_tem), aporte: br(aporteDe(m)), taxa: String(taxaReal(m.prazo_meses) * 100) // mesma taxa real do plano, para os números baterem
   })
   return `/ferramentas/meus-objetivos?${p}`
 }

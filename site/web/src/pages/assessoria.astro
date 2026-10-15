@@ -28,9 +28,27 @@ const esperar = [
   ['Atendimento próximo e pessoal', '“Oportunidade única”'],
   ['Opinião com fonte e data', 'Produto empurrado']
 ]
-// "Quanto custa ter um assessor?" entra quando a redação for aprovada pelo compliance da EQI.
+// Tabela padrão de remuneração da EQI (enviada por Rickson em out/2026). Percentuais ao ano.
+const comissao = [
+  ['Liquidez diária', '0,08%'],
+  ['Título público', '0,30%'],
+  ['Crédito bancário', '0,35%'],
+  ['Crédito privado', '0,50%'],
+  ['Fundos', '0,45%'],
+  ['Oferta pública', '0,50%']
+]
+const fee = [
+  ['R$ 100 mil a R$ 1 milhão', '1,00%'],
+  ['R$ 1 milhão a R$ 5 milhões', '0,75%'],
+  ['R$ 5 milhões a R$ 10 milhões', '0,60%'],
+  ['R$ 10 milhões a R$ 25 milhões', '0,50%'],
+  ['R$ 25 milhões a R$ 50 milhões', '0,45%'],
+  ['R$ 50 milhões a R$ 100 milhões', '0,40%'],
+  ['Acima de R$ 100 milhões', '0,35%']
+]
 const perguntas = [
   ['Como funciona o vínculo com a EQI?', 'Sou assessor de investimentos vinculado à EQI Investimentos. Seus investimentos ficam em uma conta em seu nome no BTG Pactual, a instituição custodiante, e eu acompanho a sua carteira e te oriento nas decisões.'],
+  ['Quanto custa ter um assessor?', 'Depende do modelo que você escolher. No modelo por comissão, você não paga uma taxa à parte: a remuneração vem embutida em cada investimento. No modelo por taxa de consultoria, você paga um percentual ao ano sobre o patrimônio e as comissões dos produtos voltam para você. Os percentuais estão na seção Remuneração, acima, e as condições do seu caso vêm por escrito antes de qualquer decisão.'],
   ['Existe valor mínimo para começar?', 'Sim. A assessoria é indicada para quem tem a partir de R$ 500 mil para investir. É o patamar em que consigo dedicar a atenção que cada patrimônio merece.'],
   ['O meu dinheiro fica com você?', 'Não. O dinheiro fica sempre em conta em seu nome, no BTG Pactual. Eu nunca recebo recursos de clientes em conta própria. Se alguém pedir isso, desconfie: é um dos sinais clássicos de golpe.'],
   ['Como é a primeira conversa?', 'Uma conversa de cerca de uma hora, por vídeo ou presencialmente. Eu escuto mais do que falo. Não há compromisso: se fizer sentido, seguimos. Se não, você sai com mais clareza do que entrou.']
@@ -77,6 +95,43 @@ const origens = ['Instagram', 'YouTube', 'LinkedIn', 'Indicação', 'Evento', 'G
         <div><p class="chapeu">Pode esperar</p><ul>{esperar.map(([s]) => <li class="sim">{s}</li>)}</ul></div>
         <div><p class="chapeu">Não vai encontrar</p><ul>{esperar.map(([, n]) => <li class="nao">{n}</li>)}</ul></div>
       </div>
+    </div>
+  </section>
+
+  <section class="secao secao--clara-2" id="remuneracao">
+    <div class="wrap">
+      <div class="rem__cab">
+        <p class="chapeu">Remuneração</p>
+        <h2 class="titulo">Alinhamento de interesses</h2>
+        <p class="rem__apoio">Você escolhe como o seu assessor é remunerado. Nos dois modelos, o custo é dito antes, por escrito, e não muda sem você saber.</p>
+      </div>
+      <div class="rem">
+        <article class="modelo rv">
+          <p class="modelo__tipo">Commission based</p>
+          <h3 class="modelo__nome">Por comissão</h3>
+          <p class="modelo__resumo">Por ativo alocado, prazo e risco.</p>
+          <p>Você não paga uma taxa à parte. A remuneração já vem embutida no custo de cada investimento e varia conforme o tipo de ativo, o prazo e o risco.</p>
+          <table class="rem__tabela">
+            <caption class="vh">Custo anual por classe de ativo no modelo por comissão</caption>
+            <thead><tr><th scope="col">Classe</th><th scope="col">Custo ao ano</th></tr></thead>
+            <tbody>{comissao.map(([c, v]) => <tr><th scope="row">{c}</th><td>{v}</td></tr>)}</tbody>
+          </table>
+          <p class="modelo__combina"><b>Costuma combinar com</b> quem movimenta pouco a carteira e prefere não ter uma taxa fixa.</p>
+        </article>
+        <article class="modelo modelo--fee rv" data-d="120">
+          <p class="modelo__tipo">Fee based</p>
+          <h3 class="modelo__nome">Por taxa de consultoria</h3>
+          <p class="modelo__resumo">Taxa de consultoria sobre o patrimônio ao ano + cashback de comissão.</p>
+          <p>Você paga um percentual ao ano sobre o patrimônio, que diminui conforme ele cresce. Em troca, as comissões que os produtos pagariam voltam para você. Assim, eu ganho quando o seu patrimônio cresce, não quando a carteira é movimentada.</p>
+          <table class="rem__tabela">
+            <caption class="vh">Taxa anual de consultoria por faixa de patrimônio no modelo por taxa</caption>
+            <thead><tr><th scope="col">Faixa de patrimônio</th><th scope="col">Taxa ao ano</th></tr></thead>
+            <tbody>{fee.map(([c, v]) => <tr><th scope="row">{c}</th><td>{v}</td></tr>)}</tbody>
+          </table>
+          <p class="modelo__combina"><b>Costuma combinar com</b> patrimônios maiores e com quem quer consultoria contínua, sem conflito na escolha dos produtos.</p>
+        </article>
+      </div>
+      <p class="rem__nota">Tabela padrão de referência da EQI Investimentos, em percentual ao ano. As condições do seu caso são apresentadas por escrito antes de qualquer decisão. A assessoria é indicada a partir de R$ 500 mil investidos.</p>
     </div>
   </section>
 
@@ -149,6 +204,26 @@ const origens = ['Instagram', 'YouTube', 'LinkedIn', 'Indicação', 'Evento', 'G
   .nao { color: var(--aco); }
   .nao::before { content: '✕'; color: var(--aco); }
 
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .rem__cab { display: grid; gap: 12px; justify-items: center; text-align: center; margin-bottom: 48px; }
+  .rem__apoio { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--grafite); max-width: 640px; }
+  .rem { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 1040px; margin: 0 auto; }
+  .modelo { display: grid; gap: 14px; align-content: start; background: var(--marfim); border: 1px solid var(--pedra); border-radius: var(--raio); padding: clamp(24px, 3.5vw, 40px); }
+  .modelo--fee { border-color: var(--champ); }
+  .modelo__tipo { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--champ-p); }
+  .modelo__nome { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.1; }
+  .modelo__resumo { font-weight: 600; padding: 12px 14px; background: rgba(203, 178, 122, 0.14); border-left: 2px solid var(--champ); }
+  .modelo > p:not([class]) { color: var(--grafite); }
+  .rem__tabela { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .rem__tabela th, .rem__tabela td { text-align: left; padding: 11px 0; border-bottom: 1px solid var(--pedra); font-size: 15.5px; }
+  .rem__tabela thead th { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grafite); border-bottom: 2px solid var(--tinta); }
+  .rem__tabela tbody th { font-weight: 400; }
+  .rem__tabela td, .rem__tabela thead th:last-child { text-align: right; white-space: nowrap; }
+  .rem__tabela td { font-family: var(--serif); font-size: 19px; font-variant-numeric: lining-nums tabular-nums; }
+  .modelo__combina { font-size: 14px; color: var(--grafite); }
+  .modelo__combina b { color: var(--tinta); }
+  .rem__nota { max-width: 1040px; margin: 28px auto 0; font-size: 13px; color: var(--grafite); text-align: center; }
+
   .faq { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 64px; }
   .faq .titulo { margin-top: 12px; }
   .faq__lista { border-top: 2px solid var(--tinta); }
@@ -172,7 +247,7 @@ const origens = ['Instagram', 'YouTube', 'LinkedIn', 'Indicação', 'Evento', 'G
   .reg p { font-size: 13px; color: var(--grafite); max-width: 900px; }
 
   @media (max-width: 860px) {
-    .esperar, .faq, .agendar { grid-template-columns: 1fr; gap: 32px; }
+    .esperar, .faq, .agendar, .rem { grid-template-columns: 1fr; gap: 32px; }
     .agendar__texto { position: static; }
     details p { padding-right: 0; }
   }

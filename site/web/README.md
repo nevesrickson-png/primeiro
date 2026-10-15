@@ -118,7 +118,7 @@ Na Hostinger o Planejador com IA fica no modo exemplo (a hospedagem compartilhad
 ## Antes de publicar (pendências)
 
 - [ ] Compliance da EQI: rodapé regulatório, página Assessoria, valor mínimo e política de privacidade.
-- [ ] Pergunta "Quanto custa ter um assessor?": entra com a tabela padrão de assessoria que Rickson vai enviar (ver `src/pages/assessoria.astro`).
+- [x] Pergunta "Quanto custa ter um assessor?" e seção Remuneração (tabela padrão EQI, `src/pages/assessoria.astro`). Validar a redação com o compliance.
 - [x] WhatsApp (21) 99205-3248, atendido pelo assistente virtual (o site avisa isso no atendimento e na privacidade).
 - [x] Foto do ensaio (`public/imagens/retrato-*`, `avatar.*` e `og.png`).
 - [ ] E-mail da marca (hoje `contato@ricksonmessias.com`, provisório).

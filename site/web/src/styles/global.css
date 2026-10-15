@@ -709,3 +709,6 @@ button:hover .seta {
 @media (max-width: 640px) { .marcos { grid-template-columns: 1fr 1fr; } .conquista { grid-template-columns: 44px 1fr auto; } .conquista svg { width: 44px; height: 44px; } }
 @media (prefers-reduced-motion: reduce) { .conquista { transition: none; } .conquista svg, .prog.completo .prog__trilha i { animation: none; } }
 .selecao { width: 100%; background: var(--marfim-2); border: 1px solid var(--pedra); border-radius: var(--raio); padding: 12px 14px; font-size: 16px; }
+
+/* Texto só para leitores de tela. */
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
