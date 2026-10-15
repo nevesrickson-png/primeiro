@@ -1,0 +1,26 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+import Progresso from '../../components/ferramentas/Progresso.astro'
+const objetivos = ['Viagem', 'Carro', 'Entrada da casa própria', 'Educação dos filhos', 'Casamento', 'Abrir um negócio', 'Outro']
+---
+<LayoutFerramenta slug="meus-objetivos">
+  <Fragment slot="campos">
+    <div class="cf"><label for="f-objetivo" style="font-size:13px;font-weight:600">Qual é o objetivo?</label>
+      <select id="f-objetivo" name="objetivo" class="selecao">{objetivos.map((o) => <option>{o}</option>)}</select></div>
+    <Campo nome="meta" rotulo="Quanto custa" valor="60.000" prefixo="R$" faixa={[1000, 1000000, 1000]} />
+    <Campo nome="prazo" rotulo="Em quanto tempo você quer chegar lá" valor="36" sufixo="meses" faixa={[1, 240, 1]} />
+    <Campo nome="guardado" rotulo="Quanto já tem guardado para isso" valor="10.000" prefixo="R$" />
+    <Campo nome="aporte" rotulo="Quanto consegue guardar por mês" valor="1.200" prefixo="R$" faixa={[0, 20000, 50]} />
+    <Campo nome="taxa" rotulo="Rendimento esperado" valor="10" sufixo="% ao ano" ajuda="Para prazos curtos, prefira aplicações conservadoras e com liquidez." />
+  </Fragment>
+  <Fragment slot="resultado">
+    <Progresso id="objetivo" rotulo="Você já percorreu" />
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Guardar por mês</span><span class="kpi__valor" id="r-necessario">—</span><span class="kpi__nota" id="r-necessario-nota"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Com o que você guarda</span><span class="kpi__valor" id="r-data">—</span><span class="kpi__nota" id="r-data-nota"></span></div>
+    </div>
+    <div class="painel-graf"><div id="grafico"></div></div>
+    <p class="leitura" id="r-leitura"></p>
+  </Fragment>
+</LayoutFerramenta>

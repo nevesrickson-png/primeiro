@@ -42,3 +42,26 @@ test('números em formato brasileiro', () => {
   assert.equal(f.numeroBR('12,5%'), 12.5); assert.equal(f.numeroBR('1234.5'), 1234.5)
   assert.equal(f.mesesParaMeta(1000, 0, 100, 0), 10)
 })
+
+test('Price e SAC quitam a dívida e SAC paga menos juros', () => {
+  const price = f.tabelaPrice(100000, 0.01, 120), sac = f.tabelaSAC(100000, 0.01, 120)
+  perto(price[119].saldo, 0, 0.01); perto(sac[119].saldo, 0, 0.01)
+  perto(price[0].parcela, 1434.71, 0.01)
+  perto(sac[0].parcela, 100000 / 120 + 1000, 0.01)
+  assert.ok(f.totalPago(sac) < f.totalPago(price))
+})
+test('poupança segue a regra da Selic', () => {
+  perto(f.poupancaMensal(0.14, 0), 0.005, 1e-12)
+  perto(f.poupancaMensal(0.07, 0), f.mensalDeAnual(0.049), 1e-12)
+})
+test('à vista x parcelado', () => {
+  const r = f.vistaOuParcelado({ preco: 1000, descontoVista: 0.1, parcelas: 10, rendMensal: 0.01, primeiraNoAto: false })
+  assert.equal(r.melhor, 'vista')
+  const s = f.vistaOuParcelado({ preco: 1000, descontoVista: 0.01, parcelas: 10, rendMensal: 0.01, primeiraNoAto: false })
+  assert.equal(s.melhor, 'parcelado')
+  perto(r.descontoEmpate, 1 - r.vpParcelado / 1000, 1e-12)
+})
+test('poder de compra', () => {
+  const r = f.poderDeCompra(1000, 0.05, 10)
+  perto(r.equivalenteFuturo, 1628.89, 0.01); perto(r.poderHoje, 613.91, 0.01)
+})

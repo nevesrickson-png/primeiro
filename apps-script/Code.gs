@@ -36,7 +36,9 @@ function doPost(e) {
     var req = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     // Formulários públicos do site (ricksonmessias.com): não usam o token secreto,
     // só acrescentam uma linha na aba "Entradas", que o CRM importa na sincronização.
-    if (req.acao === 'formularioSite') return json_(formularioSite_(req));
+    if (req.acao === 'formularioSite') {
+      try { return json_(formularioSite_(req)); } catch (e) { return json_({ ok: false, erro: 'Não foi possível enviar agora.' }); }
+    }
     var token = PropertiesService.getScriptProperties().getProperty('TOKEN');
     if (!token) return json_({ ok: false, erro: 'Token não configurado. Rode a função instalar() no editor do Apps Script.' });
     if (req.token !== token) return json_({ ok: false, erro: 'Token inválido.' });
@@ -293,6 +295,20 @@ function formularioSite_(req) {
   if (!email && v['WhatsApp'].replace(/\D/g, '').length < 10) return { ok: false, erro: 'Informe um e-mail ou WhatsApp.' };
   if (d.lgpd !== true) return { ok: false, erro: 'É preciso aceitar a Política de privacidade.' };
   if (!v['Nome']) v['Nome'] = email ? email.split('@')[0] : 'Contato do site';
+  // Limites contra abuso (o Apps Script não vê o IP): teto global por 10 minutos e por dia,
+  // e o mesmo contato no mesmo formulário só é gravado uma vez a cada 10 minutos.
+  var cache = typeof CacheService !== 'undefined' ? CacheService.getScriptCache() : null;
+  if (cache) {
+    var dia = 'site-dia-' + new Date().toISOString().slice(0, 10);
+    var janela = 'site-10min-' + Math.floor(Date.now() / 600000);
+    var nDia = Number(cache.get(dia) || 0), nJanela = Number(cache.get(janela) || 0);
+    if (nJanela >= 30 || nDia >= 300) return { ok: false, erro: 'Muitos envios agora. Tente mais tarde.' };
+    var repetido = 'site-rep-' + tipo + '-' + (email || v['WhatsApp'].replace(/\D/g, '')).toLowerCase();
+    if (cache.get(repetido)) return { ok: true };
+    cache.put(dia, String(nDia + 1), 21600);
+    cache.put(janela, String(nJanela + 1), 600);
+    cache.put(repetido, '1', 600);
+  }
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var aba = ss.getSheetByName(ABA_ENTRADAS) || ss.insertSheet(ABA_ENTRADAS);

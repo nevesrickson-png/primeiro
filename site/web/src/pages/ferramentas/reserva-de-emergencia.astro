@@ -1,6 +1,7 @@
 ---
 import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
 import Campo from '../../components/ferramentas/Campo.astro'
+import Progresso from '../../components/ferramentas/Progresso.astro'
 const perfis = [
   ['estavel', 'Renda estável (CLT, servidor)', '6 meses de gastos'],
   ['liberal', 'Profissional liberal ou autônomo', '12 meses de gastos'],
@@ -26,6 +27,7 @@ const perfis = [
       <div class="kpi"><span class="kpi__rotulo">Falta juntar</span><span class="kpi__valor" id="r-falta">—</span></div>
       <div class="kpi"><span class="kpi__rotulo">Tempo para chegar lá</span><span class="kpi__valor" id="r-tempo">—</span></div>
     </div>
+    <Progresso id="reserva" rotulo="Sua reserva hoje" />
     <div class="painel-graf"><div id="grafico"></div></div>
     <p class="leitura" id="r-leitura"></p>
   </Fragment>

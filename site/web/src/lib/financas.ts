@@ -165,3 +165,64 @@ export function numeroBR(texto: string): number {
   const n = parseFloat(t)
   return Number.isFinite(n) ? n : 0
 }
+
+// ---------- Financiamento ----------
+export interface Parcela { n: number; parcela: number; juros: number; amortizacao: number; saldo: number }
+
+/** Tabela Price: parcelas iguais. */
+export function tabelaPrice(valor: number, taxaMensal: number, meses: number): Parcela[] {
+  const pmt = taxaMensal === 0 ? valor / meses : (valor * taxaMensal) / (1 - Math.pow(1 + taxaMensal, -meses))
+  const r: Parcela[] = []
+  let saldo = valor
+  for (let n = 1; n <= meses; n++) {
+    const juros = saldo * taxaMensal
+    const amortizacao = pmt - juros
+    saldo = Math.max(0, saldo - amortizacao)
+    r.push({ n, parcela: pmt, juros, amortizacao, saldo })
+  }
+  return r
+}
+
+/** SAC: amortização constante, parcelas decrescentes. */
+export function tabelaSAC(valor: number, taxaMensal: number, meses: number): Parcela[] {
+  const amortizacao = valor / meses
+  const r: Parcela[] = []
+  let saldo = valor
+  for (let n = 1; n <= meses; n++) {
+    const juros = saldo * taxaMensal
+    saldo = Math.max(0, saldo - amortizacao)
+    r.push({ n, parcela: amortizacao + juros, juros, amortizacao, saldo })
+  }
+  return r
+}
+
+export const totalPago = (t: Parcela[]): number => t.reduce((s, p) => s + p.parcela, 0)
+
+// ---------- Poupança ----------
+/** Regra da poupança (depósitos desde 2012): Selic > 8,5% a.a. → 0,5% a.m. + TR; senão 70% da Selic + TR. */
+export function poupancaMensal(selicAnual: number, trMensal: number): number {
+  const base = selicAnual > 0.085 ? 0.005 : mensalDeAnual(selicAnual * 0.7)
+  return (1 + base) * (1 + trMensal) - 1
+}
+
+// ---------- À vista ou parcelado ----------
+/**
+ * Compara pagar à vista com desconto x parcelar sem juros deixando o dinheiro rendendo.
+ * Retorna o valor presente das parcelas descontado pela rentabilidade líquida mensal.
+ */
+export function vistaOuParcelado(p: { preco: number; descontoVista: number; parcelas: number; rendMensal: number; primeiraNoAto: boolean }) {
+  const vista = p.preco * (1 - p.descontoVista)
+  const parcela = p.preco / p.parcelas
+  let vp = 0
+  for (let k = 0; k < p.parcelas; k++) vp += parcela / Math.pow(1 + p.rendMensal, p.primeiraNoAto ? k : k + 1)
+  // Desconto mínimo à vista para empatar com o parcelado.
+  const descontoEmpate = 1 - vp / p.preco
+  return { vista, vpParcelado: vp, parcela, melhor: vista <= vp ? 'vista' : 'parcelado', economia: Math.abs(vp - vista), descontoEmpate }
+}
+
+// ---------- Inflação ----------
+/** Quanto R$ X de hoje compra daqui a N anos, e quanto será preciso para comprar o mesmo. */
+export function poderDeCompra(valor: number, inflacaoAnual: number, anos: number) {
+  const fator = Math.pow(1 + inflacaoAnual, anos)
+  return { equivalenteFuturo: valor * fator, poderHoje: valor / fator, perdaPct: 1 - 1 / fator }
+}

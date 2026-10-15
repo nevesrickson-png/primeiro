@@ -1,0 +1,170 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+const exemplos = [
+  'Tenho 32 anos, quero trocar de carro em 2 anos e juntar a entrada de um apartamento. Ainda pago parcela do cartão.',
+  'Sou autônomo, minha renda varia muito. Quero ter uma reserva e começar a pensar na aposentadoria.',
+  'Vou casar no ano que vem e queremos fazer uma viagem de lua de mel. Depois, ter um filho.'
+]
+---
+<LayoutFerramenta slug="planejador-ia" semFormulario>
+  <div class="pia" data-planejador>
+    <form class="pia__form" novalidate>
+      <div class="pia__cab">
+        <p class="chapeu">Conte com as suas palavras</p>
+        <p class="pia__dica">O que você quer realizar, em quanto tempo e o que pesa hoje. Quanto mais concreto, melhor o plano.</p>
+      </div>
+      <label class="vh" for="pia-descricao">Seus objetivos</label>
+      <textarea id="pia-descricao" name="descricao" rows="6" maxlength="1500" required placeholder="Ex.: Tenho 30 anos, quero fazer uma viagem para a Europa em 2027, trocar de carro e começar a investir para a aposentadoria. Hoje gasto uns R$ 6 mil por mês."></textarea>
+      <div class="pia__exemplos" aria-label="Exemplos para começar">
+        {exemplos.map((e) => <button type="button" class="pia__chip" data-exemplo={e}>{e.split('.')[0]}</button>)}
+      </div>
+      <div class="pia__numeros">
+        <div class="cf"><label for="pia-idade">Idade <span>(opcional)</span></label><div class="cf__caixa"><input id="pia-idade" name="idade" inputmode="numeric" autocomplete="off" size="4" /><span class="cf__suf">anos</span></div></div>
+        <div class="cf"><label for="pia-mes">Consigo guardar por mês <span>(opcional)</span></label><div class="cf__caixa"><span class="cf__pre">R$</span><input id="pia-mes" name="guardaPorMes" inputmode="decimal" autocomplete="off" size="6" /></div></div>
+        <div class="cf"><label for="pia-guardado">Já tenho guardado <span>(opcional)</span></label><div class="cf__caixa"><span class="cf__pre">R$</span><input id="pia-guardado" name="jaGuardado" inputmode="decimal" autocomplete="off" size="6" /></div></div>
+      </div>
+      <div class="vh" aria-hidden="true"><label>Não preencha <input name="site_web" tabindex="-1" autocomplete="off" /></label></div>
+      <div class="pia__acoes">
+        <button type="submit" class="btn btn--tinta">Montar meu plano <span class="seta">→</span></button>
+        <button type="button" class="link" data-exemplo-plano>Ver um plano de exemplo</button>
+      </div>
+      <p class="pia__privado">Para montar o plano, o texto é processado por uma inteligência artificial (Claude, da Anthropic) e não fica guardado neste site. Não escreva nome, CPF ou contatos. O plano é educativo e não é recomendação de investimento.</p>
+      <p class="pia__erro" role="alert" hidden></p>
+    </form>
+
+    <div class="pia__pensando" aria-live="polite" hidden>
+      <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="44" /><circle cx="60" cy="60" r="44" class="giro" /></svg>
+      <ol>
+        <li>Lendo seus objetivos</li>
+        <li>Colocando em ordem de prioridade</li>
+        <li>Calculando quanto guardar por mês</li>
+        <li>Escolhendo os primeiros passos</li>
+      </ol>
+    </div>
+
+    <section class="pia__plano" aria-live="polite" hidden>
+      <div class="pia__topo">
+        <div>
+          <p class="chapeu" data-origem>Seu plano</p>
+          <p class="pia__resumo" data-resumo></p>
+        </div>
+        <blockquote class="pia__frase" data-incentivo></blockquote>
+      </div>
+      <div class="pia__balanco" data-balanco></div>
+      <ol class="pia__metas" data-metas></ol>
+      <div class="pia__duas">
+        <div class="pia__habitos">
+          <p class="chapeu">Hábitos da semana</p>
+          <p class="pia__sub">Marque conforme for fazendo. O plano fica salvo neste navegador.</p>
+          <div class="prog" data-progresso="habitos">
+            <div class="prog__topo"><span class="prog__rotulo">Hábitos em dia</span><span class="prog__pct" data-pct>0%</span></div>
+            <div class="prog__trilha" aria-hidden="true"><i></i><b style="left:25%"></b><b style="left:50%"></b><b style="left:75%"></b></div>
+            <p class="prog__frase" data-frase></p>
+          </div>
+          <ul data-habitos></ul>
+        </div>
+        <div class="pia__atencao" data-atencao-bloco>
+          <p class="chapeu">Pontos de atenção</p>
+          <ul data-atencao></ul>
+          <p class="pia__premissa">Aportes calculados com rendimento real (acima da inflação) de 2% ao ano para metas de até 2 anos e 4% ao ano para as demais. Ajuste em cada simulador.</p>
+        </div>
+      </div>
+      <div class="pia__fim">
+        <button type="button" class="btn btn--linha" data-imprimir>Salvar em PDF</button>
+        <button type="button" class="link" data-recomecar>Montar outro plano</button>
+      </div>
+    </section>
+  </div>
+</LayoutFerramenta>
+
+<script>
+  import '../../scripts/planejador'
+</script>
+
+<style>
+  .pia { display: grid; gap: 40px; }
+  .pia [hidden] { display: none !important; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pia__form { display: grid; gap: 18px; background: var(--marfim-2); border: 1px solid var(--pedra); border-radius: var(--raio); padding: clamp(20px, 4vw, 40px); }
+  .pia__dica { font-family: var(--serif); font-size: 20px; font-style: italic; color: var(--grafite); margin-top: 6px; }
+  .pia__form textarea { width: 100%; resize: vertical; min-height: 150px; padding: 16px 18px; font: inherit; font-size: 17px; line-height: 1.55; background: var(--marfim); border: 1px solid var(--pedra); border-radius: var(--raio); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  .pia__form textarea:focus { border-color: var(--champ-p); box-shadow: 0 0 0 3px rgba(203, 178, 122, 0.25); }
+  .pia__exemplos { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pia__chip { font-size: 13px; padding: 7px 12px; border: 1px solid var(--pedra); border-radius: 999px; background: var(--marfim); color: var(--grafite); cursor: pointer; transition: border-color 0.2s, color 0.2s; text-align: left; }
+  .pia__chip:hover { border-color: var(--champ-p); color: var(--tinta); }
+  .pia__numeros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .pia__numeros label span { font-weight: 400; color: var(--grafite); }
+  .pia__numeros .cf { display: grid; gap: 6px; min-width: 0; }
+  .pia__numeros .cf label { font-size: 13px; font-weight: 600; }
+  .pia__numeros .cf__caixa { display: flex; align-items: center; background: var(--marfim); border: 1px solid var(--pedra); border-radius: var(--raio); }
+  .pia__numeros input { flex: 1; min-width: 0; width: 100%; border: 0; background: none; padding: 12px 14px; font-size: 17px; outline: none; }
+  .pia__numeros .cf__pre, .pia__numeros .cf__suf { color: var(--grafite); font-size: 14px; padding: 0 12px; }
+  .pia__numeros .cf__pre { padding-right: 0; }
+  .pia__acoes { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+  .pia__acoes .link { background: none; border: 0; cursor: pointer; font: inherit; }
+  .pia__privado { font-size: 12.5px; color: var(--grafite); max-width: 70ch; }
+  .pia__erro { color: #8a2d1c; font-weight: 600; }
+
+  .pia__pensando { display: grid; grid-template-columns: 96px 1fr; gap: 28px; align-items: center; padding: 32px; background: var(--tinta); color: var(--marfim); border-radius: var(--raio); }
+  .pia__pensando svg { width: 96px; height: 96px; fill: none; stroke: rgba(203, 178, 122, 0.25); stroke-width: 3; }
+  .pia__pensando .giro { stroke: var(--champ); stroke-dasharray: 70 210; transform-origin: 60px 60px; animation: giro 1.4s linear infinite; }
+  .pia__pensando ol { list-style: none; display: grid; gap: 8px; font-family: var(--serif); font-size: 20px; }
+  .pia__pensando li { opacity: 0.3; transition: opacity 0.5s; }
+  .pia__pensando li.on { opacity: 1; }
+  .pia__pensando li.on::before { content: '— '; color: var(--champ); }
+  @keyframes giro { to { transform: rotate(360deg); } }
+
+  .pia__plano { display: grid; gap: 36px; }
+  .pia__topo { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 40px; align-items: end; padding-bottom: 28px; border-bottom: 2px solid var(--tinta); }
+  .pia__resumo { font-family: var(--serif); font-size: clamp(22px, 2.6vw, 30px); line-height: 1.3; margin-top: 10px; }
+  .pia__frase { font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--champ-p); border-left: 2px solid var(--champ); padding-left: 18px; }
+  .pia__metas { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; counter-reset: meta; }
+  .pia__sub { font-size: 14px; color: var(--grafite); margin: 4px 0 16px; }
+  .pia__duas { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: start; }
+  .pia__premissa { font-size: 12.5px; color: var(--grafite); margin-top: 16px; }
+  .pia__fim { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+  .pia__fim .link { background: none; border: 0; cursor: pointer; font: inherit; }
+  @media (max-width: 860px) {
+    .pia__numeros, .pia__topo, .pia__duas { grid-template-columns: 1fr; }
+    .pia__pensando { grid-template-columns: 1fr; justify-items: start; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pia__pensando .giro { animation-duration: 4s; } }
+</style>
+
+<style is:global>
+  .meta { position: relative; display: grid; gap: 14px; padding: 26px 24px 22px; background: var(--marfim); border: 1px solid var(--pedra); border-radius: var(--raio); counter-increment: meta; animation: entra 0.7s var(--ease) both; }
+  .meta::before { content: counter(meta, decimal-leading-zero); position: absolute; top: 18px; right: 20px; font-family: var(--serif); font-size: 30px; color: var(--pedra); }
+  .meta__cat { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--champ-p); }
+  .meta__nome { font-family: var(--serif); font-size: 24px; line-height: 1.15; padding-right: 40px; }
+  .meta__numeros { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--pedra); border: 1px solid var(--pedra); }
+  .meta__numeros div { background: var(--marfim-2); padding: 10px 12px; display: grid; gap: 2px; }
+  .meta__numeros span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grafite); }
+  .meta__numeros b { font-size: 18px; font-variant-numeric: tabular-nums; }
+  .meta__numeros .meta__aporte { grid-column: 1 / -1; background: var(--tinta); color: var(--marfim); }
+  .meta__numeros .meta__aporte span { color: var(--champ); }
+  .meta__numeros .meta__aporte b { font-family: var(--serif); font-weight: 400; font-size: 26px; }
+  .meta__barra { height: 6px; background: var(--pedra); border-radius: 3px; overflow: hidden; }
+  .meta__barra i { display: block; height: 100%; width: calc(var(--p, 0) * 100%); background: var(--champ-p); transition: width 1.2s var(--ease); }
+  .meta__porque { font-size: 14px; color: var(--grafite); }
+  .meta__passo { font-size: 14.5px; padding: 12px 14px; background: rgba(203, 178, 122, 0.12); border-left: 2px solid var(--champ); }
+  .meta__passo b { display: block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--champ-p); margin-bottom: 2px; }
+  .meta__simular { font-size: 14px; font-weight: 600; }
+  .pia__balanco:empty { display: none; }
+  .pia__balanco { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; padding: 20px 24px; border: 1px solid var(--pedra); border-radius: var(--raio); background: var(--marfim-2); }
+  .pia__balanco.ok { border-color: var(--champ); background: rgba(203, 178, 122, 0.12); }
+  .pia__balanco b.grande { font-family: var(--serif); font-weight: 400; font-size: 34px; font-variant-numeric: tabular-nums; }
+  .pia__habitos ul, .pia__atencao ul { list-style: none; display: grid; gap: 10px; }
+  .habito { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--pedra); border-radius: var(--raio); background: var(--marfim); cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+  .habito input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--champ-p); flex: none; }
+  .habito:has(input:checked) { background: rgba(203, 178, 122, 0.14); border-color: var(--champ); }
+  .habito:has(input:checked) span { text-decoration: line-through; text-decoration-color: var(--champ-p); color: var(--grafite); }
+  .pia__atencao li { font-size: 15px; padding-left: 18px; position: relative; }
+  .pia__atencao li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 8px; height: 8px; border: 1.5px solid var(--champ-p); transform: rotate(45deg); }
+  @media (max-width: 640px) { .pia__balanco { grid-template-columns: 1fr; gap: 6px; } }
+  @keyframes entra { from { opacity: 0; transform: translateY(16px); } }
+  @media (prefers-reduced-motion: reduce) { .meta { animation: none; } .meta__barra i { transition: none; } }
+  @media print {
+    .cab, .rodape, .abertura, .pia__form, .pia__fim, .ferr__conversa, .secao--clara-2, .atalho-whats { display: none !important; }
+    .meta { break-inside: avoid; }
+  }
+</style>

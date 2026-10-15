@@ -1,6 +1,7 @@
 ---
 import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
 import Campo from '../../components/ferramentas/Campo.astro'
+import Progresso from '../../components/ferramentas/Progresso.astro'
 ---
 <LayoutFerramenta slug="independencia-financeira">
   <Fragment slot="campos">
@@ -21,6 +22,8 @@ import Campo from '../../components/ferramentas/Campo.astro'
       <div class="kpi"><span class="kpi__rotulo">Aporte mensal necessário</span><span class="kpi__valor" id="r-aporte">—</span><span class="kpi__nota" id="r-aporte-nota"></span></div>
       <div class="kpi"><span class="kpi__rotulo">Com o seu aporte atual</span><span class="kpi__valor" id="r-chega">—</span><span class="kpi__nota" id="r-chega-nota"></span></div>
     </div>
+    <Progresso id="indep" rotulo="Do patrimônio necessário, você já tem" />
+    <div><p class="chapeu" style="margin-bottom:10px">Marcos da sua jornada, no ritmo atual</p><ul class="marcos" id="r-marcos"></ul></div>
     <div class="painel-graf"><div id="grafico"></div></div>
     <p class="leitura" id="r-leitura"></p>
     <table class="tabela-ferr">

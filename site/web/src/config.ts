@@ -74,10 +74,16 @@ export type Categoria = keyof typeof CATEGORIAS
 
 /** Ferramentas de planejamento e análise (cálculos no navegador, nada é enviado). */
 export const FERRAMENTAS = [
-  { slug: 'independencia-financeira', nome: 'Independência financeira', pergunta: 'Quanto preciso juntar para viver de renda?', texto: 'Calcula o patrimônio necessário e o aporte mensal para a renda que você quer, em valores de hoje.', icone: 'sol' },
-  { slug: 'juros-compostos', nome: 'Juros compostos', pergunta: 'Quanto meu dinheiro pode virar em décadas?', texto: 'Projeta aportes mensais no tempo e mostra quanto veio do seu bolso e quanto veio dos juros.', icone: 'curva' },
-  { slug: 'custo-das-taxas', nome: 'O custo das taxas', pergunta: 'Quanto uma taxa de 2% ao ano me custa?', texto: 'Compara a mesma carteira com taxas diferentes. A lição de John Bogle, em reais.', icone: 'taxa' },
-  { slug: 'renda-fixa', nome: 'CDB × LCI/LCA', pergunta: 'Qual paga mais depois do imposto?', texto: 'Compara títulos tributados e isentos no mesmo prazo e calcula a taxa equivalente.', icone: 'balanca' },
-  { slug: 'reserva-de-emergencia', nome: 'Reserva de emergência', pergunta: 'De quanto é a minha reserva?', texto: 'Define a meta pelo seu tipo de renda e quanto tempo leva para chegar lá.', icone: 'escudo' },
-  { slug: 'detector-de-golpes', nome: 'Detector de golpes', pergunta: 'Essa proposta é confiável?', texto: 'Dez perguntas que separam investimento de pirâmide. Responda antes de transferir qualquer valor.', icone: 'lupa' }
+  { slug: 'planejador-ia', grupo: 'Planejar', nome: 'Planejador com IA', pergunta: 'Por onde eu começo?', texto: 'Conte seus objetivos com as suas palavras. A IA organiza as prioridades e transforma tudo em metas, valores e hábitos.', icone: 'faisca' },
+  { slug: 'meus-objetivos', grupo: 'Planejar', nome: 'Meus objetivos', pergunta: 'Quando eu realizo o meu objetivo?', texto: 'Viagem, carro, entrada da casa, estudos: quanto guardar por mês e o dia em que você chega lá.', icone: 'alvo' },
+  { slug: 'independencia-financeira', grupo: 'Planejar', nome: 'Independência financeira', pergunta: 'Quanto preciso juntar para viver de renda?', texto: 'Calcula o patrimônio necessário e o aporte mensal para a renda que você quer, em valores de hoje.', icone: 'sol' },
+  { slug: 'juros-compostos', grupo: 'Planejar', nome: 'Juros compostos', pergunta: 'Quanto meu dinheiro pode virar em décadas?', texto: 'Projeta aportes mensais no tempo e mostra quanto veio do seu bolso e quanto veio dos juros.', icone: 'curva' },
+  { slug: 'custo-das-taxas', grupo: 'Comparar', nome: 'O custo das taxas', pergunta: 'Quanto uma taxa de 2% ao ano me custa?', texto: 'Compara a mesma carteira com taxas diferentes. A lição de John Bogle, em reais.', icone: 'taxa' },
+  { slug: 'renda-fixa', grupo: 'Comparar', nome: 'CDB × LCI/LCA', pergunta: 'Qual paga mais depois do imposto?', texto: 'Compara títulos tributados e isentos no mesmo prazo e calcula a taxa equivalente.', icone: 'balanca' },
+  { slug: 'reserva-de-emergencia', grupo: 'Planejar', nome: 'Reserva de emergência', pergunta: 'De quanto é a minha reserva?', texto: 'Define a meta pelo seu tipo de renda e quanto tempo leva para chegar lá.', icone: 'escudo' },
+  { slug: 'financiamento', grupo: 'Decidir', nome: 'Financiamento SAC × Price', pergunta: 'Quanto vou pagar de juros no financiamento?', texto: 'Compara SAC e Price, parcela a parcela, e mostra quanto custa a dívida até o fim.', icone: 'casa' },
+  { slug: 'poupanca-ou-cdi', grupo: 'Comparar', nome: 'Poupança × CDB', pergunta: 'A poupança ainda vale a pena?', texto: 'Compara a regra da poupança com um CDB depois do imposto, no mesmo prazo.', icone: 'cofre' },
+  { slug: 'a-vista-ou-parcelado', grupo: 'Decidir', nome: 'À vista ou parcelado', pergunta: 'Pago à vista com desconto ou parcelo sem juros?', texto: 'Mostra qual sai mais barato considerando o rendimento do dinheiro e o desconto mínimo que compensa.', icone: 'cartao' },
+  { slug: 'poder-de-compra', grupo: 'Decidir', nome: 'Inflação e poder de compra', pergunta: 'Quanto meu dinheiro perde parado?', texto: 'Mostra quanto será preciso no futuro para comprar o mesmo que hoje.', icone: 'termometro' },
+  { slug: 'detector-de-golpes', grupo: 'Proteger', nome: 'Detector de golpes', pergunta: 'Essa proposta é confiável?', texto: 'Dez perguntas que separam investimento de pirâmide. Responda antes de transferir qualquer valor.', icone: 'lupa' }
 ] as const

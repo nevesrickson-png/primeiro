@@ -1,0 +1,9 @@
+---
+interface Props { id: string; rotulo: string }
+const { id, rotulo } = Astro.props
+---
+<div class="prog" data-progresso={id}>
+  <div class="prog__topo"><span class="prog__rotulo">{rotulo}</span><span class="prog__pct" data-pct>0%</span></div>
+  <div class="prog__trilha" aria-hidden="true"><i></i><b style="left:25%"></b><b style="left:50%"></b><b style="left:75%"></b></div>
+  <p class="prog__frase" data-frase></p>
+</div>

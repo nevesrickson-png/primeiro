@@ -77,6 +77,10 @@ const atual = Astro.url.pathname.replace(/\/$/, '') || '/'
     botao.setAttribute('aria-expanded', String(!aberto))
     menu?.classList.toggle('aberto', !aberto)
   })
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
+    botao?.setAttribute('aria-expanded', 'false')
+    menu.classList.remove('aberto')
+  }))
   // Na Home o cabeçalho começa escuro (sobre a abertura) e fica claro ao chegar no conteúdo.
   const abertura = document.querySelector<HTMLElement>('[data-abertura]')
   if (cab && abertura && cab.hasAttribute('data-escuro')) {

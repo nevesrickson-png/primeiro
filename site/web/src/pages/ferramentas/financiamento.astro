@@ -1,0 +1,29 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+---
+<LayoutFerramenta slug="financiamento">
+  <Fragment slot="campos">
+    <Campo nome="bem" rotulo="Valor do imóvel ou veículo" valor="600.000" prefixo="R$" />
+    <Campo nome="entrada" rotulo="Entrada" valor="120.000" prefixo="R$" />
+    <Campo nome="taxa" rotulo="Juros do financiamento" valor="11" sufixo="% ao ano" ajuda="Use o custo efetivo total (CET) da proposta, que inclui seguros e tarifas." faixa={[5, 30, 0.25]} />
+    <Campo nome="meses" rotulo="Prazo" valor="360" sufixo="meses" faixa={[12, 420, 12]} />
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">SAC economiza</span><span class="kpi__valor" id="r-economia">—</span><span class="kpi__nota">em juros, em relação à Price</span></div>
+      <div class="kpi"><span class="kpi__rotulo">1ª parcela SAC</span><span class="kpi__valor" id="r-sac1">—</span><span class="kpi__nota" id="r-sacfim"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Parcela Price</span><span class="kpi__valor" id="r-price">—</span><span class="kpi__nota">fixa até o fim</span></div>
+    </div>
+    <div class="painel-graf"><div id="grafico"></div></div>
+    <table class="tabela-ferr">
+      <thead><tr><th></th><th>SAC</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr><td>Valor financiado</td><td id="t-fin">—</td><td id="t-fin2">—</td></tr>
+        <tr><td>Total de juros</td><td id="t-jsac">—</td><td id="t-jprice">—</td></tr>
+        <tr><td>Total pago</td><td id="t-tsac">—</td><td id="t-tprice">—</td></tr>
+      </tbody>
+    </table>
+    <p class="leitura" id="r-leitura"></p>
+  </Fragment>
+</LayoutFerramenta>

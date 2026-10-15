@@ -109,7 +109,7 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
           <p class="chapeu rv">Ferramentas</p>
           <h2 class="titulo rv" data-d="100">Faça as contas <em>antes</em> de decidir.</h2>
           <p class="apoio rv" data-d="200">Simuladores de planejamento e análise, com a mesma lógica que eu uso com clientes. Gratuitos, sem cadastro, e os cálculos ficam no seu navegador.</p>
-          <a class="link link--sub rv" data-d="300" href="/ferramentas">Ver todas as ferramentas <span class="seta">→</span></a>
+          <a class="link link--sub rv" data-d="300" href="/ferramentas">Ver as {FERRAMENTAS.length} ferramentas <span class="seta">→</span></a>
         </div>
         <figure class="fh__curva" data-curva>
           <svg viewBox="0 0 680 330" role="img" aria-label="Exemplo ilustrativo: R$ 1.000 por mês a 0,5% ao mês. Em 30 anos, R$ 360 mil aportados viram cerca de R$ 1 milhão.">
@@ -128,7 +128,7 @@ const recentes = (fixado ? [fixado, ...artigos.filter((a) => a !== fixado)] : ar
           <figcaption>Exemplo ilustrativo: R$ 1.000 por mês a 0,5% ao mês, sem impostos nem inflação. A linha tracejada é o que saiu do bolso.</figcaption>
         </figure>
       </div>
-      <div class="grade-3 fh__cards">{FERRAMENTAS.map((f) => <CartaoFerramenta f={f} escuro />)}</div>
+      <div class="grade-3 fh__cards">{FERRAMENTAS.slice(0, 6).map((f) => <CartaoFerramenta f={f} escuro />)}</div>
     </div>
   </section>
 

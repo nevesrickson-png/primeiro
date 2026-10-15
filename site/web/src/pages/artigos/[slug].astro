@@ -49,6 +49,7 @@ const cat = artigo ? CATEGORIAS[artigo.data.categoria] : null
   />
 ) : artigo && conteudo && cat && (
   <Base titulo={artigo.data.titulo} descricao={artigo.data.resumo} tipo="article" publicado={artigo.data.data} imagem={artigo.data.capa ?? '/og.png'} semIndice={artigo.data.rascunho}>
+    <div class="leitura-barra" aria-hidden="true"></div>
     <article class="artigo">
       <header class="wrap artigo__cab">
         <a class="chapeu chapeu--filete" href={`/artigos/${artigo.data.categoria}`}>{cat.nome}</a>

@@ -1,0 +1,23 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+---
+<LayoutFerramenta slug="poupanca-ou-cdi">
+  <Fragment slot="campos">
+    <Campo nome="valor" rotulo="Valor" valor="20.000" prefixo="R$" />
+    <Campo nome="meses" rotulo="Prazo" valor="12" sufixo="meses" faixa={[1, 60, 1]} />
+    <Campo nome="selic" rotulo="Selic atual" valor="14,25" sufixo="% ao ano" ajuda="Confira a taxa vigente e ajuste." />
+    <Campo nome="cdi" rotulo="CDI atual" valor="14,15" sufixo="% ao ano" />
+    <Campo nome="tr" rotulo="TR mensal" valor="0,10" sufixo="% ao mês" ajuda="Taxa Referencial divulgada pelo Banco Central." />
+    <Campo nome="pct" rotulo="CDB ou Tesouro pós" valor="100" sufixo="% do CDI" />
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Rende mais</span><span class="kpi__valor" id="r-venc">—</span><span class="kpi__nota" id="r-venc-nota"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Poupança (isenta)</span><span class="kpi__valor" id="r-poup">—</span><span class="kpi__nota" id="r-poup-aa"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">CDB após IR</span><span class="kpi__valor" id="r-cdb">—</span><span class="kpi__nota" id="r-cdb-aa"></span></div>
+    </div>
+    <div class="painel-graf"><div id="grafico"></div></div>
+    <p class="leitura" id="r-leitura"></p>
+  </Fragment>
+</LayoutFerramenta>

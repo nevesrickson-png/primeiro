@@ -33,13 +33,28 @@ Campos `null` em `src/config.ts` (WhatsApp, retrato) simplesmente não aparecem 
 
 ## Ferramentas (simuladores)
 
-Seis simuladores em `/ferramentas`: independência financeira, juros compostos, custo das taxas, CDB × LCI/LCA, reserva de emergência e detector de golpes. Os cálculos rodam no navegador do visitante (nada é enviado), a simulação fica na URL para compartilhar e o botão "Conversar sobre isso" leva ao agendamento com o assunto preenchido.
+Doze ferramentas em `/ferramentas`, em quatro grupos (Planejar, Comparar, Decidir, Proteger): planejador com IA, meus objetivos, independência financeira, juros compostos, custo das taxas, CDB × LCI/LCA, reserva de emergência, SAC × Price, poupança × CDB, à vista × parcelado, poder de compra (inflação) e detector de golpes. Os cálculos rodam no navegador do visitante (nada é enviado), a simulação fica na URL para compartilhar e o botão "Conversar sobre isso" leva ao agendamento com o assunto preenchido.
+
+Quando a pessoa alcança um objetivo, aparece uma celebração (confete nas cores da marca e um cartão de conquista); as metas mostram barra de progresso com marcos de 25/50/75/100%.
 
 - Cálculos: `src/lib/financas.ts` (testes em `testes/`, rode `npm test`).
-- Telas: `src/pages/ferramentas/*.astro`; lógica de cada uma: `src/scripts/ferramentas-paginas.ts`.
+- Telas: `src/pages/ferramentas/*.astro`; lógica de cada uma: `src/scripts/ferramentas-paginas.ts`; celebração: `src/scripts/celebracao.ts`.
 - Perguntas do detector de golpes: `src/lib/golpes.ts`.
 - Lista e textos dos cartões: `FERRAMENTAS` em `src/config.ts`.
 - Regras de IR da renda fixa (tabela regressiva) estão em `aliquotaIR`; revise se a lei mudar.
+
+### Planejador com IA
+
+A pessoa descreve os objetivos com as próprias palavras e recebe um plano: metas em ordem de prioridade, quanto guardar por mês em cada uma, o primeiro passo de cada meta, um checklist de hábitos (salvo no navegador, com celebração ao completar) e o balanço "cabe ou não cabe no seu mês". A IA só organiza e prioriza; os valores mensais são recalculados no navegador com `financas.ts`.
+
+- Página: `src/pages/ferramentas/planejador-ia.astro` + `src/scripts/planejador.ts`.
+- Servidor: `functions/api/planejar.ts` (Cloudflare Pages Function, SDK oficial da Anthropic, modelo `claude-opus-5-5` com resposta em JSON estruturado). Se o modelo recusar um pedido, a API tenta de novo sozinha num modelo reserva (`fallbacks: "default"`).
+- Proteções: só aceita pedidos do próprio site, campo-armadilha, texto limitado a 1.500 caracteres, limite de 5 planos por IP por hora (e teto diário com KV), mensagens de erro genéricas, nada é gravado em log.
+- Sem a chave configurada (ou rodando `npm run dev`), a página continua funcionando com o **plano de exemplo**.
+
+Para ativar no Cloudflare Pages: **Settings → Variables and Secrets** → adicione `ANTHROPIC_API_KEY` como *Secret* (a chave vem de console.anthropic.com). Opcional: crie um KV namespace e ligue-o ao projeto com o nome `LIMITES` (**Settings → Bindings**) para o limite valer em todos os servidores. No console da Anthropic, defina um **limite de gasto mensal** para não haver surpresa. Para usar um modelo mais barato, defina `CLAUDE_MODELO`.
+
+Para testar a IA no computador: `npm run build`, crie `site/web/.dev.vars` com `ANTHROPIC_API_KEY=...` (o arquivo não vai para o Git) e rode `npx wrangler pages dev dist`.
 
 ## Publicar artigos (painel)
 
@@ -58,6 +73,14 @@ Os quatro formulários (agendar conversa, carta mensal, lista do livro, convite 
 - Proteções: aceite LGPD obrigatório, campo-armadilha contra robôs, limites de tamanho e neutralização de fórmulas.
 - Depois de atualizar o `Code.gs` no Apps Script, publique uma **nova versão** do App da Web (Implantar → Gerenciar implantações → Editar → Nova versão). A URL continua a mesma.
 - A URL do App da Web vai na variável `PUBLIC_FORM_ENDPOINT`. Sem ela, os formulários avisam "ainda não conectado" em vez de perder o contato.
+
+## Testar sem complicação
+
+1. **No celular ou computador, sem instalar nada:** com o Cloudflare Pages ligado ao GitHub (passo a passo abaixo), cada envio ao branch `claude/wonderful-bell-2bt1o5` gera um endereço de prévia (`https://claude-wonderful-bell-2bt1o5.<projeto>.pages.dev`; o link também aparece no painel da Cloudflare e no GitHub). É só abrir o link. O branch `main` vira o site oficial.
+2. **No computador:** `cd site/web && npm install && npm run dev` e abra `http://localhost:4321`.
+3. **Ferramentas:** cada simulação fica no endereço; copie o link para mostrar a alguém exatamente o que você viu.
+
+Comparativo das 10 hospedagens e do domínio: `site/HOSPEDAGEM.md`. Revisão de segurança: `site/SEGURANCA.md`.
 
 ## Colocar no ar
 
@@ -78,7 +101,7 @@ Plano gratuito com builds automáticos a partir do GitHub (inclusive repositóri
 4. Salvar e implantar. Em ~2 minutos o site fica no ar em `https://<nome-do-projeto>.pages.dev` para testar.
 5. Domínio: em **Domínios personalizados**, adicione `ricksonmessias.com`. Se comprar o domínio na própria Cloudflare (Registrar, preço de custo), a ligação é automática; se comprar em outro lugar, aponte os DNS para a Cloudflare.
 
-Cada mudança enviada ao branch (inclusive pelo painel de artigos) publica o site sozinha. Cabeçalhos de segurança e cache: `public/_headers`.
+Cada mudança enviada ao branch (inclusive pelo painel de artigos) publica o site sozinha. Cabeçalhos de segurança e cache: `public/_headers`. O Planejador com IA só funciona aqui (Cloudflare), porque precisa de uma função no servidor.
 
 ### Alternativa: Hostinger (pago)
 
@@ -89,6 +112,8 @@ Se preferir a Hostinger, o plano mais simples basta (não precisa do plano com N
 3. Rode o workflow **Site** (aba Actions). Ative o SSL no hPanel; o `.htaccess` força HTTPS e usa a página 404 da marca.
 
 Se o FTP já abrir dentro de `public_html`, troque `server-dir` no workflow para `./`.
+
+Na Hostinger o Planejador com IA fica no modo exemplo (a hospedagem compartilhada não roda a função `functions/api/planejar.ts`).
 
 ## Antes de publicar (pendências)
 

@@ -24,7 +24,7 @@ async function enviar(form: HTMLFormElement) {
   if (!dados.lgpd) return status(form, 'erro', 'Para enviar, marque a autorização de uso dos dados.')
 
   if (!ENDPOINT) {
-    console.warn('PUBLIC_FORM_ENDPOINT não configurado; dados não enviados:', dados)
+    console.warn('PUBLIC_FORM_ENDPOINT não configurado; dados não enviados.')
     return status(form, 'erro', 'Formulário ainda não conectado. Escreva para contato@ricksonmessias.com.')
   }
 

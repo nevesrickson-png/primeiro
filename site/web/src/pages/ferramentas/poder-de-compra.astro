@@ -1,0 +1,20 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+---
+<LayoutFerramenta slug="poder-de-compra">
+  <Fragment slot="campos">
+    <Campo nome="valor" rotulo="Valor de hoje" valor="10.000" prefixo="R$" />
+    <Campo nome="inflacao" rotulo="Inflação média" valor="4,5" sufixo="% ao ano" faixa={[1, 15, 0.5]} />
+    <Campo nome="anos" rotulo="Daqui a quantos anos" valor="10" sufixo="anos" faixa={[1, 40, 1]} />
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Para comprar o mesmo</span><span class="kpi__valor" id="r-futuro">—</span><span class="kpi__nota" id="r-futuro-nota"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Se ficar parado</span><span class="kpi__valor" id="r-hoje">—</span><span class="kpi__nota">é o que ele compra, em valores de hoje</span></div>
+      <div class="kpi"><span class="kpi__rotulo">Perda de poder de compra</span><span class="kpi__valor" id="r-perda">—</span></div>
+    </div>
+    <div class="painel-graf"><div id="grafico"></div></div>
+    <p class="leitura" id="r-leitura"></p>
+  </Fragment>
+</LayoutFerramenta>

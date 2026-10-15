@@ -58,6 +58,7 @@ const pessoa = {
     <meta property="og:image" content={imagemAbs} />
     <meta name="twitter:card" content="summary_large_image" />
     {publicado && <meta property="article:published_time" content={publicado.toISOString()} />}
+    {/* O hash deste script está na CSP de public/_headers e public/.htaccess: se mudar o conteúdo, atualize lá. */}
     <script is:inline>document.documentElement.classList.add('js')</script>
     <script type="application/ld+json" set:html={JSON.stringify(pessoa)} />
   </head>

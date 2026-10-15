@@ -3,18 +3,32 @@ import Base from '../../layouts/Base.astro'
 import AberturaPagina from '../../components/AberturaPagina.astro'
 import CartaoFerramenta from '../../components/ferramentas/CartaoFerramenta.astro'
 import { FERRAMENTAS } from '../../config'
+const GRUPOS = [
+  ['Planejar', 'Transformar objetivos em números e números em hábito.'],
+  ['Comparar', 'Ver o que sobra de verdade depois de taxas e impostos.'],
+  ['Decidir', 'Fazer as contas antes de comprar, financiar ou deixar parado.'],
+  ['Proteger', 'Reconhecer a promessa que não fecha.']
+]
 ---
 <Base titulo="Ferramentas de planejamento" descricao="Simuladores gratuitos de independência financeira, juros compostos, custo das taxas, CDB × LCI/LCA, reserva de emergência e detector de golpes.">
   <AberturaPagina chapeu="Ferramentas" titulo="Faça as contas <em>antes</em> de decidir." apoio="Simuladores de planejamento e análise, com a mesma lógica que eu uso com clientes. Gratuitos, sem cadastro, e os cálculos ficam no seu navegador." />
   <section class="secao">
     <div class="wrap">
-      <div class="grade-3 hub">{FERRAMENTAS.map((f) => <CartaoFerramenta f={f} />)}</div>
+      {GRUPOS.map(([g, desc]) => (
+        <div class="hub__grupo">
+          <div class="hub__cab"><p class="chapeu">{g}</p><p class="hub__desc">{desc}</p></div>
+          <div class="grade-3 hub">{FERRAMENTAS.filter((f) => f.grupo === g).map((f) => <CartaoFerramenta f={f} />)}</div>
+        </div>
+      ))}
       <p class="hub__nota">Simulações educativas, com resultados hipotéticos. Não constituem recomendação de investimento.</p>
     </div>
   </section>
 </Base>
 <style>
   .hub { gap: 20px; }
+  .hub__grupo + .hub__grupo { margin-top: 64px; }
+  .hub__cab { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; padding-bottom: 16px; margin-bottom: 24px; border-bottom: 2px solid var(--tinta); }
+  .hub__desc { font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--grafite); }
   .hub__nota { margin-top: 32px; font-size: 13px; color: var(--grafite); }
   @media (max-width: 960px) { .hub { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) { .hub { grid-template-columns: 1fr; } }

@@ -1,0 +1,28 @@
+---
+import LayoutFerramenta from '../../components/ferramentas/LayoutFerramenta.astro'
+import Campo from '../../components/ferramentas/Campo.astro'
+---
+<LayoutFerramenta slug="a-vista-ou-parcelado">
+  <Fragment slot="campos">
+    <Campo nome="preco" rotulo="Preço cheio" valor="12.000" prefixo="R$" />
+    <Campo nome="desconto" rotulo="Desconto para pagar à vista" valor="5" sufixo="%" faixa={[0, 30, 0.5]} />
+    <Campo nome="parcelas" rotulo="Parcelas sem juros" valor="10" sufixo="vezes" faixa={[2, 24, 1]} />
+    <Campo nome="rend" rotulo="Rendimento líquido do seu dinheiro" valor="10" sufixo="% ao ano" ajuda="Já descontado o imposto. Ex.: 10% ao ano." />
+    <label class="opcoes"><span style="display:flex;gap:10px;align-items:center;font-size:15px;padding:12px 14px;border:1px solid var(--pedra);background:var(--marfim-2)"><input type="checkbox" name="noato" /> A primeira parcela é paga na compra</span></label>
+  </Fragment>
+  <Fragment slot="resultado">
+    <div class="kpis">
+      <div class="kpi kpi--destaque"><span class="kpi__rotulo">Melhor opção</span><span class="kpi__valor" id="r-melhor">—</span><span class="kpi__nota" id="r-melhor-nota"></span></div>
+      <div class="kpi"><span class="kpi__rotulo">Desconto que empata</span><span class="kpi__valor" id="r-empate">—</span><span class="kpi__nota">acima disso, pague à vista</span></div>
+    </div>
+    <table class="tabela-ferr">
+      <thead><tr><th></th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Pagando à vista</td><td id="t-vista">—</td></tr>
+        <tr><td>Parcelas</td><td id="t-parcela">—</td></tr>
+        <tr><td>Custo real do parcelado (valor de hoje)</td><td id="t-vp">—</td></tr>
+      </tbody>
+    </table>
+    <p class="leitura" id="r-leitura"></p>
+  </Fragment>
+</LayoutFerramenta>

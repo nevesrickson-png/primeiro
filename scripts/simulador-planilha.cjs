@@ -68,6 +68,7 @@ const props = {}
 const contexto = vm.createContext({
   SpreadsheetApp: { getActiveSpreadsheet: () => planilha, flush: () => {}, getUi: () => { throw new Error('sem UI') } },
   LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
+  CacheService: (() => { const m = new Map(); return { getScriptCache: () => ({ get: (k) => { const e = m.get(k); return e && e.ate > Date.now() ? e.v : null }, put: (k, v, s) => m.set(k, { v, ate: Date.now() + (s || 600) * 1000 }) }) } })(),
   PropertiesService: { getScriptProperties: () => ({ getProperty: (k) => props[k] ?? null, setProperty: (k, v) => { props[k] = v } }) },
   Utilities: { getUuid: () => crypto.randomUUID() },
   ContentService: {
