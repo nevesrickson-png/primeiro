@@ -1,0 +1,29 @@
+---
+// Painel de indicadores e tabelas de cotações (preenchidos pelo script mercados.ts).
+import { ATIVOS, TAXAS } from '../../lib/mercados'
+interface Props { tabelas?: boolean }
+const { tabelas = true } = Astro.props
+const principais = ['IBOV', 'IFIX', 'USDBRL', 'EURBRL', 'SPX'].map((id) => ATIVOS.find((a) => a.id === id)!)
+const acoes = ATIVOS.filter((a) => a.tipo === 'acao')
+const fiis = ATIVOS.filter((a) => a.tipo === 'fii')
+---
+<aside class="ind" aria-label="Indicadores do mercado">
+  <p class="ind__titulo">Indicadores</p>
+  <dl class="ind__grade">
+    {TAXAS.map((t) => (<div><dt>{t.rotulo}</dt><dd data-taxa-valor={t.id}>—</dd></div>))}
+    {principais.map((a) => (<div><dt>{a.rotulo}</dt><dd><span data-cot-preco={a.id}>—</span> <small data-cot-var={a.id}></small></dd></div>))}
+  </dl>
+  {tabelas && (
+    <>
+      <p class="ind__titulo">Ações em destaque</p>
+      <table class="ind__tab"><caption class="vh">Ações em destaque</caption><tbody>
+        {acoes.map((a) => (<tr><th scope="row"><b>{a.id}</b><span>{a.rotulo}</span></th><td data-cot-preco={a.id}>—</td><td data-cot-var={a.id}></td></tr>))}
+      </tbody></table>
+      <p class="ind__titulo">Fundos imobiliários</p>
+      <table class="ind__tab"><caption class="vh">Fundos imobiliários</caption><tbody>
+        {fiis.map((a) => (<tr><th scope="row"><b>{a.id}</b><span>{a.rotulo}</span></th><td data-cot-preco={a.id}>—</td><td data-cot-var={a.id}></td></tr>))}
+      </tbody></table>
+    </>
+  )}
+  <p class="ind__fonte" data-fonte>Dados com atraso. Fontes: Banco Central e Yahoo Finance.</p>
+</aside>

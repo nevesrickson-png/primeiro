@@ -1,0 +1,195 @@
+/* ---------- Seção Mercados: jornal financeiro dentro da identidade da marca ---------- */
+.mercados { --sobe: #23774a; --cai: #b23a2e; --regra: #c9c4b8; background: var(--marfim); }
+.mercados .wrap { position: relative; }
+
+/* Faixa de cotações (topo da página) */
+.faixa { position: relative; display: flex; align-items: center; background: var(--tinta); color: var(--marfim); height: 38px; font-size: 13px; border-bottom: 1px solid rgba(203, 178, 122, 0.35); overflow: hidden; }
+.faixa__janela { flex: 1; overflow: hidden; height: 100%; mask-image: linear-gradient(90deg, transparent, #000 32px, #000 calc(100% - 32px), transparent); }
+.faixa__lista { list-style: none; display: flex; align-items: center; height: 100%; width: max-content; padding: 0 16px; }
+.faixa__lista.rolando { animation: faixa var(--duracao, 60s) linear infinite; }
+.faixa:hover .faixa__lista, .faixa:focus-within .faixa__lista { animation-play-state: paused; }
+@keyframes faixa { to { transform: translateX(-50%); } }
+.faixa__item { display: inline-flex; align-items: baseline; gap: 8px; padding: 0 18px; border-right: 1px solid rgba(245, 241, 232, 0.12); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.faixa__nome { color: var(--champ); font-weight: 600; letter-spacing: 0.02em; }
+.faixa__preco { font-weight: 600; }
+.faixa__var { font-size: 12px; color: var(--aco-claro); }
+.faixa__var--sobe { color: #6fd39a; }
+.faixa__var--cai { color: #ff9384; }
+.faixa__info { flex: none; padding: 0 16px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--aco-claro); border-left: 1px solid rgba(245, 241, 232, 0.12); height: 100%; display: flex; align-items: center; }
+.faixa--erro .faixa__janela { opacity: 0.5; }
+@media (prefers-reduced-motion: reduce) { .faixa__janela { overflow-x: auto; mask-image: none; } }
+@media (max-width: 760px) { .faixa__info { display: none; } }
+
+/* Cabeçalho de jornal */
+.mh { padding: 22px 0 0; border-bottom: 1px solid var(--tinta); background: var(--marfim); }
+.mh__topo { display: flex; justify-content: space-between; gap: 16px; font-size: 12px; color: var(--grafite); letter-spacing: 0.04em; padding-bottom: 12px; border-bottom: 1px solid var(--regra); }
+.mh__topo [data-hoje]::first-letter { text-transform: uppercase; }
+.mh__rss { color: var(--champ-p); font-weight: 600; }
+.mh__nome { font-family: var(--serif); font-weight: 400; text-align: center; font-size: clamp(44px, 7vw, 92px); line-height: 1; letter-spacing: -0.01em; padding: 18px 0 16px; border-bottom: 3px double var(--tinta); }
+.mh__nome a { color: var(--tinta); }
+.mh__nav ul { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 28px; padding: 12px 0; }
+.mh__nav a { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grafite); padding: 4px 0; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+.mh__nav a:hover, .mh__nav a[aria-current='page'] { color: var(--tinta); border-bottom-color: var(--champ); }
+@media (max-width: 760px) {
+  .mh__por { display: none; }
+  .mh__nav ul { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; gap: 22px; scrollbar-width: none; }
+  .mh__nav a { white-space: nowrap; }
+}
+
+/* Grade de capa: últimas | manchete | indicadores */
+.m-capa { display: grid; grid-template-columns: 240px minmax(0, 1fr) 300px; gap: 0; padding: 32px 0 48px; }
+.m-capa > * { padding: 0 28px; min-width: 0; }
+.m-capa > *:first-child { padding-left: 0; }
+.m-capa > *:last-child { padding-right: 0; }
+.m-capa > * + * { border-left: 1px solid var(--regra); }
+.m-col__titulo { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tinta); padding-bottom: 10px; margin-bottom: 4px; border-bottom: 2px solid var(--tinta); }
+.m-secundarias { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--regra); }
+@media (max-width: 1080px) {
+  .m-capa { grid-template-columns: minmax(0, 1fr) 300px; }
+  .m-ultimas { grid-column: 1 / -1; order: 3; padding: 32px 0 0 !important; border-left: 0 !important; }
+}
+@media (max-width: 760px) {
+  .m-capa { grid-template-columns: 1fr; }
+  .m-capa > * { padding: 0 !important; border-left: 0 !important; }
+  .m-capa > * + * { margin-top: 32px; }
+  .m-secundarias { grid-template-columns: 1fr; }
+}
+
+/* Cartões de notícia */
+.cn a { display: grid; gap: 8px; color: inherit; }
+.cn__chapeu { display: flex; gap: 10px; align-items: center; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--champ-p); }
+.cn__urgente { color: #fff; background: var(--cai); padding: 2px 7px; letter-spacing: 0.1em; }
+.cn__rascunho { color: #9a3b2e; border: 1px solid currentColor; padding: 0 5px; }
+.cn__titulo { font-family: var(--serif); font-weight: 400; font-size: 21px; line-height: 1.22; transition: color 0.2s; }
+.cn a:hover .cn__titulo { color: var(--champ-p); }
+.cn__fina { color: var(--grafite); font-size: 15px; line-height: 1.5; }
+.cn__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 12px; color: var(--grafite); }
+.cn__tickers { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.cn--manchete .cn__titulo { font-size: clamp(30px, 3.4vw, 46px); line-height: 1.08; letter-spacing: -0.005em; }
+.cn--manchete .cn__fina { font-family: var(--serif); font-style: italic; font-size: 20px; line-height: 1.45; color: #3d434b; }
+.cn--manchete a { gap: 12px; }
+.cn--compacto .cn__titulo { font-size: 18px; }
+.cn--linha a { grid-template-columns: 52px 1fr; column-gap: 12px; row-gap: 2px; padding: 14px 0; border-bottom: 1px solid var(--regra); }
+.cn--linha .cn__meta { grid-column: 1; grid-row: 1 / span 2; align-self: start; font-weight: 700; color: var(--tinta); font-variant-numeric: tabular-nums; }
+.cn--linha .cn__meta .cn__tickers { display: none; }
+.cn--linha .cn__chapeu { grid-column: 2; font-size: 10px; }
+.cn--linha .cn__titulo { grid-column: 2; font-family: var(--sans); font-weight: 600; font-size: 15px; line-height: 1.35; }
+
+/* Códigos de ativos citados (preço ao vivo ao passar o mouse e ao lado) */
+[data-chip] { display: inline-flex; gap: 5px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; padding: 2px 7px; border: 1px solid var(--regra); border-radius: 2px; color: var(--tinta); font-variant-numeric: tabular-nums; }
+[data-chip][data-valor]:not([data-valor=''])::after { content: attr(data-valor); font-weight: 600; color: var(--grafite); }
+[data-chip].sobe::after { color: var(--sobe) !important; }
+[data-chip].cai::after { color: var(--cai) !important; }
+
+/* Capa gerada */
+.capa-n { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--noite); margin: 0; }
+.capa-n img { width: 100%; height: 100%; object-fit: cover; }
+.capa-n figcaption { position: absolute; right: 8px; bottom: 6px; font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6); }
+.capa-n--arte { background: radial-gradient(120% 120% at 90% 0%, var(--noite), var(--tinta) 70%); }
+.capa-n--arte svg { position: absolute; inset: 22% 0 0; width: 100%; height: 78%; }
+.capa-n__grade line { stroke: rgba(245, 241, 232, 0.08); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.capa-n__area { fill: rgba(203, 178, 122, 0.12); stroke: none; }
+.capa-n__linha { fill: none; stroke: var(--champ); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.capa-n__rotulo { position: absolute; left: 16px; top: 14px; font-family: var(--serif); font-size: 22px; color: var(--marfim); letter-spacing: 0.02em; }
+.capa-n--grande .capa-n__rotulo { font-size: 34px; left: 22px; top: 18px; }
+.capa-n--economia { background: radial-gradient(120% 120% at 90% 0%, #23405f, var(--tinta) 70%); }
+.capa-n--fiis { background: radial-gradient(120% 120% at 90% 0%, #3a3424, var(--tinta) 72%); }
+.capa-n--internacional { background: radial-gradient(120% 120% at 90% 0%, #1f3a3a, var(--tinta) 72%); }
+.capa-n--empresas { background: radial-gradient(120% 120% at 90% 0%, #2c2f45, var(--tinta) 72%); }
+
+/* Indicadores */
+.ind { display: grid; gap: 14px; align-content: start; }
+.ind__titulo { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 2px solid var(--tinta); margin-top: 8px; }
+.ind__titulo:first-child { margin-top: 0; }
+.ind__grade { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--regra); border: 1px solid var(--regra); }
+.ind__grade div { background: var(--marfim); padding: 10px 12px; display: grid; gap: 2px; }
+.ind__grade dt { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--grafite); }
+.ind__grade dd { font-family: var(--serif); font-size: 19px; font-variant-numeric: lining-nums tabular-nums; }
+.ind__grade dd small { display: block; font-family: var(--sans); font-size: 11px; font-weight: 600; }
+.ind__tab { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.ind__tab th, .ind__tab td { padding: 7px 0; border-bottom: 1px solid var(--regra); text-align: left; font-weight: 400; }
+.ind__tab th b { display: block; font-weight: 700; font-size: 13px; }
+.ind__tab th span { font-size: 11px; color: var(--grafite); }
+.ind__tab td { text-align: right; white-space: nowrap; padding-left: 10px; }
+.var { font-weight: 600; }
+.var--sobe { color: var(--sobe); }
+.var--cai { color: var(--cai); }
+.var--estavel { color: var(--grafite); }
+.ind__fonte { font-size: 11px; color: var(--grafite); }
+
+/* Seções por editoria */
+.m-secao { padding: 40px 0; border-top: 1px solid var(--tinta); }
+.m-secao__cab { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 24px; }
+.m-secao__cab h2 { font-family: var(--serif); font-weight: 400; font-size: 30px; }
+.m-secao__cab p { color: var(--grafite); font-size: 14px; }
+.m-secao__mais { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--champ-p); white-space: nowrap; }
+.m-grade { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 0; }
+.m-grade > * { padding: 0 24px; }
+.m-grade > *:first-child { padding-left: 0; }
+.m-grade > *:last-child { padding-right: 0; }
+.m-grade > * + * { border-left: 1px solid var(--regra); }
+.m-grade__lista > * + * { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--regra); }
+@media (max-width: 900px) {
+  .m-grade { grid-template-columns: 1fr; }
+  .m-grade > * { padding: 0 !important; border-left: 0 !important; }
+  .m-grade > * + * { margin-top: 24px; padding-top: 24px !important; border-top: 1px solid var(--regra); }
+}
+
+/* Faixa de ferramentas e contato */
+.m-ferr { background: var(--tinta); color: var(--marfim); padding: 56px 0; }
+.m-ferr__in { display: grid; grid-template-columns: 1fr 1.6fr; gap: 48px; align-items: center; }
+.m-ferr h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3vw, 40px); line-height: 1.15; }
+.m-ferr p { color: var(--aco-claro); margin-top: 12px; }
+.m-ferr__lista { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(245, 241, 232, 0.12); border: 1px solid rgba(245, 241, 232, 0.12); }
+.m-ferr__lista a { display: grid; gap: 4px; padding: 18px 20px; background: var(--tinta); color: var(--marfim); transition: background 0.2s; }
+.m-ferr__lista a:hover { background: var(--noite); }
+.m-ferr__lista b { font-family: var(--serif); font-weight: 400; font-size: 19px; }
+.m-ferr__lista span { font-size: 13px; color: var(--aco-claro); }
+.m-ferr .acoes { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
+@media (max-width: 900px) { .m-ferr__in { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .m-ferr__lista { grid-template-columns: 1fr; } }
+
+.m-vazio { padding-top: 40px; padding-bottom: 40px; text-align: left; }
+.m-vazio h2 { font-family: var(--serif); font-weight: 400; font-size: 32px; }
+.m-vazio p { color: var(--grafite); margin-top: 10px; max-width: 520px; }
+.m-aviso { font-size: 12px; color: var(--grafite); padding: 28px 0 40px; border-top: 1px solid var(--regra); margin-top: 8px; max-width: 900px; }
+
+/* Página da notícia */
+.nt { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; padding: 40px 0 56px; }
+.nt__cab { display: grid; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid var(--regra); }
+.nt__titulo { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 4.2vw, 54px); line-height: 1.08; letter-spacing: -0.005em; }
+.nt__fina { font-family: var(--serif); font-style: italic; font-size: clamp(19px, 2vw, 23px); line-height: 1.45; color: #3d434b; }
+.nt__autor { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; font-size: 13px; color: var(--grafite); }
+.nt__autor b { color: var(--tinta); }
+.nt__ia { display: inline-flex; gap: 6px; align-items: center; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--champ-p); border: 1px solid var(--champ); padding: 2px 8px; }
+.nt__tickers { display: flex; flex-wrap: wrap; gap: 8px; }
+.nt__tickers [data-chip] { font-size: 12px; padding: 4px 9px; }
+.nt__capa { margin: 24px 0 8px; }
+.nt__corpo { max-width: var(--leitura); font-size: 18.5px; line-height: 1.75; color: #232c38; padding-top: 16px; }
+.nt__corpo > * + * { margin-top: 1.1em; }
+.nt__corpo h2 { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.2; margin-top: 1.7em; color: var(--tinta); }
+.nt__corpo h3 { font-family: var(--serif); font-weight: 500; font-size: 22px; margin-top: 1.4em; color: var(--tinta); }
+.nt__corpo a { color: var(--champ-p); text-decoration: underline; text-underline-offset: 3px; }
+.nt__corpo blockquote { border-left: 2px solid var(--champ); padding-left: 20px; color: var(--grafite); font-size: 16px; }
+.nt__corpo ul, .nt__corpo ol { padding-left: 1.3em; }
+.nt__corpo li + li { margin-top: 0.4em; }
+.nt__corpo strong { color: var(--tinta); }
+.nt__corpo img { margin: 1.4em 0; }
+.nt__corpo table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+.nt__corpo th, .nt__corpo td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--regra); }
+.nt__corpo th { border-bottom: 2px solid var(--tinta); }
+.nt__fontes { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--regra); font-size: 14px; }
+.nt__fontes ul { list-style: none; margin-top: 8px; display: grid; gap: 6px; }
+.nt__fontes a { color: var(--champ-p); text-decoration: underline; text-underline-offset: 3px; }
+.nt__compartilhar { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; font-size: 13px; }
+.nt__compartilhar a, .nt__compartilhar button { border: 1px solid var(--regra); padding: 7px 12px; background: none; color: var(--tinta); font: inherit; cursor: pointer; }
+.nt__compartilhar a:hover, .nt__compartilhar button:hover { border-color: var(--champ); }
+.nt__cta { margin-top: 36px; padding: 26px 28px; background: var(--tinta); color: var(--marfim); display: grid; gap: 12px; }
+.nt__cta b { font-family: var(--serif); font-weight: 400; font-size: 24px; }
+.nt__cta p { color: var(--aco-claro); font-size: 15px; }
+.nt__lado { display: grid; gap: 32px; align-content: start; position: sticky; top: calc(var(--cab-altura) + 20px); }
+@media (max-width: 960px) {
+  .nt { grid-template-columns: 1fr; gap: 40px; }
+  .nt__lado { position: static; }
+}
+@media (max-width: 640px) { .nt__corpo { font-size: 17.5px; } }

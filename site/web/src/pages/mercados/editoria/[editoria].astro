@@ -1,0 +1,37 @@
+---
+import Mercados from '../../../layouts/Mercados.astro'
+import CartaoNoticia from '../../../components/mercados/CartaoNoticia.astro'
+import Indicadores from '../../../components/mercados/Indicadores.astro'
+import { EDITORIAS, LISTA_EDITORIAS, type Editoria } from '../../../lib/mercados'
+import { noticiasPublicadas } from '../../../lib/noticias'
+
+export function getStaticPaths() {
+  return LISTA_EDITORIAS.map((editoria) => ({ params: { editoria } }))
+}
+const editoria = Astro.params.editoria as Editoria
+const info = EDITORIAS[editoria]
+const lista = await noticiasPublicadas(editoria)
+const [primeira, ...demais] = lista
+---
+<Mercados titulo={`${info.nome} · Mercados`} descricao={`${info.nome}: ${info.descricao}`} atual={editoria}>
+  <div class="wrap nt">
+    <div>
+      <div class="m-secao__cab" style="margin-bottom:28px">
+        <div><h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.6vw,44px)">{info.nome}</h2><p>{info.descricao}</p></div>
+      </div>
+      {primeira ? (
+        <>
+          <CartaoNoticia n={primeira} variante="manchete" nivel={3} />
+          <div class="m-lista-ed">{demais.map((n) => <CartaoNoticia n={n} variante="compacto" />)}</div>
+        </>
+      ) : (
+        <div class="m-vazio"><h2>Ainda não há notícias nesta editoria.</h2><p>Volte em breve ou veja os <a class="link" href="/mercados">destaques do dia</a>.</p></div>
+      )}
+    </div>
+    <div class="nt__lado"><Indicadores /></div>
+  </div>
+</Mercados>
+<style>
+  .m-lista-ed { margin-top: 32px; border-top: 2px solid var(--tinta); }
+  .m-lista-ed > :global(*) { padding: 20px 0; border-bottom: 1px solid var(--regra); }
+</style>

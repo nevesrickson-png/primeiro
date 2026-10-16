@@ -1,0 +1,74 @@
+---
+import Mercados from '../../layouts/Mercados.astro'
+import CartaoNoticia from '../../components/mercados/CartaoNoticia.astro'
+import Indicadores from '../../components/mercados/Indicadores.astro'
+import CartaMensal from '../../components/CartaMensal.astro'
+import { EDITORIAS, LISTA_EDITORIAS } from '../../lib/mercados'
+import { noticiasPublicadas } from '../../lib/noticias'
+import { FERRAMENTAS } from '../../config'
+
+const todas = await noticiasPublicadas()
+const manchete = todas.find((n) => n.data.destaque) ?? todas[0]
+const secundarias = todas.filter((n) => n !== manchete).slice(0, 2)
+const naCapa = new Set([manchete, ...secundarias].filter(Boolean).map((n) => n!.id))
+const ultimas = todas.slice(0, 8)
+const secoes = LISTA_EDITORIAS.map((e) => ({ e, itens: todas.filter((n) => n.data.editoria === e && !naCapa.has(n.id)).slice(0, 5) })).filter((s) => s.itens.length)
+const ferramentas = ['planejador-ia', 'renda-fixa', 'poupanca-ou-cdi', 'juros-compostos'].map((s) => FERRAMENTAS.find((f) => f.slug === s)!)
+---
+<Mercados titulo="Mercados" descricao="Notícias de mercado, economia, empresas e fundos imobiliários, com cotações e indicadores do dia.">
+  <div class="wrap">
+    {manchete ? (
+      <section class="m-capa" aria-label="Destaques">
+        <div class="m-ultimas">
+          <h2 class="m-col__titulo">Últimas</h2>
+          {ultimas.map((n) => <CartaoNoticia n={n} variante="linha" />)}
+        </div>
+        <div>
+          <CartaoNoticia n={manchete} variante="manchete" nivel={2} />
+          {secundarias.length > 0 && <div class="m-secundarias">{secundarias.map((n) => <CartaoNoticia n={n} variante="padrao" />)}</div>}
+        </div>
+        <Indicadores />
+      </section>
+    ) : (
+      <section class="m-capa" aria-label="Destaques">
+        <div class="m-ultimas"><h2 class="m-col__titulo">Últimas</h2><p class="cn__fina" style="padding-top:14px">As primeiras notícias chegam em breve.</p></div>
+        <div class="m-vazio">
+          <p class="cn__chapeu">Em preparação</p>
+          <h2>A cobertura de mercado começa em breve.</h2>
+          <p>Notícias de bolsa, economia, empresas e fundos imobiliários, com fonte e data, explicadas para quem investe pensando no longo prazo. Enquanto isso, acompanhe as cotações e os indicadores ao lado.</p>
+        </div>
+        <Indicadores />
+      </section>
+    )}
+  </div>
+
+  {secoes.map(({ e, itens }) => (
+    <section class="wrap m-secao" aria-labelledby={`sec-${e}`}>
+      <div class="m-secao__cab">
+        <div><h2 id={`sec-${e}`}>{EDITORIAS[e].nome}</h2><p>{EDITORIAS[e].descricao}</p></div>
+        <a class="m-secao__mais" href={`/mercados/editoria/${e}`}>Ver tudo →</a>
+      </div>
+      <div class="m-grade">
+        <CartaoNoticia n={itens[0]} variante="padrao" />
+        {itens[1] && <div class="m-grade__lista">{itens.slice(1, 3).map((n) => <CartaoNoticia n={n} variante="compacto" />)}</div>}
+        {itens[3] && <div class="m-grade__lista">{itens.slice(3, 5).map((n) => <CartaoNoticia n={n} variante="compacto" />)}</div>}
+      </div>
+    </section>
+  ))}
+
+  <section class="m-ferr" aria-labelledby="m-ferr-t">
+    <div class="wrap m-ferr__in">
+      <div>
+        <p class="chapeu">Da notícia à decisão</p>
+        <h2 id="m-ferr-t">Leu a notícia? Faça as contas para o seu caso.</h2>
+        <p>Simuladores gratuitos para entender o efeito dos juros, da inflação e das taxas no seu dinheiro. E, quando quiser, uma conversa com quem acompanha o mercado todos os dias.</p>
+        <div class="acoes"><a class="btn btn--champ" href="/assessoria?assunto=Mercados#agendar">Falar com um assessor <span class="seta">→</span></a><a class="btn btn--linha-clara" href="/ferramentas">Todas as ferramentas</a></div>
+      </div>
+      <div class="m-ferr__lista">
+        {ferramentas.map((f) => (<a href={`/ferramentas/${f.slug}`}><b>{f.nome}</b><span>{f.pergunta}</span></a>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="secao"><div class="wrap"><CartaMensal titulo="O mercado da semana no seu e-mail" texto="Um resumo do que importou e do que vem pela frente, sem ruído e sem jargão." /></div></section>
+</Mercados>

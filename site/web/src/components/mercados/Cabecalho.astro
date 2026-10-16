@@ -1,0 +1,25 @@
+---
+// Cabeçalho da seção (estilo jornal): data da edição, nome da seção e editorias.
+import { EDITORIAS, LISTA_EDITORIAS, dataExtensa, type Editoria } from '../../lib/mercados'
+interface Props { atual?: Editoria | 'inicio'; titulo?: string; nivel?: 1 | 2 }
+const { atual = 'inicio', titulo = 'Mercados', nivel = 1 } = Astro.props
+const H = nivel === 1 ? 'h1' : 'p'
+---
+<header class="mh">
+  <div class="wrap">
+    <div class="mh__topo">
+      <span data-hoje>{dataExtensa(new Date())}</span>
+      <span class="mh__por">Por Rickson Messias · assessor de investimentos CEA</span>
+      <a href="/mercados/rss.xml" class="mh__rss">RSS</a>
+    </div>
+    <H class="mh__nome"><a href="/mercados">{titulo}</a></H>
+    <nav class="mh__nav" aria-label="Editorias">
+      <ul>
+        <li><a href="/mercados" aria-current={atual === 'inicio' ? 'page' : undefined}>Destaques</a></li>
+        {LISTA_EDITORIAS.map((e) => (
+          <li><a href={`/mercados/editoria/${e}`} aria-current={atual === e ? 'page' : undefined}>{EDITORIAS[e].nome}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -62,3 +62,90 @@ content:
       - name: body
         label: Texto
         type: rich-text
+  - name: noticias
+    label: Notícias (Mercados)
+    type: collection
+    path: site/web/src/content/noticias
+    view:
+      fields: [titulo, editoria, data, rascunho]
+      sort: [data]
+      default:
+        sort: data
+        order: desc
+    fields:
+      - name: titulo
+        label: Título
+        type: string
+        required: true
+      - name: linha_fina
+        label: Linha fina (resumo abaixo do título)
+        type: text
+        required: true
+      - name: editoria
+        label: Editoria
+        type: select
+        required: true
+        options:
+          values:
+            - { value: mercados, label: Mercados }
+            - { value: economia, label: Economia }
+            - { value: empresas, label: Empresas }
+            - { value: fiis, label: Fundos imobiliários }
+            - { value: internacional, label: Internacional }
+      - name: data
+        label: Data e hora de publicação
+        type: date
+        required: true
+        options:
+          time: true
+      - name: atualizado
+        label: Atualizado em (se corrigida)
+        type: date
+        options:
+          time: true
+      - name: autor
+        label: Autor
+        type: string
+        default: Redação
+      - name: ia
+        label: Produzido com IA (mostra o selo)
+        type: boolean
+        default: true
+      - name: tickers
+        label: Ativos citados (PETR4, HGLG11, IBOV, SELIC…)
+        type: string
+        list: true
+      - name: fontes
+        label: Fontes
+        type: object
+        list: true
+        fields:
+          - { name: nome, label: Nome da fonte, type: string }
+          - { name: url, label: Link, type: string }
+      - name: imagem
+        label: Imagem (opcional; sem imagem, o site gera uma arte)
+        type: image
+        options:
+          input: site/web/public/imagens/noticias
+          output: /imagens/noticias
+      - name: imagem_alt
+        label: Descrição da imagem
+        type: string
+      - name: imagem_credito
+        label: Crédito da imagem
+        type: string
+      - name: destaque
+        label: Manchete da capa
+        type: boolean
+        default: false
+      - name: urgente
+        label: Última hora
+        type: boolean
+        default: false
+      - name: rascunho
+        label: Rascunho (não aparece no site publicado)
+        type: boolean
+        default: true
+      - name: body
+        label: Texto
+        type: rich-text

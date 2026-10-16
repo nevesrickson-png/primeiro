@@ -1,0 +1,30 @@
+---
+// Capa da notícia: a imagem enviada ou, sem imagem, uma arte da marca com um gráfico desenhado a partir do título.
+import { EDITORIAS, type Editoria } from '../../lib/mercados'
+interface Props { titulo: string; editoria: Editoria; imagem?: string | null; alt?: string | null; credito?: string | null; ticker?: string; grande?: boolean }
+const { titulo, editoria, imagem, alt, credito, ticker, grande = false } = Astro.props
+let h = 0
+for (const c of titulo) h = (h * 31 + c.charCodeAt(0)) >>> 0
+const pontos: string[] = []
+let y = 60
+for (let x = 0; x <= 400; x += 25) {
+  h = (h * 1103515245 + 12345) >>> 0
+  y = Math.min(110, Math.max(20, y + ((h % 41) - 20)))
+  pontos.push(`${x},${y}`)
+}
+---
+{imagem ? (
+  <figure class:list={['capa-n', { 'capa-n--grande': grande }]}>
+    <img src={imagem} alt={alt ?? ''} loading="lazy" decoding="async" />
+    {credito && <figcaption>{credito}</figcaption>}
+  </figure>
+) : (
+  <div class:list={['capa-n', 'capa-n--arte', `capa-n--${editoria}`, { 'capa-n--grande': grande }]} aria-hidden="true">
+    <svg viewBox="0 0 400 130" preserveAspectRatio="none">
+      <g class="capa-n__grade">{[30, 60, 90].map((g) => <line x1="0" x2="400" y1={g} y2={g} />)}</g>
+      <polyline class="capa-n__area" points={`0,130 ${pontos.join(' ')} 400,130`} />
+      <polyline class="capa-n__linha" points={pontos.join(' ')} />
+    </svg>
+    <span class="capa-n__rotulo">{ticker ?? EDITORIAS[editoria].nome}</span>
+  </div>
+)}

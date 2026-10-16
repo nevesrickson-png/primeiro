@@ -36,6 +36,7 @@ export function linkWhatsapp(): string | null {
 export const FORM_ENDPOINT: string = import.meta.env.PUBLIC_FORM_ENDPOINT ?? ''
 
 export const MENU = [
+  { rotulo: 'Mercados', href: '/mercados' },
   { rotulo: 'Artigos', href: '/artigos' },
   { rotulo: 'Ferramentas', href: '/ferramentas' },
   { rotulo: 'Sobre', href: '/sobre' },

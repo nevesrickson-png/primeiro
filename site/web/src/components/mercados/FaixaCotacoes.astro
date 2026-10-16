@@ -1,0 +1,19 @@
+---
+// Faixa de cotações do topo da seção Mercados. Os valores chegam pelo script mercados.ts (/api/cotacoes).
+import { ATIVOS, TAXAS } from '../../lib/mercados'
+const itens = [...TAXAS.map((t) => ({ id: t.id, rotulo: t.rotulo, taxa: true })), ...ATIVOS.map((a) => ({ id: a.id, rotulo: a.rotulo, taxa: false }))]
+---
+<div class="faixa" data-faixa role="region" aria-label="Cotações do mercado">
+  <div class="faixa__janela" tabindex="0">
+    <ul class="faixa__lista" data-faixa-lista>
+      {itens.map((i) => (
+        <li class="faixa__item" data-item={i.id} data-taxa={i.taxa ? '' : undefined}>
+          <span class="faixa__nome">{i.rotulo}</span>
+          <span class="faixa__preco">—</span>
+          <span class="faixa__var"></span>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <p class="faixa__info" data-faixa-info>Carregando cotações…</p>
+</div>

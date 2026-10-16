@@ -56,6 +56,15 @@ Para ativar no Cloudflare Pages: **Settings → Variables and Secrets** → adic
 
 Para testar a IA no computador: `npm run build`, crie `site/web/.dev.vars` com `ANTHROPIC_API_KEY=...` (o arquivo não vai para o Git) e rode `npx wrangler pages dev dist`.
 
+## Mercados (notícias e cotações)
+
+Seção `/mercados` em formato de jornal financeiro: faixa de cotações no topo, manchete, últimas, indicadores (Selic, CDI, IPCA, Ibovespa, IFIX, câmbio, S&P 500), tabelas de ações e FIIs, editorias (Mercados, Economia, Empresas, Fundos imobiliários, Internacional), página de cada notícia com os ativos citados e cotação ao vivo, feed RSS (`/mercados/rss.xml`) e chamada para ferramentas e contato.
+
+- Notícias: `src/content/noticias/*.md`, publicadas pelo agente de IA. Formato e regras em **`AGENTE-MERCADOS.md`**. As 8 notícias que vêm no projeto são exemplos em rascunho (não aparecem no site publicado).
+- Cotações: `functions/api/cotacoes.ts` (Banco Central + Yahoo Finance, grátis e sem chave; `BRAPI_TOKEN` opcional). Lista de ativos em `src/lib/mercados.ts`.
+- Visual: `src/styles/mercados.css`; moldura da seção: `src/layouts/Mercados.astro`.
+- Para ver as notícias de exemplo no site publicado, crie no Cloudflare a variável `PUBLIC_MOSTRAR_RASCUNHOS` = `1`, refaça o deploy e depois apague a variável.
+
 ## Publicar artigos (painel)
 
 1. Entre em **https://app.pagescms.org** com a conta do GitHub e abra o repositório `primeiro`.

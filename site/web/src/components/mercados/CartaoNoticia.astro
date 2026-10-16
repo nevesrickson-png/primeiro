@@ -1,0 +1,28 @@
+---
+import CapaNoticia from './CapaNoticia.astro'
+import { EDITORIAS, hora, dataHora } from '../../lib/mercados'
+import type { Noticia } from '../../lib/noticias'
+interface Props { n: Noticia; variante?: 'manchete' | 'padrao' | 'compacto' | 'linha'; nivel?: 2 | 3; semCapa?: boolean }
+const { n, variante = 'padrao', nivel = 3, semCapa = false } = Astro.props
+const d = n.data
+const H = nivel === 2 ? 'h2' : 'h3'
+const href = `/mercados/${n.id}`
+---
+<article class:list={['cn', `cn--${variante}`]}>
+  <a href={href}>
+    {!semCapa && variante !== 'linha' && variante !== 'compacto' && (
+      <CapaNoticia titulo={d.titulo} editoria={d.editoria} imagem={d.imagem} alt={d.imagem_alt} ticker={d.tickers[0]} grande={variante === 'manchete'} />
+    )}
+    <p class="cn__chapeu">
+      {d.urgente && <span class="cn__urgente">Última hora</span>}
+      <span>{EDITORIAS[d.editoria].nome}</span>
+      {d.rascunho && <span class="cn__rascunho">Rascunho</span>}
+    </p>
+    <H class="cn__titulo">{d.titulo}</H>
+    {(variante === 'manchete' || variante === 'padrao') && <p class="cn__fina">{d.linha_fina}</p>}
+    <p class="cn__meta">
+      <time datetime={d.data.toISOString()} data-relativo>{variante === 'linha' ? hora(d.data) : dataHora(d.data)}</time>
+      {d.tickers.length > 0 && <span class="cn__tickers">{d.tickers.slice(0, 3).map((t) => <span data-chip={t}>{t}</span>)}</span>}
+    </p>
+  </a>
+</article>

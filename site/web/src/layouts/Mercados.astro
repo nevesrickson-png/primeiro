@@ -1,0 +1,31 @@
+---
+// Moldura da seção Mercados: faixa de cotações no topo, cabeçalho de jornal e aviso regulatório.
+import Base from './Base.astro'
+import FaixaCotacoes from '../components/mercados/FaixaCotacoes.astro'
+import Cabecalho from '../components/mercados/Cabecalho.astro'
+import type { Editoria } from '../lib/mercados'
+import '../styles/mercados.css'
+interface Props {
+  titulo?: string
+  descricao: string
+  atual?: Editoria | 'inicio'
+  cabecalhoNivel?: 1 | 2
+  imagem?: string
+  tipo?: 'website' | 'article'
+  publicado?: Date
+}
+const { titulo, descricao, atual = 'inicio', cabecalhoNivel = 1, imagem, tipo, publicado } = Astro.props
+---
+<Base titulo={titulo} descricao={descricao} imagem={imagem} tipo={tipo} publicado={publicado}>
+  <FaixaCotacoes slot="topo" />
+  <div class="mercados">
+    <Cabecalho atual={atual} nivel={cabecalhoNivel} />
+    <slot />
+    <div class="wrap">
+      <p class="m-aviso">Conteúdo informativo, produzido com apoio de inteligência artificial a partir de fontes públicas citadas em cada notícia. Não constitui recomendação de investimento. Cotações com atraso.</p>
+    </div>
+  </div>
+</Base>
+<script>
+  import '../scripts/mercados'
+</script>

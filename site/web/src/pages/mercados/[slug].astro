@@ -1,0 +1,93 @@
+---
+import Mercados from '../../layouts/Mercados.astro'
+import CapaNoticia from '../../components/mercados/CapaNoticia.astro'
+import CartaoNoticia from '../../components/mercados/CartaoNoticia.astro'
+import Indicadores from '../../components/mercados/Indicadores.astro'
+import { render } from 'astro:content'
+import { EDITORIAS, dataHora } from '../../lib/mercados'
+import { noticiasPublicadas, minutosLeitura, type Noticia } from '../../lib/noticias'
+import { SITE } from '../../config'
+
+export async function getStaticPaths() {
+  const todas = await noticiasPublicadas()
+  return todas.map((n) => ({ params: { slug: n.id }, props: { n, todas } }))
+}
+interface Props { n: Noticia; todas: Noticia[] }
+const { n, todas } = Astro.props
+const d = n.data
+const { Content } = await render(n)
+const url = new URL(`/mercados/${n.id}`, Astro.site).href
+const relacionadas = todas.filter((x) => x.id !== n.id && x.data.editoria === d.editoria).slice(0, 3)
+const ultimas = todas.filter((x) => x.id !== n.id).slice(0, 6)
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: d.titulo,
+  description: d.linha_fina,
+  datePublished: d.data.toISOString(),
+  dateModified: (d.atualizado ?? d.data).toISOString(),
+  author: { '@type': 'Organization', name: `${d.autor} · ${SITE.nome}` },
+  publisher: { '@type': 'Person', name: 'Rickson Messias', url: SITE.url },
+  mainEntityOfPage: url,
+  ...(d.imagem ? { image: new URL(d.imagem, Astro.site).href } : {})
+}
+---
+<Mercados titulo={d.titulo} descricao={d.linha_fina} atual={d.editoria} cabecalhoNivel={2} tipo="article" publicado={d.data} imagem={d.imagem ?? undefined}>
+  <div class="wrap nt">
+    <article>
+      <header class="nt__cab">
+        <p class="cn__chapeu">
+          {d.urgente && <span class="cn__urgente">Última hora</span>}
+          <a href={`/mercados/editoria/${d.editoria}`}>{EDITORIAS[d.editoria].nome}</a>
+          {d.rascunho && <span class="cn__rascunho">Rascunho</span>}
+        </p>
+        <h1 class="nt__titulo">{d.titulo}</h1>
+        <p class="nt__fina">{d.linha_fina}</p>
+        <div class="nt__autor">
+          <span>Por <b>{d.autor}</b></span>
+          <time datetime={d.data.toISOString()}>{dataHora(d.data)}</time>
+          {d.atualizado && <span>Atualizado em <time datetime={d.atualizado.toISOString()}>{dataHora(d.atualizado)}</time></span>}
+          <span>{minutosLeitura(n.body)} min de leitura</span>
+          {d.ia && <span class="nt__ia" title="Texto produzido com apoio de inteligência artificial a partir das fontes citadas">Produzido com IA</span>}
+        </div>
+        {d.tickers.length > 0 && <div class="nt__tickers" aria-label="Ativos citados">{d.tickers.map((t) => <span data-chip={t}>{t}</span>)}</div>}
+      </header>
+      <div class="nt__capa"><CapaNoticia titulo={d.titulo} editoria={d.editoria} imagem={d.imagem} alt={d.imagem_alt} credito={d.imagem_credito} ticker={d.tickers[0]} grande /></div>
+      <div class="nt__corpo"><Content /></div>
+      {d.fontes.length > 0 && (
+        <div class="nt__fontes">
+          <b>Fontes</b>
+          <ul>{d.fontes.map((f) => <li><a href={f.url} target="_blank" rel="noopener nofollow">{f.nome}</a></li>)}</ul>
+        </div>
+      )}
+      <div class="nt__compartilhar">
+        <a href={`https://wa.me/?text=${encodeURIComponent(d.titulo + ' ' + url)}`} target="_blank" rel="noopener">WhatsApp</a>
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener">LinkedIn</a>
+        <button type="button" data-copiar={url}>Copiar link</button>
+      </div>
+      <div class="nt__cta">
+        <b>O que essa notícia muda para você?</b>
+        <p>Cada carteira reage de um jeito. Se quiser entender o efeito no seu caso, converse com quem acompanha o mercado todos os dias.</p>
+        <div><a class="btn btn--champ" href={`/assessoria?assunto=${encodeURIComponent(d.titulo.slice(0, 60))}#agendar`}>Agendar conversa <span class="seta">→</span></a></div>
+      </div>
+    </article>
+    <div class="nt__lado">
+      <Indicadores tabelas={false} />
+      {ultimas.length > 0 && (<div><p class="m-col__titulo">Últimas</p>{ultimas.map((x) => <CartaoNoticia n={x} variante="linha" />)}</div>)}
+    </div>
+  </div>
+  {relacionadas.length > 0 && (
+    <section class="wrap m-secao">
+      <div class="m-secao__cab"><h2>Mais em {EDITORIAS[d.editoria].nome}</h2><a class="m-secao__mais" href={`/mercados/editoria/${d.editoria}`}>Ver tudo →</a></div>
+      <div class="m-grade">{relacionadas.map((x) => <CartaoNoticia n={x} variante="padrao" />)}</div>
+    </section>
+  )}
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</Mercados>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copiar]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copiar!); b.textContent = 'Link copiado'; setTimeout(() => (b.textContent = 'Copiar link'), 2000) } catch { prompt('Copie o link:', b.dataset.copiar) }
+    })
+  })
+</script>
