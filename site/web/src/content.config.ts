@@ -31,9 +31,12 @@ const noticias = defineCollection({
     autor: z.string().default('Redação'),
     // Conteúdo produzido com inteligência artificial ganha um aviso visível na notícia.
     ia: z.boolean().default(true),
-    tickers: z.array(z.string().regex(/^[A-Z0-9^=.\-]{1,12}$/)).max(8).default([]),
-    fontes: z.array(z.object({ nome: z.string(), url: z.string().url() })).default([]),
-    imagem: z.string().optional().nullable(),
+    // Aceita minúsculas (petr4 → PETR4).
+    tickers: z.array(z.string().trim().toUpperCase().regex(/^[A-Z0-9^=.\-]{1,12}$/)).max(8).default([]),
+    // Só links http(s): o validador padrão aceitaria javascript: e data:.
+    fontes: z.array(z.object({ nome: z.string().min(2), url: z.string().url().regex(/^https?:\/\//i) })).default([]),
+    // Imagens ficam no próprio site (a política de segurança bloqueia imagens de outros domínios).
+    imagem: z.string().regex(/^\/imagens\//, 'Use uma imagem em /imagens/…').optional().nullable(),
     imagem_alt: z.string().optional().nullable(),
     imagem_credito: z.string().optional().nullable(),
     destaque: z.boolean().default(false),

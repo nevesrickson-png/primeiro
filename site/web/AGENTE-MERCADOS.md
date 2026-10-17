@@ -23,7 +23,7 @@ tickers: [SELIC]            # até 8 códigos: PETR4, HGLG11, IBOV, IFIX, USDBRL
 fontes:                     # pelo menos 1 fonte primária, com link
   - nome: Banco Central do Brasil — comunicado do Copom
     url: https://www.bcb.gov.br/
-imagem: null                # opcional: caminho em /imagens/noticias/… (sem imagem, o site gera uma arte)
+imagem: null                # opcional: SÓ caminho no próprio site, /imagens/noticias/arquivo.jpg (sem imagem, o site gera uma arte)
 imagem_alt: null
 imagem_credito: null
 destaque: false             # true coloca como manchete da capa (só uma por vez)
@@ -41,6 +41,7 @@ Os códigos de `tickers` aparecem como etiquetas com a cotação ao vivo. Açõe
 3. `## O que observar`: próximos eventos e riscos.
 4. Tabelas Markdown são permitidas (no celular, elas rolam de lado).
 5. Tamanho ideal: de 250 a 600 palavras.
+6. **Não use HTML ativo** (`<script>`, `<iframe>`, formulários, `onclick=`, links `javascript:`). Uma notícia com isso é retirada do site automaticamente, para proteger contra textos de terceiros com código embutido.
 
 ## 4. Regras editoriais (obrigatórias)
 
@@ -71,6 +72,8 @@ curl -X PUT \
   }'
 ```
 
+- **Imagem:** envie antes o arquivo para `site/web/public/imagens/noticias/<nome>.jpg` com a mesma chamada (conteúdo em Base64) e use `imagem: /imagens/noticias/<nome>.jpg`. Imagens de outros sites são bloqueadas pela política de segurança. Só use imagens com direito de uso.
+- Links das `fontes` precisam começar com `https://`.
 - Para **editar** uma notícia, faça um GET no mesmo endereço, pegue o `sha` e envie-o junto no PUT.
 - Use o branch de produção configurado no Cloudflare. Hoje é `claude/wonderful-bell-2bt1o5`; mude aqui se passar a ser `main`.
 - Se o cabeçalho tiver erro (campo faltando, editoria inválida), o build falha e o site continua na versão anterior. Nada quebra no ar, mas a notícia não entra. O motivo aparece no log do deploy no Cloudflare.
